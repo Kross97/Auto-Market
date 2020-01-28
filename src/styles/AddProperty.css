@@ -1,0 +1,176 @@
+.conteiner {
+  height: 740px;
+  width: 64%;
+  margin-top: 10px;
+  background-color: #fff;
+  margin: 25px auto;
+  position: relative;
+}
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 75px;
+  padding-top: 25px;
+}
+
+.content h3 {
+  padding-bottom: 28px;
+  padding-left: 90px;
+}
+
+.form {
+  padding-left: 90px;
+}
+
+.btn {
+  width: 136px;
+  height: 30px;
+  border: none;
+  color:#fff;
+  margin-right: 25px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.btn:hover, .form label:hover {
+  cursor: pointer;
+}
+
+.btn.comeBack {
+  background-color: #ff0000;
+}
+
+.btn.save {
+  background-color: #31c35a;
+}
+
+
+.form p {
+display: block;
+margin-top: -27px;
+margin-left: 30px;
+}
+
+.form label > span, .form div > span  {
+  color: red;
+  display: inline;
+  margin-left: 0px;
+}
+
+.form input {
+  border: 1px solid #efefef;
+  height: 26px;
+}
+
+.form input[type=text] {
+  border: 1px solid #efefef;
+  width: 224px;
+  height: 26px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.form label {
+  display: block;
+}
+
+.radio {
+cursor: pointer;
+position: relative;
+width: 160px;
+height: 35px;
+padding-top: 5px;
+}
+
+.radio input {
+  z-index: -2;
+}
+
+.radio .newRadio {
+  position: absolute;
+  top: 12px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  background-color:#fff;
+  border-radius: 13px;
+  border: 2px solid#efefef;
+}
+
+.newRadio.active {
+  display: none;
+  top: 15px;
+  left: 7px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #110fba;
+}
+
+.newRadio.active.selected {
+  display: inline;
+}
+
+.conteiner ul {
+  position: absolute;
+  right: 97px;
+  top: 125px;
+  height: 465px;
+  max-height: 465px;
+  overflow: hidden;
+  width: 345px;
+}
+
+/* MEDIA */
+@media(max-width:1230px)  {
+  .conteiner {
+   width: 80%;
+ }
+}
+
+@media(max-width:990px)  {
+  .btns {
+    justify-content: center;
+  }
+
+  .conteiner ul {
+    top: 220px;
+    right: 0;
+  }
+
+ .conteiner ul  .alertInfo {
+   font-size: 17px;
+   height: 90px;
+   width: 230px;
+   padding-top: 0px;
+  }
+}
+
+@media(max-width:870px)  {
+  .conteiner {
+   width: 100%;
+   margin-top: 0px;
+ }
+}
+
+@media (max-width:570px) {
+  .conteiner ul {
+    display: none;
+  }
+}
+
+@media (max-width:420px) {
+  .btns {
+    justify-content: center;
+    margin-left: 120px;
+  }
+  .btn {
+    width: 95px;
+  }
+}
+
+@media (max-width:380px) {
+  .form input[type="text"] {
+    width: 160px;
+  }
+}

@@ -1,0 +1,246 @@
+.container {
+  margin: 0 auto;
+  height: 689px;
+  width: 64%;
+  background-color: #fff;
+  box-shadow: 0px 18px 30px #efefef;
+}
+
+.content {
+position: relative;
+width: 85%;
+margin: 0 auto;
+}
+
+.content a {
+padding: 40px 0 43px 0;
+display: block;
+}
+
+.defaultProps {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-basis: 50%;
+  padding-left: 70px;
+}
+
+.description > p {
+  width: 100%;
+  max-width: 100%;
+  word-break: break-all;
+  height: 125px;
+  max-height: 125px;
+  overflow: auto;
+}
+
+.img {
+  flex-basis: 32%;
+  height: 207px;
+}
+
+.additionalProps {
+width: 40%;
+height: 300px;
+max-height: 300px;
+overflow: auto;
+margin-left: 45px;
+margin-top: 35px;
+}
+
+.conteinerAdditional {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.propSelect > select {
+  width: 85%;
+  height: 35px;
+  border: 2px solid #efefef;
+  margin-top: 10px;
+}
+
+.propSelect span, .prop span{
+display: block;
+font-size: 20px;
+}
+
+.propSelect , .prop {
+flex-basis: 100%;
+margin-bottom: 20px;
+}
+
+.addBasket {
+  background-color: #ffba00;
+  box-shadow: 3px 7px 10px #efefef;
+  height: 37px;
+  border: none;
+  border-radius: 5px;
+  color:#fff;
+  width: 155px;
+  position: absolute;
+  bottom: 60px;
+  left: 430px;
+  font-size: 15px;
+}
+
+.additionalProps > p{
+font-size: 30px;
+letter-spacing: 5px;
+color:#808080;
+}
+
+.content > p {
+position: absolute;
+bottom: 85px;
+left: 430px;
+font-size: 35px;
+}
+
+.content > ul {
+position: absolute;
+top: 133px;
+left: -322px;
+height: 450px;
+max-height: 450px;
+overflow: hidden;
+}
+
+.addBasket:hover {
+  cursor: pointer;
+}
+
+/* CARD UNDEFINED*/
+.undefinedContainer {
+margin: 300px auto;
+background-color: #fff;
+display: block;
+width: 358px;
+height: 250px;
+}
+
+.undefinedContent {
+  text-align: center;
+  padding-top: 75px;
+}
+
+.undefinedContent > a > button {
+background-color:#ffba00;
+box-shadow: 3px 7px 10px #efefef;
+height: 28px;
+border: none;
+border-radius: 4px;
+color:#fff;
+width: 132px;
+font-size: 15px;
+margin-top: 2px;
+margin-right: 15px;
+}
+
+@media (max-width:1454px) {
+  .additionalProps > p {
+    font-size: 23px;
+  }
+}
+
+@media(max-width:1220px)  {
+  .container {
+   width: 80%;
+ }
+ .content > ul {
+    left: 620px;
+  }
+   .content > ul .alertInfo {
+   height: 85px;
+    width: 170px;
+  }
+}
+
+@media(max-width:1020px) {
+  .content > ul {
+     display: none;
+   }
+}
+
+@media(max-width:890px)  {
+  .container {
+   width: 100%;
+ }
+}
+
+@media (max-width:768px) {
+  .additionalProps > p {
+    font-size: 15px;
+  }
+
+.content > p {
+    font-size: 25px;
+  }
+  .img {
+    height: 150px;
+    margin-top: 55px;
+  }
+}
+
+@media (max-width:687px) {
+  .container {
+    height: 800px;
+  }
+  .content > p {
+    bottom: -50px;
+    left: 41px;
+  }
+  .addBasket {
+    bottom: -90px;
+    left: 40px;
+  }
+  .additionalProps {
+    width: 65%;
+  }
+}
+
+@media (max-width:500px) {
+  .defaultProps {
+    flex-direction: column;
+  }
+  .additionalProps {
+    margin-left: 70px;
+  }
+  .img {
+    width: 200px;
+    margin-top: 5px;
+    margin-left: 100px;
+    margin-bottom: 20px;
+  }
+  .container {
+    height: 1000px;
+  }
+}
+
+@media (max-width:360px){
+  .propSelect span, .prop span {
+    font-size: 17px;
+  }
+}
+
+@media (max-width:310px) {
+  .img {
+    margin-left: 20px;
+  }
+  .additionalProps {
+    width: 50%;
+  }
+  .content > p {
+    bottom: -60px;
+  }
+  .addBasket {
+    bottom: -100px;
+  }
+}

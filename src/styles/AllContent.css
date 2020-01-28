@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&display=swap');
+
+* {
+  font-family: Roboto;
+}
+
+.container {
+  margin: 0 auto;
+  height: 689px;
+  width: 64%;
+}
+
+.btns {
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.navBtn {
+flex-basis: 23%;
+font-size: 17px;
+height: 60px;
+background-color: #f7fbff;
+border: none;
+}
+
+.navBtn:hover {
+  cursor: pointer;
+}
+
+.active {
+  border-top: 2px solid #0059ff;
+  background: rgba(231,235,255,1);
+  background: -moz-linear-gradient(top, rgba(231,235,255,1) 0%, rgba(247,251,255,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(231,235,255,1)), color-stop(100%, rgba(247,251,255,1)));
+  background: -webkit-linear-gradient(top, rgba(231,235,255,1) 0%, rgba(247,251,255,1) 100%);
+  background: -o-linear-gradient(top, rgba(231,235,255,1) 0%, rgba(247,251,255,1) 100%);
+  background: -ms-linear-gradient(top, rgba(231,235,255,1) 0%, rgba(247,251,255,1) 100%);
+  background: linear-gradient(to bottom, rgba(231,235,255,1) 0%, rgba(247,251,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e7ebff', endColorstr='#f7fbff', GradientType=0 );
+  color: #397dff;
+}
+
+
+@media(max-width:1160px)  {
+  .container {
+   width: 80%;
+ }
+}
+
+@media(max-width:1050px)  {
+  .navBtn {
+  flex-basis: 28%;
+  }
+}
+
+@media(max-width:870px)  {
+  .container {
+   width: 100%;
+ }
+  .navBtn {
+    flex-basis: 31%;
+    font-size: 18px;
+  }
+}
+
+
+@media(max-width:570px)  {
+  .btns button:nth-of-type(2) {
+      flex-basis: 33.4%;
+  }
+}
+
+@media(max-width:495px)  {
+  .navBtn {
+    flex-basis: 50%;
+    font-size: 24px;
+  }
+}

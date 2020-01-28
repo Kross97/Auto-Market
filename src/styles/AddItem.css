@@ -1,0 +1,388 @@
+.conteiner {
+  height: 860px;
+  width: 64%;
+  margin-top: 10px;
+  background-color: #fff;
+  margin: 25px auto;
+}
+
+.content {
+  position: relative;
+}
+
+.content > ul {
+  position: absolute;
+  right: -170px;
+  top: 25px;
+  height: 400px;
+  max-height: 400px;
+  overflow: hidden;
+  width: 345px;
+}
+
+.buttonsGrp {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 75px;
+  padding-top: 25px;
+}
+
+.content h3 {
+  padding-bottom: 28px;
+  padding-left: 90px;
+}
+
+.form {
+  padding-left: 90px;
+  position: relative;
+}
+
+.btn {
+  width: 136px;
+  height: 30px;
+  border: none;
+  color:#fff;
+  margin-right: 25px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.btn:hover, .form label {
+  cursor: pointer;
+}
+
+.btn.comeBack {
+  background-color: #ff0000;
+}
+
+.btn.save {
+  background-color: #31c35a;
+}
+
+.form label {
+  display: block;
+  margin-bottom: 10px;
+  position: relative;
+  width: 298px;
+  font-size: 15px;
+}
+
+.form label span {
+  color: red;
+}
+
+.form input {
+  border: 1px solid #efefef;
+  width: 302px;
+  height: 33px;
+  display: block;
+}
+
+.customInput {
+  width: 302px;
+  height: 33px;
+  position: absolute;
+  background-color:#fff;
+  top: 20px;
+  left: 1px;
+}
+
+.customImg {
+  position: absolute;
+  top: 20px;
+  right: 7px;
+}
+
+.form textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 90px;
+  max-height: 90px;
+  display: block;
+  margin-bottom: 25px;
+}
+
+.img {
+  position: absolute;
+  width: 104px;
+  height: 80px;
+  top: 125px;
+  left: 412px;
+}
+
+.form h3:nth-of-type(1) {
+  display: inline;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 35px;
+}
+
+/* BTN ACTION */
+.btnAction {
+height: 32px;
+width: 33px;
+background-color:#fff;
+border: 1px solid#0059ff;
+color:#0059ff;
+border-radius: 20px;
+font-size: 20px;
+font-weight: 600;
+}
+
+.btnActionPlus {
+  height: 32px;
+  width: 33px;
+  background-color:#fff;
+  border: 1px solid#0059ff;
+  color:#0059ff;
+  border-radius: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.btnDelete {
+  height: 32px;
+  width: 33px;
+  background-color:#fff;
+  border: 1px solid#0059ff;
+  color:#0059ff;
+  border-radius: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  position: static;
+}
+
+.btnAction:hover ,  {
+  color:#fff;
+  background-color:#0059ff;
+}
+
+.properties{
+width: 640px;
+height: 245px;
+max-height: 245px;
+overflow: auto;
+margin-top: 25px;
+}
+
+.btnAction:hover , .btnDelete:hover{
+  cursor: pointer;
+}
+/* PROP ITEMS */
+.propData {
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  margin-top: 25px;
+  padding: 6px 0 0 25px;
+}
+
+.propData .btnAction {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.propTitle{
+  width: 210px;
+  height: 32px;
+  border: 1px solid #efebef;
+  border-radius: 5px;
+  padding: 5px 0 0 15px;
+  box-sizing: border-box;
+}
+
+.propInput {
+flex-basis: 50%;
+display: flex;
+flex-wrap: wrap;
+}
+
+.propInput input {
+  flex-basis: 85%;
+  border-radius: 5px;
+  border: 1px solid #efebef;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.propHeader span, .propInput span{
+  padding-bottom: 15px;
+  display: block;
+  padding-left: 8px;
+}
+
+.selected div {
+  flex-basis: 90%;
+  display: flex;
+}
+
+
+.btnDisabled {
+  display: none;
+}
+
+.propInput .itemBtnAct {
+  position: static;
+}
+
+.erorValid , .propInput .erorValid {
+  border: 2px solid red;
+}
+
+
+/* MEDIA */
+
+@media(max-width:1360px)  {
+  .conteiner {
+   width: 80%;
+ }
+ .content > ul {
+    right: -90px;
+  }
+}
+
+@media(max-width:950px)  {
+  .conteiner {
+   width: 100%;
+ }
+
+ .content > ul .alertInfo {
+     height: 80px;
+     width: 150px;
+     font-size: 15px;
+   }
+}
+
+@media (max-width:765px) {
+  .propData {
+    flex-direction: column;
+  }
+  .properties {
+    width: 370px;
+  }
+  .propHeader {
+    margin-left: 35px;
+  }
+  .propInput {
+    margin-left: 37px;
+    margin-top: 20px;
+
+  }
+  .propInput .btnAction {
+    margin-right: 5px;
+  }
+  .selected input {
+    flex-basis: 60%;
+  }
+}
+
+@media (max-width:665px) {
+  .content > ul {
+    right: -180px;
+  }
+}
+
+@media (max-width:590px) {
+  .content > ul {
+    display: none;
+  }
+}
+
+@media (max-width:535px) {
+  .img {
+    display: none;
+  }
+}
+
+@media (max-width:480px) {
+  .properties {
+    width: 250px;
+  }
+  .selected input {
+    width: 109px;
+    flex-basis: -1%;
+  }
+  .propInput {
+    margin-left: 0px;
+}
+  .propInput input {
+    margin-right: 5px;
+  }
+  .propTitle {
+    width: 135px;
+  }
+}
+
+@media (max-width:420px) {
+  .form input{
+    width: 199px;
+  }
+  .form textarea {
+    width: 200px;
+  }
+  .customImg {
+    top: 20px;
+    right: 105px;
+}
+  label {
+    font-size: 14px;
+  }
+  .customInput {
+    width: 199px;
+  }
+}
+
+@media (max-width:390px){
+  .buttonsGrp {
+    justify-content: center;
+    padding-left: 80px;
+  }
+  .btn {
+    width: 92px;
+  }
+}
+
+@media (max-width:357px) {
+  .properties {
+    width: 170px;
+  }
+  .propTitle {
+    width: 90px;
+    font-size: 12px;
+}
+.customInput {
+  width: 100px;
+    top: 16px;
+}
+.selected input {
+    width: 80px;
+    flex-basis: auto;
+}
+.form input {
+    width: 100px;
+  }
+  .propInput input {
+
+    flex-basis: auto;
+  }
+  .customImg {
+    top: 22px;
+    right: 46px;
+    width: 17px;
+    height: 19px;
+}
+  label {
+    font-size: 12px;
+  }
+  .form label {
+    width: 140px;
+}
+  .form textarea {
+    width: 150px;
+  }
+  .btnAction {
+    height: 25px;
+    width: 33px;
+  }
+}

@@ -1,0 +1,90 @@
+body {
+  background-color: #f7fbff;
+}
+
+.form {
+  position: relative;
+  height: 277px;
+}
+
+.form span {
+  display: block;
+  margin-left: 50px;
+}
+
+.form input{
+    width: 75%;
+    border: 1px solid #f7f3f7;
+    margin: 10px auto;
+    display: block;
+    height: 27px;
+}
+
+.form a:nth-of-type(1) {
+  text-decoration: none;
+  width: 100px;
+  display: block;
+  margin-left: 115px;
+}
+
+.form a:nth-of-type(2) {
+  text-decoration: none;
+  width: 100px;
+  display: block;
+  margin-left: 100px;
+  font-size: 14px;
+}
+
+.content {
+ margin: 300px auto;
+ background-color: #fff;
+ display: block;
+ width: 358px;
+ height: 370px;
+}
+
+.content h1{
+  margin-bottom: 25px;
+  font-weight: 200;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.login {
+  display: block;
+  margin: 45px auto 10px;
+  background-color:#ffba00;
+  width: 100%;
+  height: 29px;
+  border: none;
+  border-radius: 5px;
+  color:#fff;
+}
+
+.login:hover{
+  cursor: pointer;
+}
+
+.notLogin {
+  background-color: #DC143C;
+  opacity: 0.5;
+}
+
+.eye {
+  background-image: url('../img/visibility.png');
+  position: absolute;
+  top: 105px;
+  right: 52px;
+  background-size: contain;
+  width: 21px;
+  height: 21px;
+  background-color:transparent;
+  border: none;
+}
+
+@media(max-width:510px) {
+.content {
+  margin: 155px auto;
+  width: 290px;
+  }
+}

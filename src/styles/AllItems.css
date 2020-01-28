@@ -1,0 +1,366 @@
+.content {
+  height: 675px;
+  background-color: #fff;
+  box-shadow: 0px 18px 30px #efefef;
+  position: relative;
+}
+
+.list ul:nth-of-type(2) {
+  position: absolute;
+  top: 25px;
+  left: -300px;
+  height: 525px;
+  overflow: hidden;
+  max-height: 525px;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-around;
+  padding-right: 66px;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 80px 35px 0;
+}
+
+.btns > div > input {
+  margin-left: 70px;
+  width: 95%;
+  height: 30px;
+  border: 1px solid #9c9a9c;
+  border-radius: 15px;
+  box-sizing: border-box;
+  padding-left: 23px;
+}
+
+.btns > div {
+position: relative;
+width: 25%;
+}
+
+.btns > div > button {
+  background-image: url('../img/search.png');
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  background-size: contain;
+  background-color:transparent;
+  border: none;
+  top: 3px;
+  right: -50px;
+}
+
+.btns > div > button:hover {
+ cursor: pointer;
+}
+
+.btn {
+  background-color:#ffba00;
+  box-shadow: 3px 7px 10px #efefef;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  color:#fff;
+  width: 132px;
+  font-size: 13px;
+  margin-top: 2px;
+  margin-right: 15px;
+}
+
+
+.navigation span {
+  color: #9c9a9c;
+  position: relative;
+}
+
+.btnSort {
+  background-image: url('../img/up-chevron.png');
+  width: 10px;
+  height: 10px;
+  border: none;
+  background-color:#fff;
+  background-size: contain;
+  position: absolute;
+  top: 6px;
+  left: -20px;
+  background-repeat: no-repeat;
+}
+
+.btn:hover, .btnSort:hover {
+  cursor: pointer;
+}
+
+.sortDesc {
+  background-image: url('../img/down-chevron.png');
+}
+
+.list ul {
+  list-style: none;
+}
+
+.list{
+height: 445px;
+max-height: 445px;
+overflow: auto;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.itemData {
+  flex-basis: 70%;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 39px;
+}
+
+.itemData a {
+  flex-basis: 33%;
+}
+
+.itemData span:nth-of-type(1) {
+  flex-basis: 26%;
+}
+
+.itemData span:nth-of-type(2) {
+  flex-basis: 16%;
+  margin-right: 100px;
+}
+
+.itemControl {
+  flex-basis: 25%;
+  display: flex;
+  justify-content: center;
+  padding-right: 20px;
+}
+
+.itemControl > a {
+margin-right: 70px;
+}
+
+.pageBtns{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 75px 0 60px;
+}
+
+.quantityPages .btnPage {
+  background-color:#fff;
+  width: 50px;
+  height: 30px;
+  border: 1px solid#ffba00;
+  color:#ffba00;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.quantityPages .active {
+  width: 50px;
+  height: 30px;
+  border: 1px solid#ffba00;
+  background-color:#ffba00;
+  color:#fff;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.currentPage .btnPage {
+  width: 30px;
+  height: 33px;
+  background-color:#fff;
+  border: 1px solid #ffba00;
+  color:#ffba00;
+  font-size: 20px;
+  border-radius: 20px;
+  margin-right: 10px;
+  padding-right: 23px;
+}
+
+.currentPage .active {
+  width: 30px;
+  height: 30px;
+  background-color:#ffba00;
+  border: 1px solid #ffba00;
+  color:#fff;
+  font-size: 20px;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+
+.currentPage {
+  flex-basis: 30%;
+  max-width: 275px;
+  max-height: 125px;
+  overflow: auto;
+}
+
+.quantityPages .btnPage:hover, .currentPage .btnPage:hover {
+  cursor: pointer;
+}
+
+/* MEDIA */
+
+@media (max-width:1400px) {
+  .itemControl {
+    padding-right: 0px;
+  }
+}
+
+@media (max-width:1380px) {
+  .list ul:nth-of-type(2) {
+    left: -220px;
+  }
+}
+
+@media (max-width:1160px) {
+  .navigation {
+    padding-right: 0px;
+}
+.itemData span:nth-of-type(2) {
+    margin-right: 60px;
+}
+  .itemControl > a {
+    margin-right: 40px;
+}
+
+.list ul:nth-of-type(2) {
+    left: 765px;
+}
+
+.list ul:nth-of-type(2) .alertInfo {
+  height: 60px;
+  width: 120px;
+  font-size: 14px;
+  padding-top: 0px;
+}
+
+}
+
+@media (max-width:1120px) {
+  .list ul:nth-of-type(2) {
+    left: 710px;
+}
+}
+
+@media(max-width:980px)  {
+  .currentPage .btnPage , .currentPage .active, .quantityPages .active , .quantityPages .btnPage {
+    margin-bottom: 10px;
+  }
+
+.currentPage,  .quantityPages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  }
+
+  .content {
+    height: 905px;
+ }
+
+ .list ul:nth-of-type(2) {
+    left: 665px;
+}
+
+}
+
+@media (max-width:920px) {
+  .list ul:nth-of-type(2) {
+    left: 630px;
+}
+}
+
+@media (max-width:870px){
+  .list ul:nth-of-type(2) {
+    display: none;
+}
+}
+
+@media(max-width:700px)  {
+  .content {
+    height: 1115px;
+ }
+
+ .currentPage,  .quantityPages {
+   align-items: flex-start;
+   }
+
+   .itemData span:nth-of-type(2) {
+       margin-right: 30px;
+   }
+
+   .itemControl > a {
+    margin-right: 5px;
+}
+
+}
+
+@media(max-width:570px)  {
+  .btns > div {
+    width: 35%;
+}
+
+.itemData {
+    padding-left: 0px;
+  }
+}
+
+@media(max-width:535px)  {
+.pageBtns {
+    flex-direction: column;
+  }
+  .btnSort {
+    top: -13px;
+    left: -1px;
+  }
+}
+
+@media(max-width:495px)  {
+  .btns > div {
+    width: 55%;
+}
+
+  .btns {
+    flex-direction: column;
+}
+
+.btn {
+    margin-top: 15px;
+    margin-left: 71px;
+ }
+}
+
+@media (max-width:445px) {
+  .navigation span {
+    font-size: 14px;
+    padding-right: 20px;
+  }
+  .list ul {
+    padding-left: 0px;
+  }
+  .item {
+    font-size: 14px;
+    }
+  .itemData span:nth-of-type(2) {
+    margin-right: 5px;
+  }
+
+  .itemControl > a {
+    margin-right: 0px;
+  }
+}
+
+@media (max-width:390px) {
+  .btns > div {
+    width: 85%;
+}
+.navigation span {
+    font-size: 13px;
+    padding-right: 7px;
+}
+}

@@ -1,0 +1,110 @@
+body {
+  background-color: #f7fbff;
+}
+
+.form {
+  position: relative;
+  height: 330px;
+}
+
+.form span {
+  display: block;
+  margin-left: 50px;
+}
+
+.form input{
+    width: 75%;
+    border: 1px solid #f7f3f7;
+    margin: 17px auto;
+    display: block;
+    height: 27px;
+}
+
+.form a {
+  text-decoration: none;
+  width: 150px;
+  display: block;
+  margin-left: 105px;
+}
+
+
+
+.content {
+ margin: 300px auto;
+ background-color: #fff;
+ display: block;
+ width: 370px;
+ height: 430px;
+}
+
+.content h1{
+  margin-bottom: 25px;
+  font-weight: 200;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.register {
+  display: block;
+  margin: 45px auto 10px;
+  background-color:#ffba00;
+  width: 55%;
+  height: 29px;
+  border: none;
+  border-radius: 5px;
+  color:#fff;
+}
+
+.register:hover{
+  cursor: pointer;
+}
+
+.notRegistr {
+  background-color: #DC143C;
+  opacity: 0.5;
+}
+
+ .eye {
+  background-image: url('../img/visibility.png');
+  position: absolute;
+  background-size: contain;
+  width: 21px;
+  height: 21px;
+  background-color:transparent;
+  border: none;
+}
+
+.registrError {
+  font-size: 11px;
+  color: red;
+  margin-top: -16px;
+  margin-bottom: 5px;
+}
+
+.registrSucces {
+  font-size: 12px;
+  color: green;
+  margin-top: -16px;
+  margin-bottom: 5px;
+}
+
+.form .inputEror {
+  border: 1px solid red;
+}
+
+form .eye:nth-of-type(1){
+  top: 125px;
+  right: 55px;
+}
+
+form .eye:nth-of-type(2){
+  top: 210px;
+  right: 55px;
+}
+
+@media(max-width:510px) {
+.content {
+  margin: 155px auto;
+  width: 290px;
+  }
+}
