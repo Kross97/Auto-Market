@@ -3,9 +3,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 import registr from '../../styles/Registration.css';
+import { IStateRegistr, IUser } from './InterfaceAutorization';
 
-export class Registration extends React.Component {
-  constructor(props) {
+export class Registration extends React.Component<{}, IStateRegistr> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       typePassword: 'password',
@@ -17,7 +18,7 @@ export class Registration extends React.Component {
     };
   }
 
-  changeTypeInputPassword = () => {
+  public changeTypeInputPassword = () => {
     const { typePassword } = this.state;
     if (typePassword === 'password') {
       this.setState({ typePassword: 'text' });
@@ -26,7 +27,7 @@ export class Registration extends React.Component {
     }
   }
 
-  changeTypeInputReplayPassword = () => {
+  public changeTypeInputReplayPassword = () => {
     const { typeReplayPassword } = this.state;
     if (typeReplayPassword === 'password') {
       this.setState({ typeReplayPassword: 'text' });
@@ -35,7 +36,7 @@ export class Registration extends React.Component {
     }
   }
 
-  register = async () => {
+  public register = async () => {
     const { login, password, replayPassword } = this.state;
     if (login === '') {
       this.setState({ processRegistr: 'loginEmpty' });
@@ -50,10 +51,10 @@ export class Registration extends React.Component {
       return;
     }
     const dataResponce = await axios.get(`http://localhost:3000/users?login=${login}`);
-    const user = { ...dataResponce.data[0] };
+    const user: IUser = { ...dataResponce.data[0] };
 
     if (user.login == undefined) {
-      const newUser = { login, password };
+      const newUser: IUser = { login, password };
       await axios.post('http://localhost:3000/users', newUser);
       this.setState({
         processRegistr: 'finishRegistr',
@@ -66,19 +67,19 @@ export class Registration extends React.Component {
     }
   }
 
-  changeLogin = ({ target }) => {
+  public changeLogin = ({ target }) => {
     this.setState({ login: target.value });
   }
 
-  changePassword = ({ target }) => {
+  public changePassword = ({ target }) => {
     this.setState({ password: target.value });
   }
 
-  changeReplayPassword = ({ target }) => {
+  public changeReplayPassword = ({ target }) => {
     this.setState({ replayPassword: target.value });
   }
 
-  render() {
+  public render() {
     const {
       typePassword,
       typeReplayPassword,

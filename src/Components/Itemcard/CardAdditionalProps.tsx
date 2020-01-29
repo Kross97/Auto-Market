@@ -2,8 +2,9 @@ import React from 'react';
 import itemCard from '../../styles/ItemCard.css';
 import { InputSelect } from './InputSelect';
 import { InputNormal } from './InputNormal';
+import { IPropsAdditional } from './InterfaceCard';
 
-export const CardAdditionalProps = (props) => {
+export const CardAdditionalProps: React.FC<IPropsAdditional> = (props: IPropsAdditional) => {
   const { card } = props;
   return (
     <div className={itemCard.additionalProps}>

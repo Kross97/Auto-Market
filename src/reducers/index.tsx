@@ -1,8 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 import update from 'immutability-helper';
+import * as ListItems from './InterfaceListAllItems';
+import * as PropertiesDefault from './InterfacePropertyDefault';
+import * as Alerts from './InterfaceAlerts';
 
 export const listAllItems = createSlice({
   name: 'allItem',
@@ -14,13 +17,13 @@ export const listAllItems = createSlice({
       titleSearch: '',
       currentPage: '',
       quantityItems: '',
-    },
+    } as ListItems.IStatelistAllItems,
   },
   reducers: {
     loadingPositionsRequest: (state) => {
       state.loadState = 'Loading Positions Request';
     },
-    loadingPositionsSucces: (state, action) => {
+    loadingPositionsSucces: (state, action: PayloadAction<ListItems.IActionPositionSucces>) => {
       const { items } = action.payload;
       return {
         ...state,
@@ -32,7 +35,7 @@ export const listAllItems = createSlice({
     loadingPositionsFailed: (state) => {
       state.loadState = 'Loading Positions Failed';
     },
-    deleteItem: (state, action) => {
+    deleteItem: (state, action: PayloadAction<ListItems.IActionDeleteItem>) => {
       const { id } = action.payload;
       const { allItems, countItems } = state;
       return {
@@ -41,17 +44,17 @@ export const listAllItems = createSlice({
         countItems: countItems - 1,
       };
     },
-    addFilterPage: (state, action) => {
+    addFilterPage: (state, action: PayloadAction<ListItems.IActionAddFilterPage>) => {
       const { page } = action.payload;
       const { filteringData } = state;
       filteringData.currentPage = page;
     },
-    addFilterTitle: (state, action) => {
+    addFilterTitle: (state, action: PayloadAction<ListItems.IActionAddFilterTitle>) => {
       const { title } = action.payload;
       const { filteringData } = state;
       filteringData.titleSearch = title;
     },
-    addFilterQuantity: (state, action) => {
+    addFilterQuantity: (state, action: PayloadAction<ListItems.IActionAddFilterQuantity>) => {
       const { quantity } = action.payload;
       const { filteringData } = state;
       filteringData.quantityItems = quantity;
@@ -64,12 +67,12 @@ export const allPropertyDefault = createSlice({
   initialState: {
     propertyDefault: [],
     loadState: '',
-  },
+  } as PropertiesDefault.IStatePropertyDefault,
   reducers: {
     loadingPropertiesRequest: (state) => {
       state.loadState = 'Loading Properties Request';
     },
-    loadingPropertiesSucces: (state, action) => {
+    loadingPropertiesSucces: (state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>) => {
       const { properties } = action.payload;
       return {
         ...state,
@@ -80,7 +83,7 @@ export const allPropertyDefault = createSlice({
     loadingPropertiesFailed: (state) => {
       state.loadState = 'Loading Properties Failed';
     },
-    deleteProperty: (state, action) => {
+    deleteProperty: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const { propertyDefault } = state;
       return {
@@ -88,7 +91,7 @@ export const allPropertyDefault = createSlice({
         propertyDefault: propertyDefault.filter((prop) => prop.id !== id),
       };
     },
-    addProperty: (state, action) => {
+    addProperty: (state, action: PayloadAction<PropertiesDefault.IActionAddProp>) => {
       const { property } = action.payload;
       const { propertyDefault } = state;
       return {
@@ -96,18 +99,18 @@ export const allPropertyDefault = createSlice({
         propertyDefault: [...propertyDefault, property],
       };
     },
-    loadingPropertiesToChange: (state, action) => {
+    loadingPropertiesToChange: (state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>) => {
       const { properties } = action.payload;
       state.propertyDefault = properties;
     },
-    increaseQuantityInputsDropdown: (state, action) => {
+    increaseQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
       const newProp = state.propertyDefault.find((prop) => prop.id === id);
       newProp.values.push({ id: _.uniqueId(), value: '' });
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
     },
-    reduceQuantityInputsDropdown: (state, action) => {
+    reduceQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
       const newProp = state.propertyDefault.find((prop) => prop.id === id);
@@ -119,9 +122,9 @@ export const allPropertyDefault = createSlice({
 
 export const alerts = createSlice({
   name: 'alerts',
-  initialState: { allAlerts: [] },
+  initialState: { allAlerts: [] } as Alerts.IStateAlerts,
   reducers: {
-    addNewAlert: (state, action) => {
+    addNewAlert: (state, action: PayloadAction<Alerts.IActionAddAlert>) => {
       const { alert } = action.payload;
       const { allAlerts } = state;
       return {
@@ -129,7 +132,7 @@ export const alerts = createSlice({
         allAlerts: [alert, ...allAlerts],
       };
     },
-    removeAlert: (state, action) => {
+    removeAlert: (state, action: PayloadAction<Alerts.IActionRemoveAlert>) => {
       const { id } = action.payload;
       const { allAlerts } = state;
       return {
@@ -137,7 +140,7 @@ export const alerts = createSlice({
         allAlerts: allAlerts.filter((alert) => alert.id !== id),
       };
     },
-    completeRemovalFromComponent: (state, action) => {
+    completeRemovalFromComponent: (state, action: PayloadAction<Alerts.IActionCompleteRemoval>) => {
       const { component } = action.payload;
       const { allAlerts } = state;
       return {
@@ -177,7 +180,6 @@ export const alerts = createSlice({
     },
   },
 });
-
 
 export const reducer = combineReducers({
   listAllItems: listAllItems.reducer,

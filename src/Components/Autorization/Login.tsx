@@ -3,9 +3,9 @@ import axios from 'axios';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
 import logined from '../../styles/Login.css';
+import { IStateLogin } from './InterfaceAutorization';
 
-
-export class Login extends React.Component {
+export class Login extends React.Component<{}, IStateLogin> {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,8 +16,7 @@ export class Login extends React.Component {
     };
   }
 
-
-changeTypeInput = () => {
+public changeTypeInput = () => {
   const { typePassword } = this.state;
   if (typePassword === 'password') {
     this.setState({ typePassword: 'text' });
@@ -26,19 +25,18 @@ changeTypeInput = () => {
   }
 }
 
-changeLogin = ({ target }) => {
+public changeLogin = ({ target }) => {
   this.setState({ login: target.value });
   axios.get(`http://localhost:3000/users?login=${target.value}`).then(({ data }) => {
     this.setState({ user: { ...data[0] } });
   });
 }
 
-changePassword = ({ target }) => {
+public changePassword = ({ target }) => {
   this.setState({ password: target.value });
 }
 
-
-render() {
+public render() {
   const {
     login,
     password,
@@ -52,7 +50,7 @@ render() {
     localStorage.setItem('isLogin', 'false');
   }
   const btnClass = cn({
-    [logined.login]: true,
+    [logined.login]: 'true',
     [logined.notLogin]: localStorage.getItem('isLogin') === 'false',
   });
   return (

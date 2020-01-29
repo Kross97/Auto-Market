@@ -1,8 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
 import addItem from '../../styles/AddItem.css';
+import { IPropsItemProp } from './InterfaceAddItem';
+import { IPropDefaultUnion } from '../../Interface_Application';
 
-export const ItemProp = (props) => {
+export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
   const {
     dataPropertiesID,
     dataProperties,
@@ -12,12 +14,17 @@ export const ItemProp = (props) => {
     removeProp,
   } = props;
   const propIsHaveData = dataPropertiesID.filter((id) => id === prop.id).length;
-  let dataProp = { value: '' };
+  let dataPropInitial: IPropDefaultUnion = {
+    title: prop.title,
+    type: prop.type,
+    id: prop.id,
+    value: '',
+  };
   let erorStyle;
   if (propIsHaveData !== 0) {
-    dataProp = dataProperties[prop.id];
+    dataPropInitial = dataProperties[prop.id];
     erorStyle = cn({
-      [addItem.erorValid]: dataProp.isValid === false,
+      [addItem.erorValid]: dataPropInitial.isValid === false,
     });
   }
   return (
@@ -29,7 +36,7 @@ export const ItemProp = (props) => {
       </div>
       <div className={addItem.propInput}>
         <span>Значение</span>
-        <input className={`${erorStyle}`} onChange={addDataInput} value={dataProp.value} type="text" />
+        <input className={`${erorStyle}`} onChange={addDataInput} value={dataPropInitial.value} type="text" />
       </div>
     </div>
   );

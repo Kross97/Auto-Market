@@ -8,6 +8,7 @@ import { ListAlerts } from '../ListAlerts/ListAlerts';
 import itemCard from '../../styles/ItemCard.css';
 import { alerts } from '../../reducers';
 import * as actions from '../../actions';
+import { IProps, IAuto } from './InterfaceCard';
 
 const mapStateToProps = ({ listAllItems: { allItems }, alerts: { allAlerts } }) => {
   const props = {
@@ -22,7 +23,7 @@ const actionCreators = {
   addNewAlert: alerts.actions.addNewAlert,
 };
 
-const CardUndefined = () => (
+const CardUndefined: React.FC = () => (
   <div className={itemCard.undefinedContainer}>
     <div className={itemCard.undefinedContent}>
       <h2>Товар не найден!</h2>
@@ -31,23 +32,23 @@ const CardUndefined = () => (
   </div>
 );
 
-class Card extends React.Component {
-  componentDidMount() {
+class Card extends React.Component<IProps, {}> {
+  public componentDidMount() {
     const { addAllItems } = this.props;
     addAllItems();
   }
 
-  addBasket = ({ title, price }) => () => {
+  public addBasket = ({ title, price }: IAuto) => () => {
     const { addNewAlert } = this.props;
-    const auto = { title, price };
+    const auto: IAuto = { title, price };
     axios.post('http://localhost:3000/basket', auto).then(() => {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'addBasket', component: 'itemCard' } });
     });
   }
 
-  render() {
+  public render() {
     const { match, allItems, allAlerts } = this.props;
-    const id = match.params.id.slice(1);
+    const id: string = match.params.id.slice(1);
     const card = allItems.find((item) => item.id === Number(id));
     if (card == undefined) {
       return <CardUndefined />;

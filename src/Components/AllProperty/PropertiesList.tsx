@@ -1,7 +1,8 @@
 import React from 'react';
 import properties from '../../styles/AllProperty.css';
+import { IPropsList } from './InterfaceAllProperty';
 
-export const PropertiesList = (props) => {
+export const PropertiesList: React.FC<IPropsList> = (props: IPropsList) => {
   const { propertyDefault, removeProperty } = props;
   return (
     <div className={properties.listConteiner}>

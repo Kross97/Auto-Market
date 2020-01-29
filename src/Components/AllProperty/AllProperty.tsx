@@ -8,6 +8,7 @@ import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { PropertiesList } from './PropertiesList';
 import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
+import { IPropAllProperty } from './InterfaceAllProperty';
 
 const mapStateToProps = ({ allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }) => {
   const props = {
@@ -24,18 +25,18 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class Properties extends React.Component {
-  componentDidMount() {
+class Properties extends React.Component<IPropAllProperty, {}> {
+  public componentDidMount() {
     const { addAllProperties } = this.props;
     addAllProperties();
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'allProperty' });
   }
 
-removeProperty = (id) => (e) => {
+public removeProperty = (id) => (e) => {
   e.preventDefault();
   const { deleteProperty, addNewAlert } = this.props;
   addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
@@ -43,7 +44,7 @@ removeProperty = (id) => (e) => {
   axios.delete(`http://localhost:3000/props/${id}`);
 }
 
-render() {
+public render() {
   const { propertyDefault, allAlerts } = this.props;
   return (
     <main className={properties.content}>

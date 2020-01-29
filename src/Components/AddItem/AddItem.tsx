@@ -11,12 +11,14 @@ import { MainData } from './MainData';
 import addItem from '../../styles/AddItem.css';
 import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
+import { IPropsAddNewItem, IStateAddNewItem, IAllTypeValidators } from './InterfaceAddItem';
+import { IAllStateApplication, IAlert, IItem, IPropDefault, IPropDefaultNormal, IPropDefaultSelect, IDataProperties } from '../../Interface_Application';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
     propertyDefault: state.allPropertyDefault.propertyDefault,
     allItems: state.listAllItems.allItems,
-    allAlerts: state.alerts.allAlerts.filter((alert) => alert.component === 'addItem'),
+    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addItem'),
   };
   return props;
 };
@@ -29,8 +31,8 @@ const actionCreators = {
   loadingPropertiesToChange: allPropertyDefault.actions.loadingPropertiesToChange,
 };
 
-class AddNewItem extends React.Component {
-  constructor(props) {
+class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
+  constructor(props: IPropsAddNewItem) {
     super(props);
     this.state = {
       dataAllPropsSelect: {},
@@ -45,7 +47,7 @@ class AddNewItem extends React.Component {
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { addAllProperties } = this.props;
     const { match: { params: { id } } } = this.props;
     if (id) {
@@ -55,14 +57,14 @@ class AddNewItem extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'addItem' });
   }
 
 // Возврат данных элемента для редактирования
 // методы (spliceStateAndItem, addingItemNormalPropsInState, addingItemDropdownPropsInState)
-spliceStateAndItem = async (idInURL) => {
+public spliceStateAndItem = async (idInURL: string) => {
   const { loadingPropertiesToChange } = this.props;
   const id = idInURL.slice(1);
   const responce = await axios.get(`http://localhost:3000/goods/?id=${id}`);
@@ -80,13 +82,13 @@ spliceStateAndItem = async (idInURL) => {
   });
 }
 
-addingItemNormalPropsInState = (item) => {
+public addingItemNormalPropsInState = (item: IItem) => {
   const { dataPropertiesID, dataProperties } = this.state;
-  const itemPropsNormal = item.allPropertiesData.filter((prop) => prop.type !== 'Dropdown');
-  const itemPropsNormalID = itemPropsNormal.map((prop) => prop.id);
-  const itemDataProperties = {};
-  itemPropsNormalID.map((id) => {
-    const currentProp = itemPropsNormal.find((prop) => prop.id === id);
+  const itemPropsNormal = item.allPropertiesData.filter((prop: IPropDefault) => prop.type !== 'Dropdown');
+  const itemPropsNormalID = itemPropsNormal.map((prop: IPropDefaultNormal) => prop.id);
+  const itemDataProperties: IDataProperties = {};
+  itemPropsNormalID.map((id: number) => {
+    const currentProp = itemPropsNormal.find((prop: IPropDefaultNormal) => prop.id === id);
     const dataProp = {
       title: currentProp.title,
       type: currentProp.type,
@@ -102,13 +104,13 @@ addingItemNormalPropsInState = (item) => {
   });
 }
 
-addingItemDropdownPropsInState = (item) => {
+public addingItemDropdownPropsInState = (item: IItem) => {
   const { dataPropertiesID, dataProperties } = this.state;
-  const itemPropsSelect = item.allPropertiesData.filter((prop) => prop.type === 'Dropdown');
-  const itemsPropsSelectID = itemPropsSelect.map((prop) => prop.id);
-  const itemDataProperties = {};
-  itemsPropsSelectID.map((id) => {
-    const currentProp = itemPropsSelect.find((prop) => prop.id === id);
+  const itemPropsSelect = item.allPropertiesData.filter((prop: IPropDefault) => prop.type === 'Dropdown');
+  const itemsPropsSelectID = itemPropsSelect.map((prop: IPropDefaultSelect) => prop.id);
+  const itemDataProperties: IDataProperties = {};
+  itemsPropsSelectID.map((id: number) => {
+    const currentProp = itemPropsSelect.find((prop: IPropDefaultSelect) => prop.id === id);
     const dataProp = {
       title: currentProp.title,
       type: currentProp.type,
@@ -123,28 +125,28 @@ addingItemDropdownPropsInState = (item) => {
   });
 }
 
-changeTitle = ({ target }) => {
+  public changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ title: target.value });
 }
 
-changePrice = ({ target }) => {
+ public changePrice = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ price: target.value });
 }
 
-changeDescription = ({ target }) => {
+  public changeDescription = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
   this.setState({ description: target.value });
 }
 
-getImgUrl = (event) => {
+  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = () => {
-    this.setState({ imgSrc: reader.result, imgName: file.name });
+    this.setState({ imgSrc: reader.result, imgName: String(file.name) });
   };
 }
 
-validationCheck = () => {
+  public validationCheck = () => {
   let check = 'add';
   const {
     title,
@@ -174,7 +176,7 @@ validationCheck = () => {
   return check;
 }
 
-addNewOrEditItem = () => {
+  public addNewOrEditItem = () => {
   const validAllForm = this.validationCheck();
   if (validAllForm === 'notAdd') {
     return;
@@ -198,7 +200,7 @@ addNewOrEditItem = () => {
     month = date.getMonth();
   }
   const itemDate = `${date.getDate()}.${month}.${date.getFullYear()}`;
-  const allPropertiesData = dataPropertiesID.map((id) => dataProperties[id]);
+  const allPropertiesData = dataPropertiesID.map((iden) => dataProperties[iden]);
   const item = {
     title,
     price: `${price}$`,
@@ -232,7 +234,7 @@ addNewOrEditItem = () => {
   });
 }
 
-createValuesSelect = (id, index, value) => {
+  public createValuesSelect = (id: number, index: number, value: string) => {
   const { dataAllPropsSelect, dataAllPropsSelectID } = this.state;
   const valueOneInput = { id: _.uniqueId(), value };
   let currentStorageSelect;
@@ -251,8 +253,7 @@ createValuesSelect = (id, index, value) => {
   });
 }
 
-
-addDataInputSelect = ({ id, title, type }, index) => ({ target }) => {
+  public addDataInputSelect = ({ id, title, type }: IPropDefault, index: number) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   const {
     dataAllPropsSelect,
     dataAllPropsSelectID,
@@ -274,17 +275,16 @@ addDataInputSelect = ({ id, title, type }, index) => ({ target }) => {
   this.setState({ dataProperties: { ...dataProperties, [id]: dataProp } });
 }
 
-
-validator = (type, value) => {
-  const allTypeValidators = {
-    Number: (val) => validator.isInt(val),
-    String: (val) => !validator.isInt(val),
+  public validator = (type: string, value: string) => {
+  const allTypeValidators: IAllTypeValidators = {
+    Number: (val: string) => validator.isInt(val),
+    String: (val: string) => !validator.isInt(val),
   };
 
   return allTypeValidators[type](value);
-};
+}
 
-addDataInput = ({ id, title, type }) => ({ target }) => {
+  public addDataInput = ({ id, title, type }: IPropDefault) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   const { dataProperties, dataPropertiesID } = this.state;
   const isValid = this.validator(type, target.value);
   const dataProp = {
@@ -300,7 +300,7 @@ addDataInput = ({ id, title, type }) => ({ target }) => {
   this.setState({ dataProperties: { ...dataProperties, [id]: dataProp } });
 }
 
-removeProp = (id) => () => {
+   public removeProp = (id: number) => () => {
   const { deleteProperty } = this.props;
   const { dataPropertiesID } = this.state;
   const dataPropertiesIDFiltered = dataPropertiesID.filter((i) => i !== id);
@@ -308,7 +308,7 @@ removeProp = (id) => () => {
   deleteProperty({ id });
 }
 
-render() {
+  public render() {
   const { dataPropertiesID, dataProperties, imgName } = this.state;
   const { propertyDefault, allAlerts } = this.props;
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import itemCard from '../../styles/ItemCard.css';
+import { IPropNormal } from './InterfaceCard';
 
-export const InputNormal = (props) => {
+export const InputNormal: React.FC<IPropNormal> = (props: IPropNormal) => {
   const { data } = props;
   return (
     <div className={itemCard.prop} key={data.id}>

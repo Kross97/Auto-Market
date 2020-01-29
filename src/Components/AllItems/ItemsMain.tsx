@@ -7,6 +7,7 @@ import { listAllItems, alerts } from '../../reducers';
 import items from '../../styles/AllItems.css';
 import { allItemsFiltered } from '../../selectors';
 import { ListItems } from './ListItems';
+import { IPropsMainContent } from './InterfaceAllItems';
 
 const mapStateToProps = (state) => {
   const props = {
@@ -22,13 +23,13 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class MainContent extends React.Component {
-  componentWillUnmount() {
+class MainContent extends React.Component<IPropsMainContent, {}> {
+  public componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'allItems' });
   }
 
-  removeItem = (id) => (e) => {
+  public removeItem = (id) => (e) => {
     e.preventDefault();
     const { deleteItem, addNewAlert } = this.props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' } });
@@ -36,7 +37,7 @@ class MainContent extends React.Component {
     axios.delete(`http://localhost:3000/goods/${id}`);
   }
 
-  sorting(itemsAfterFilters, typeSort) {
+  public sorting(itemsAfterFilters, typeSort) {
     if (typeSort === '') {
       return itemsAfterFilters;
     }
@@ -65,7 +66,7 @@ class MainContent extends React.Component {
     return allTypesSorting[typeSort](newSliceTasks);
   }
 
-  render() {
+  public render() {
     const {
       allAlerts,
       allItems,

@@ -1,7 +1,8 @@
 import React from 'react';
 import addItem from '../../styles/AddItem.css';
+import { IPropsMainData } from './InterfaceAddItem';
 
-export const MainData = (props) => {
+export const MainData: React.FC<IPropsMainData> = (props: IPropsMainData) => {
   const {
     changeTitle,
     changePrice,
@@ -19,27 +20,27 @@ export const MainData = (props) => {
   } = state;
   return (
     <>
-      <label htmlFor>
+      <label>
    Название товара
    (не более 30 символов)
         <span>*</span>
         <input onChange={changeTitle} type="text" value={title} />
       </label>
-      <label htmlFor>
+      <label>
    Стоимость товара
    (не более 15 символов)
         <span>*</span>
         <input onChange={changePrice} type="text" value={price} />
       </label>
-      <label htmlFor>
+      <label>
    Изображение
         <span>*</span>
         <input onChange={getImgUrl} type="file" accept="image/*" />
         <div className={addItem.customInput}>{imgName}</div>
         <img className={addItem.customImg} src="../src/img/download-arrow.png" alt="download" />
       </label>
-      { imgSrc !== '' ? <img className={addItem.img} src={imgSrc} alt="img-auto" /> : null }
-      <label htmlFor>
+      { imgSrc !== '' ? <img className={addItem.img} src={imgSrc as string} alt="img-auto" /> : null }
+      <label>
    Описание товара
         <textarea onChange={changeDescription} value={description} />
       </label>

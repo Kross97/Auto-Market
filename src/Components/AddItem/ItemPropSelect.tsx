@@ -3,26 +3,25 @@ import cn from 'classnames';
 import { connect } from 'react-redux';
 import addItem from '../../styles/AddItem.css';
 import { allPropertyDefault } from '../../reducers';
-
-const mapStateToProps = (state) => state;
+import { IPropsItemSelect } from './InterfaceAddItem';
 
 const actionCreators = {
   reduceQuantityInputsDropdown: allPropertyDefault.actions.reduceQuantityInputsDropdown,
   increaseQuantityInputsDropdown: allPropertyDefault.actions.increaseQuantityInputsDropdown,
 };
 
-class ItemSelect extends React.Component {
-increaseInput = (id) => () => {
+class ItemSelect extends React.Component<IPropsItemSelect, {}> {
+public increaseInput = (id: number) => () => {
   const { increaseQuantityInputsDropdown } = this.props;
   increaseQuantityInputsDropdown({ id });
 }
 
-reduceInput = (id) => () => {
+  public reduceInput = (id: number) => () => {
   const { reduceQuantityInputsDropdown } = this.props;
   reduceQuantityInputsDropdown({ id });
 }
 
-render() {
+  public render() {
   const {
     addDataInputSelect,
     prop,
@@ -48,7 +47,7 @@ render() {
         <span>Значение</span>
         {prop.values.map((el, i) => (
           <div key={el.id}>
-            <input onChange={addDataInputSelect(prop, i)} value={isHaveSelectData === -1 ? '' : null} type="text" />
+            <input onChange={addDataInputSelect(prop, i)} value={isHaveSelectData === -1 ? '' : undefined} type="text" />
             <button onClick={this.reduceInput(prop.id)} className={btnClassMinus} type="button">-</button>
           </div>
         ))}
@@ -59,4 +58,4 @@ render() {
 }
 }
 
-export const ItemPropSelect = connect(mapStateToProps, actionCreators)(ItemSelect);
+export const ItemPropSelect = connect(null, actionCreators)(ItemSelect);

@@ -27,7 +27,6 @@ const store = configureStore({
   },
 });
 
-
 ReactDOM.render(
   <HashRouter>
     <Provider store={store}>

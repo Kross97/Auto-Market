@@ -7,8 +7,10 @@ import { ItemsSortNavigation } from './ItemsSortNavigation';
 import items from '../../styles/AllItems.css';
 import * as actions from '../../actions';
 import { listAllItems } from '../../reducers';
+import { IPropsAllItems, IStateAllItems } from './InterfaceAllItems';
+import { IAllStateApplication } from '../../Interface_Application';
 
-const mapStateToProps = ({ listAllItems: { countItems } }) => ({ countItems });
+const mapStateToProps = ({ listAllItems: { countItems } }: IAllStateApplication) => ({ countItems });
 
 const actionCreators = {
   addAllItems: actions.addAllItems,
@@ -18,8 +20,8 @@ const actionCreators = {
   addFilterQuantity: listAllItems.actions.addFilterQuantity,
 };
 
-class Items extends React.Component {
-  constructor(props) {
+class Items extends React.Component<IPropsAllItems, IStateAllItems> {
+  constructor(props: IPropsAllItems) {
     super(props);
     this.state = {
       currentQuantity: '10',
@@ -30,7 +32,7 @@ class Items extends React.Component {
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const {
       addAllItems,
       addFilterPage,
@@ -44,19 +46,19 @@ class Items extends React.Component {
     addFilterQuantity({ quantity: currentQuantity });
   }
 
-  changeCurrentQuantity = ({ target }) => {
+  public changeCurrentQuantity = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterQuantity } = this.props;
     this.setState({ currentQuantity: target.value });
     addFilterQuantity({ quantity: target.value });
   }
 
-  changeCurrentPage = ({ target }) => {
+  public changeCurrentPage = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterPage } = this.props;
     this.setState({ currentPage: target.value });
     addFilterPage({ page: target.value });
   }
 
- currentSort = (type) => () => {
+ public currentSort = (type: string) => () => {
    const { typeSort } = this.state;
    if (type === typeSort) {
      this.setState({ typeSort: `Desc${type}` });
@@ -65,18 +67,18 @@ class Items extends React.Component {
    }
  }
 
-  addSearchTitle = () => {
+  public addSearchTitle = () => {
     const { titleData } = this.state;
     const { addFilterTitle } = this.props;
     this.setState({ titleSearch: titleData });
     addFilterTitle({ title: titleData });
   }
 
-  changeTitleData = ({ target }) => {
+  public changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ titleData: target.value });
-  };
+  }
 
-  render() {
+  public render() {
     const {
       titleData,
       titleSearch,
@@ -85,8 +87,8 @@ class Items extends React.Component {
       currentPage,
     } = this.state;
     const { countItems } = this.props;
-    const quantityPages = Math.ceil(countItems / currentQuantity);
-    const userIsLogin = localStorage.getItem('isLogin');
+    const quantityPages: number = Math.ceil(countItems / Number(currentQuantity));
+    const userIsLogin: string | null  = localStorage.getItem('isLogin');
     return (
       <div className={items.content}>
         <div className={items.btns}>

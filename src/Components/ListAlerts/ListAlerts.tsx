@@ -2,20 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert } from './Alert';
 import { alerts } from '../../reducers';
-
+import { IProps } from './InterfaceListAlerts';
 const mapStateToProps = (state) => state;
 
 const actionCreators = {
   removeAlert: alerts.actions.removeAlert,
 };
 
-class Alerts extends React.Component {
-  removeCurrentAlert = (id) => () => {
+class Alerts extends React.Component<IProps, {}> {
+  public removeCurrentAlert = (id) => () => {
     const { removeAlert } = this.props;
     removeAlert({ id });
   }
 
-  render() {
+  public render() {
     const { allAlerts } = this.props;
     return (
       <ul>

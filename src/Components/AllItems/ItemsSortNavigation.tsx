@@ -1,7 +1,8 @@
 import React from 'react';
 import items from '../../styles/AllItems.css';
+import { IPropsSortNavigation } from './InterfaceAllItems';
 
-export const ItemsSortNavigation = (props) => {
+export const ItemsSortNavigation: React.FC<IPropsSortNavigation> = (props: IPropsSortNavigation) => {
   const { currentSort, typeSort } = props;
   return (
     <nav className={items.navigation}>

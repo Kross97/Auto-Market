@@ -5,25 +5,29 @@ import { AllItems } from '../AllItems/AllItems';
 import { AllProperty } from '../AllProperty/AllProperty';
 import content from '../../styles/AllContent.css';
 
-export class AllContent extends React.Component {
-  constructor(props) {
+interface IStateAllContent {
+  showPage: string;
+}
+
+export class AllContent extends React.Component<{}, IStateAllContent> {
+  constructor(props: {}) {
     super(props);
     this.state = { showPage: 'goods' };
   }
 
-  changeShow = (type) => () => {
+  public changeShow = (type: string) => () => {
     this.setState({ showPage: type });
   }
 
-  render() {
-    const userIsLogin = localStorage.getItem('isLogin');
+  public render() {
+    const userIsLogin: string | null = localStorage.getItem('isLogin');
     const { showPage } = this.state;
     const btnClassGoods = cn({
-      [content.navBtn]: true,
+      [content.navBtn]: 'true',
       [content.active]: showPage === 'goods',
     });
     const btnClassProp = cn({
-      [content.navBtn]: true,
+      [content.navBtn]: 'true',
       [content.active]: showPage === 'prop',
     });
     const propPage = <button onClick={this.changeShow('prop')} type="button" className={btnClassProp}>Листинг проперти</button>;

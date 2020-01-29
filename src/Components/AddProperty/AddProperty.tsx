@@ -8,11 +8,13 @@ import { PropertyMain } from './PropertyMain';
 import addProp from '../../styles/AddProperty.css';
 import { allPropertyDefault, alerts } from '../../reducers';
 import { defaultPropsTitles } from '../../selectors';
+import { IPropsAddNewProperty, IStateAddNewProperty } from './InterfaceAddProperty';
+import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
     propertyDefaultTitles: defaultPropsTitles(state),
-    allAlerts: state.alerts.allAlerts.filter((alert) => alert.component === 'addProp'),
+    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addProp'),
   };
   return props;
 };
@@ -23,18 +25,18 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class AddNewProperty extends React.Component {
-  constructor(props) {
+class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewProperty> {
+  constructor(props: IPropsAddNewProperty) {
     super(props);
     this.state = { title: '', type: '' };
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'addProp' });
   }
 
-constructorProp = () => {
+public constructorProp = () => {
   const { title, type } = this.state;
   const property = { title, type };
   if (type === 'Dropdown') {
@@ -43,7 +45,7 @@ constructorProp = () => {
   return property;
 }
 
-addNewProperty = () => {
+public addNewProperty = () => {
   const { propertyDefaultTitles, addProperty, addNewAlert } = this.props;
   const { type, title } = this.state;
   const allPropTitles = new Set(propertyDefaultTitles);
@@ -73,15 +75,15 @@ addNewProperty = () => {
   this.setState({ title: '', type: '' });
 }
 
-changePropTitle = ({ target }) => {
+  public changePropTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ title: target.value });
 }
 
-changePropType = ({ target }) => {
+  public changePropType = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ type: target.value });
 }
 
-render() {
+public render() {
   const { title, type } = this.state;
   const { allAlerts } = this.props;
   const { match: { params: { from } } } = this.props;

@@ -1,14 +1,15 @@
 import React from 'react';
 import cn from 'classnames';
 import items from '../../styles/AllItems.css';
+import { IPropsItemsFooter } from './InterfaceAllItems';
 
-export const ItemsFooter = (props) => {
-  const constructorPages = (allPages, quantityPages, valuePage) => {
-    if (quantityPages === 0) {
-      return allPages;
+export const ItemsFooter: React.FC<IPropsItemsFooter> = (props: IPropsItemsFooter) => {
+  const constructorPages = (pages: string[], quantity: number, valuePage: number): string[] => {
+    if (quantity === 0) {
+      return pages;
     }
-    const newAllPages = [...allPages, `${valuePage}`];
-    return constructorPages(newAllPages, quantityPages - 1, valuePage + 1);
+    const newAllPages: string[] = [...pages, `${valuePage}`];
+    return constructorPages(newAllPages, quantity - 1, valuePage + 1);
   };
 
   const {
@@ -18,9 +19,9 @@ export const ItemsFooter = (props) => {
     changeCurrentPage,
     quantityPages,
   } = props;
-  const arrForPages = [];
+  const arrForPages: string[] = [];
   const startValuePage = 1;
-  const allPages = constructorPages(arrForPages, quantityPages, startValuePage);
+  const allPages: string[] = constructorPages(arrForPages, quantityPages, startValuePage);
   const quantityBtns = ['10', '30', '50'];
   return (
     <footer className={items.pageBtns}>
@@ -35,7 +36,7 @@ export const ItemsFooter = (props) => {
       </div>
       <div className={items.currentPage}>
         <p>Текущая страница:</p>
-        {allPages.map((btnVal) => {
+        {allPages.map((btnVal: string) => {
           const divClassActive = cn({
             [items.active]: btnVal === currentPage,
           });
