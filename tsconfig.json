@@ -1,18 +1,6 @@
 {
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          "classnameTransform": "dashes",
-          "customMatcher": "\\.m\\.css$",
-          "customRenderer": "./myRenderer.js",
-          "dotenvOptions": {},
-          "postCssOptions": {},
-          "rendererOptions": {}
-        }
-      }
-    ],
+    "plugins" : [{ "name" : "css-module-types" }] ,
     "target": "es5",
     "lib": [
       "dom",
@@ -32,6 +20,7 @@
     "jsx": "react"
   },
   "include": [
+    "global.d.ts",
     "src"
   ]
 }

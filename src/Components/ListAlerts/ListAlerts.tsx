@@ -2,15 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert } from './Alert';
 import { alerts } from '../../reducers';
-import { IProps } from './InterfaceListAlerts';
-const mapStateToProps = (state) => state;
+import { IPropsListAlerts } from './InterfaceListAlerts';
 
 const actionCreators = {
   removeAlert: alerts.actions.removeAlert,
 };
 
-class Alerts extends React.Component<IProps, {}> {
-  public removeCurrentAlert = (id) => () => {
+class Alerts extends React.Component<IPropsListAlerts, {}> {
+  public removeCurrentAlert = (id: string) => () => {
     const { removeAlert } = this.props;
     removeAlert({ id });
   }
@@ -87,4 +86,4 @@ class Alerts extends React.Component<IProps, {}> {
   }
 }
 
-export const ListAlerts = connect(mapStateToProps, actionCreators)(Alerts);
+export const ListAlerts = connect(null, actionCreators)(Alerts);

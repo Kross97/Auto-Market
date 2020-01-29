@@ -6,11 +6,14 @@ import logined from '../../styles/Login.css';
 import { IStateLogin } from './InterfaceAutorization';
 
 export class Login extends React.Component<{}, IStateLogin> {
-  constructor(props) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       typePassword: 'password',
-      user: {},
+      user: {
+        login: '',
+        password: '',
+      },
       login: '',
       password: '',
     };
@@ -25,14 +28,14 @@ public changeTypeInput = () => {
   }
 }
 
-public changeLogin = ({ target }) => {
+public changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ login: target.value });
   axios.get(`http://localhost:3000/users?login=${target.value}`).then(({ data }) => {
     this.setState({ user: { ...data[0] } });
   });
 }
 
-public changePassword = ({ target }) => {
+public changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
   this.setState({ password: target.value });
 }
 

@@ -3,9 +3,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 import update from 'immutability-helper';
-import * as ListItems from './InterfaceListAllItems';
-import * as PropertiesDefault from './InterfacePropertyDefault';
-import * as Alerts from './InterfaceAlerts';
+import * as ListItems from './Interface_ListAllItems';
+import * as PropertiesDefault from './Interface_PropertyDefault';
+import * as Alerts from './Interface_Alerts';
 
 export const listAllItems = createSlice({
   name: 'allItem',
@@ -17,8 +17,8 @@ export const listAllItems = createSlice({
       titleSearch: '',
       currentPage: '',
       quantityItems: '',
-    } as ListItems.IStatelistAllItems,
-  },
+    },
+  } as ListItems.IStatelistAllItems,
   reducers: {
     loadingPositionsRequest: (state) => {
       state.loadState = 'Loading Positions Request';
@@ -106,14 +106,14 @@ export const allPropertyDefault = createSlice({
     increaseQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      const newProp: any = state.propertyDefault.find((prop) => prop.id === id);
       newProp.values.push({ id: _.uniqueId(), value: '' });
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
     },
     reduceQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      const newProp: any = state.propertyDefault.find((prop) => prop.id === id);
       newProp.values.pop();
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
     },
@@ -150,28 +150,28 @@ export const alerts = createSlice({
     },
   },
   extraReducers: {
-    [listAllItems.actions.loadingPositionsSucces]: (state) => {
+    [listAllItems.actions.loadingPositionsSucces as any]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsSucces', component: 'allItems' }],
       };
     },
-    [listAllItems.actions.loadingPositionsFailed]: (state) => {
+    [listAllItems.actions.loadingPositionsFailed as any]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsFailed', component: 'allItems' }],
       };
     },
-    [allPropertyDefault.actions.loadingPropertiesSucces]: (state) => {
+    [allPropertyDefault.actions.loadingPropertiesSucces as any]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addPropsSucces', component: 'allProperty' }],
       };
     },
-    [allPropertyDefault.actions.loadingPropertiesFailed]: (state) => {
+    [allPropertyDefault.actions.loadingPropertiesFailed as any]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,

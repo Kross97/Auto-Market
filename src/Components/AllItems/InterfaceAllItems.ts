@@ -30,6 +30,8 @@ export interface IPropsSortNavigation {
 export interface IPropsMainContent {
   allItems: IItem[];
   allAlerts: IAlert[];
+  currentQuantity: string;
+  typeSort: string;
   deleteItem(id: { id: number }): any;
   addNewAlert(alert: { alert: IAlert }): any;
   completeRemovalFromComponent(remove: { component: string }): any;
@@ -39,8 +41,8 @@ export interface IPropsItemsFooter {
   currentQuantity: string;
   currentPage: string;
   quantityPages: number;
-  changeCurrentQuantity(event: React.MouseEvent<HTMLButtonElement>): void;
-  changeCurrentPage(event: React.MouseEvent<HTMLButtonElement>): void;
+  changeCurrentQuantity(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;   // React.MouseEvent<HTMLButtonElement, MouseEvent>
+  changeCurrentPage(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
 }
 
 export interface IStateAllItems {
@@ -58,4 +60,8 @@ export interface IPropsAllItems {
   addFilterPage(page: { page: string }): any;
   addFilterTitle(title: { title: string }): any;
   addFilterQuantity(quantity: { quantity: string }): any;
+}
+
+export interface IAllTypesSorting {
+  [type: string]: (tasks: IItem[]) => IItem[];
 }

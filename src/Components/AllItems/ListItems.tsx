@@ -10,7 +10,7 @@ export const ListItems: React.FC<IPropsListItems> = (props: IPropsListItems) => 
       {itemsAfterFilterAndSort.length !== 0 && (
         <ul>
           {itemsAfterFilterAndSort.map((item, i) => {
-            if (i >= currentQuantity) {
+            if (i >= Number(currentQuantity)) {
               return null;
             }
             return (

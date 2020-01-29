@@ -7,7 +7,6 @@ interface IAlert {
 interface IItem {
   title: string;
   price: string;
-  channelId: string;
   itemDate: string;
   dateSort: string;
   description: string;
@@ -17,7 +16,7 @@ interface IItem {
   allPropertiesData: any[];
 }
 
-export interface IProps {
+export interface IPropsItemCard {
   match: {
     params: {
       id: string;
@@ -26,7 +25,7 @@ export interface IProps {
   allAlerts: IAlert[];
   allItems: IItem[];
   addAllItems(): void;
-  addNewAlert(alert: IAlert): void;
+  addNewAlert(alert: { alert: IAlert }): void;
 }
 
 export interface IAuto {

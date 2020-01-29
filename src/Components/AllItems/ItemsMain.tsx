@@ -7,12 +7,13 @@ import { listAllItems, alerts } from '../../reducers';
 import items from '../../styles/AllItems.css';
 import { allItemsFiltered } from '../../selectors';
 import { ListItems } from './ListItems';
-import { IPropsMainContent } from './InterfaceAllItems';
+import { IPropsMainContent, IAllTypesSorting } from './InterfaceAllItems';
+import { IAllStateApplication, IAlert, IItem } from '../../Interface_Application';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
     allItems: allItemsFiltered(state),
-    allAlerts: state.alerts.allAlerts.filter((alert) => alert.component === 'allItems'),
+    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'allItems'),
   };
   return props;
 };
@@ -29,7 +30,7 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
     completeRemovalFromComponent({ component: 'allItems' });
   }
 
-  public removeItem = (id) => (e) => {
+  public removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const { deleteItem, addNewAlert } = this.props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' } });
@@ -37,33 +38,33 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
     axios.delete(`http://localhost:3000/goods/${id}`);
   }
 
-  public sorting(itemsAfterFilters, typeSort) {
+  public sorting(itemsAfterFilters: IItem[], typeSort: string) {
     if (typeSort === '') {
       return itemsAfterFilters;
     }
 
-    const newSliceTasks = itemsAfterFilters.slice();
-    const allTypesSorting = {
-      Price: (tasks) => tasks.sort((a, b) => {
+    const newSliceItems = itemsAfterFilters.slice();
+    const allTypesSorting: IAllTypesSorting = {
+      Price: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => {
         const indexLastSymbolA = a.price.length - 2;
         const indexLastSymbolB = b.price.length - 2;
         return (
           Number(a.price.slice(0, indexLastSymbolA)) - Number(b.price.slice(0, indexLastSymbolB))
         );
       }),
-      DescPrice: (tasks) => tasks.sort((a, b) => {
+      DescPrice: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => {
         const indexLastSymbolA = a.price.length - 2;
         const indexLastSymbolB = b.price.length - 2;
         return (
           Number(b.price.slice(0, indexLastSymbolB)) - Number(a.price.slice(0, indexLastSymbolA))
         );
       }),
-      Data: (tasks) => tasks.sort((a, b) => Date.parse(a.dateSort) - Date.parse(b.dateSort)),
-      DescData: (tasks) => tasks.sort((a, b) => Date.parse(b.dateSort) - Date.parse(a.dateSort)),
-      Title: (tasks) => tasks.sort((a, b) => a.title > b.title),
-      DescTitle: (tasks) => tasks.sort((a, b) => a.title < b.title),
+      Data: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(a.dateSort) - Date.parse(b.dateSort)),
+      DescData: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(b.dateSort) - Date.parse(a.dateSort)),
+      Title: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem): any => a.title > b.title),
+      DescTitle: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem): any => a.title < b.title),
     };
-    return allTypesSorting[typeSort](newSliceTasks);
+    return allTypesSorting[typeSort](newSliceItems);
   }
 
   public render() {
@@ -73,7 +74,7 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
       currentQuantity,
       typeSort,
     } = this.props;
-    const itemsAfterFilterAndSort = this.sorting(allItems, typeSort);
+    const itemsAfterFilterAndSort: IItem[] = this.sorting(allItems, typeSort);
     return (
       <main className={items.list}>
         <ListItems

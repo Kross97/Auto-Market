@@ -3,11 +3,11 @@ interface IDataInputSelect {
   value: string;
 }
 
-interface IPropDefault {
+export interface IPropDefault {
   title: string;
   type: string;
   id: number;
-  values?: IDataInputSelect[];
+  values?: IDataInputSelect[] | undefined;
 }
 
 export interface IStatePropertyDefault {

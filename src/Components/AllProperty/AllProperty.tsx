@@ -9,11 +9,12 @@ import { PropertiesList } from './PropertiesList';
 import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
 import { IPropAllProperty } from './InterfaceAllProperty';
+import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = ({ allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }) => {
+const mapStateToProps = ({ allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }: IAllStateApplication) => {
   const props = {
     propertyDefault,
-    allAlerts: allAlerts.filter((alert) => alert.component === 'allProperty'),
+    allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'allProperty'),
   };
   return props;
 };
@@ -36,7 +37,7 @@ class Properties extends React.Component<IPropAllProperty, {}> {
     completeRemovalFromComponent({ component: 'allProperty' });
   }
 
-public removeProperty = (id) => (e) => {
+public removeProperty = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
   e.preventDefault();
   const { deleteProperty, addNewAlert } = this.props;
   addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });

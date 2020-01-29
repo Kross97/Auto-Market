@@ -8,12 +8,13 @@ import { ListAlerts } from '../ListAlerts/ListAlerts';
 import itemCard from '../../styles/ItemCard.css';
 import { alerts } from '../../reducers';
 import * as actions from '../../actions';
-import { IProps, IAuto } from './InterfaceCard';
+import { IPropsItemCard, IAuto } from './InterfaceCard';
+import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = ({ listAllItems: { allItems }, alerts: { allAlerts } }) => {
+const mapStateToProps = ({ listAllItems: { allItems }, alerts: { allAlerts } }: IAllStateApplication) => {
   const props = {
     allItems,
-    allAlerts: allAlerts.filter((alert) => alert.component === 'itemCard'),
+    allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'itemCard'),
   };
   return props;
 };
@@ -32,7 +33,7 @@ const CardUndefined: React.FC = () => (
   </div>
 );
 
-class Card extends React.Component<IProps, {}> {
+class Card extends React.Component<IPropsItemCard, {}> {
   public componentDidMount() {
     const { addAllItems } = this.props;
     addAllItems();

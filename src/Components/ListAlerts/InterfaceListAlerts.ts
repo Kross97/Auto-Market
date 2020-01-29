@@ -1,7 +1,7 @@
-export interface IProps {
+export interface IPropsAlert {
   text: string;
   alertClass: string;
-  onClick(): void;
+  onClick(event: React.MouseEvent<HTMLDivElement>): void;
 }
 
 interface IAlert {
@@ -10,11 +10,7 @@ interface IAlert {
   component: string;
 }
 
-export interface IProps {
+export interface IPropsListAlerts {
  allAlerts: IAlert[];
- removeAlert(obJId: Iid): void;
-}
-
-interface IId {
-  id: string;
+ removeAlert(remove: { id: string }): void;
 }

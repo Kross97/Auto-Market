@@ -137,7 +137,7 @@ public addingItemDropdownPropsInState = (item: IItem) => {
   this.setState({ description: target.value });
 }
 
-  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement> | any) => {
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.readAsDataURL(file);

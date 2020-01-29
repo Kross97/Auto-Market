@@ -48,14 +48,14 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
 
   public changeCurrentQuantity = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterQuantity } = this.props;
-    this.setState({ currentQuantity: target.value });
-    addFilterQuantity({ quantity: target.value });
+    this.setState({ currentQuantity: (target as HTMLButtonElement).value });
+    addFilterQuantity({ quantity: (target as HTMLButtonElement).value });
   }
 
   public changeCurrentPage = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterPage } = this.props;
-    this.setState({ currentPage: target.value });
-    addFilterPage({ page: target.value });
+    this.setState({ currentPage: (target as HTMLButtonElement).value });
+    addFilterPage({ page: (target as HTMLButtonElement).value });
   }
 
  public currentSort = (type: string) => () => {

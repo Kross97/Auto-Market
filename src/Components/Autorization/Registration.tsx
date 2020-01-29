@@ -67,15 +67,15 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     }
   }
 
-  public changeLogin = ({ target }) => {
+  public changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ login: target.value });
   }
 
-  public changePassword = ({ target }) => {
+  public changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: target.value });
   }
 
-  public changeReplayPassword = ({ target }) => {
+  public changeReplayPassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ replayPassword: target.value });
   }
 
