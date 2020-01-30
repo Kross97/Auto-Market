@@ -82,6 +82,10 @@ body {
   border: none;
 }
 
+.eye:hover {
+  cursor: pointer;
+}
+
 @media(max-width:510px) {
 .content {
   margin: 155px auto;

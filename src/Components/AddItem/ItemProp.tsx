@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import addItem from '../../styles/AddItem.css';
 import { IPropsItemProp } from './InterfaceAddItem';
-import { IPropDefaultUnion } from '../../Interface_Application';
+import { IPropDefaultNormal } from '../../Interface_Application';
 
 export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
   const {
@@ -14,15 +14,16 @@ export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
     removeProp,
   } = props;
   const propIsHaveData = dataPropertiesID.filter((id) => id === prop.id).length;
-  let dataPropInitial: IPropDefaultUnion = {
+  let dataPropInitial: IPropDefaultNormal = {
     title: prop.title,
     type: prop.type,
     id: prop.id,
+    isValid: true,
     value: '',
   };
   let erorStyle;
   if (propIsHaveData !== 0) {
-    dataPropInitial = dataProperties[prop.id];
+    dataPropInitial = (dataProperties[prop.id] as IPropDefaultNormal);
     erorStyle = cn({
       [addItem.erorValid]: dataPropInitial.isValid === false,
     });

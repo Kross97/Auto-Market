@@ -1,3 +1,5 @@
+import { IAlert } from '../../Interface_Application';
+
 interface IDataInputSelect {
   id: string;
   value: string;
@@ -12,20 +14,14 @@ interface IPropDefault {
 
 export interface IPropsList {
   propertyDefault: IPropDefault[];
-  removeProperty(id: number): any;
-}
-
-interface IAlert {
-  id: string;
-  type: string;
-  component: string;
+  removeProperty(id: number): ((event: React.MouseEvent<HTMLAnchorElement>) => void) | undefined;
 }
 
 export interface IPropAllProperty {
   propertyDefault: IPropDefault[];
   allAlerts: IAlert[];
-  addNewAlert(alert: { alert: IAlert }): any;
-  deleteProperty(id: { id: number }): any;
-  addAllProperties(): any;
-  completeRemovalFromComponent(remove: { component: string }): any;
+  addNewAlert(alert: { alert: IAlert }): void;
+  deleteProperty(id: { id: number }): void;
+  addAllProperties(): void;
+  completeRemovalFromComponent(remove: { component: string }): void;
 }

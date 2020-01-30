@@ -1,3 +1,5 @@
+import { IAlert } from '../../Interface_Application';
+
 export interface IPropsPropertyMain {
   type: string;
   title: string;
@@ -16,12 +18,6 @@ interface IPropToAdd {
   values?: IDataInputSelect[] | undefined;
 }
 
-interface IAlert {
-  id: string;
-  type: string;
-  component: string;
-}
-
 export interface IStateAddNewProperty {
   title: string;
   type: string;
@@ -35,7 +31,7 @@ export interface IPropsAddNewProperty {
       from: string;
     };
   };
-  addProperty(prop: { property: IPropToAdd }): any;
-  addNewAlert(alert: { alert: IAlert }): any;
-  completeRemovalFromComponent(remove: { component: string }): any;
+  addProperty(prop: { property: IPropToAdd }): void;
+  addNewAlert(alert: { alert: IAlert }): void;
+  completeRemovalFromComponent(remove: { component: string }): void;
 }

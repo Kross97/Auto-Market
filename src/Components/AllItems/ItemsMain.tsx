@@ -61,8 +61,8 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
       }),
       Data: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(a.dateSort) - Date.parse(b.dateSort)),
       DescData: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(b.dateSort) - Date.parse(a.dateSort)),
-      Title: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem): any => a.title > b.title),
-      DescTitle: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem): any => a.title < b.title),
+      Title: (tasks: IItem[]) => tasks.sort((a: IItem, b: IItem): number => Number(a.title > b.title)),
+      DescTitle: (tasks: IItem[]) => tasks.sort((a: IItem, b: IItem): number => Number(a.title < b.title)),
     };
     return allTypesSorting[typeSort](newSliceItems);
   }

@@ -1,14 +1,4 @@
-interface IItem {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: string;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  id: number;
-  allPropertiesData: any[];
-}
+import { IItem } from '../Interface_Application';
 
 export interface IStatelistAllItems {
   countItems: number;

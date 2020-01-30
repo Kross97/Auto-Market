@@ -1,8 +1,4 @@
-interface IAlert {
-  id: string;
-  type: string;
-  component: string;
-}
+import { IItem, IAlert, IPropDefaultNormal, IPropDefaultSelect } from '../../Interface_Application';
 
 interface IDataInputSelect {
   id: string;
@@ -16,18 +12,6 @@ interface IPropDefault {
   values?: IDataInputSelect[] | undefined;
 }
 
-interface IItem {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: string;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  id: number;
-  allPropertiesData: any[];
-}
-
 export interface IPropsAddNewItem {
  propertyDefault: IPropDefault[];
  allItems: IItem[];
@@ -37,11 +21,11 @@ export interface IPropsAddNewItem {
      id: string;
    };
  };
- deleteProperty(id: { id: number }): any;
- addNewAlert(alert: { alert: IAlert }): any;
- completeRemovalFromComponent(remove: { component: string }): any;
- addAllProperties(): any;
- loadingPropertiesToChange(prop: { properties: any[]}): any;
+ deleteProperty(id: { id: number }): void;
+ addNewAlert(alert: { alert: IAlert }): void;
+ completeRemovalFromComponent(remove: { component: string }): void;
+ addAllProperties(): void;
+ loadingPropertiesToChange(prop: { properties: Array<IPropDefaultSelect | IPropDefaultNormal>}): void;
 }
 
 export interface IStateAddNewItem {
@@ -52,14 +36,7 @@ export interface IStateAddNewItem {
   };
   dataAllPropsSelectID: number[];
   dataProperties: {
-    [id: number]: {
-      id: number;
-      title: string;
-      type: string;
-      isValid?: boolean | undefined;
-      value?: string | undefined;
-      values?: IDataInputSelect[] | undefined;
-    };
+    [id: number]: IPropDefaultNormal | IPropDefaultSelect;
   };
   dataPropertiesID: number[];
   title: string;
@@ -81,26 +58,12 @@ export interface IPropsMainData {
 export interface IPropsItemProp {
   dataPropertiesID: number[];
   dataProperties: {
-    [id: number]: {
-      id: number;
-      title: string;
-      type: string;
-      isValid?: boolean | undefined;
-      value?: string | undefined;
-      values?: IDataInputSelect[] | undefined;
-    };
+    [id: number]: IPropDefaultNormal | IPropDefaultSelect;
   };
   prop: IPropDefault;
   index: number;
   addDataInput(event: React.ChangeEvent<HTMLInputElement>): void;
   removeProp(event: React.MouseEvent<HTMLButtonElement> ): void;
-}
-
-interface IPropDefaultSelect {
-  title: string;
-  type: string;
-  id: number;
-  values: IDataInputSelect[];
 }
 
 export interface IPropsItemSelect {

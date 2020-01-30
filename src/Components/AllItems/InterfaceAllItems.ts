@@ -1,30 +1,14 @@
-interface IItem {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: string;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  id: number;
-  allPropertiesData: any[];
-}
-
-interface IAlert {
-  id: string;
-  type: string;
-  component: string;
-}
+import { IItem, IAlert } from '../../Interface_Application';
 
 export interface IPropsListItems {
   itemsAfterFilterAndSort: IItem[];
   currentQuantity: string;
-  removeItem(id: number): any;
+  removeItem(id: number): ((e: React.MouseEvent<HTMLAnchorElement>) => void) | undefined;
 }
 
 export interface IPropsSortNavigation {
   typeSort: string;
-  currentSort(type: string): any;
+  currentSort(type: string): ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
 }
 
 export interface IPropsMainContent {
@@ -32,16 +16,16 @@ export interface IPropsMainContent {
   allAlerts: IAlert[];
   currentQuantity: string;
   typeSort: string;
-  deleteItem(id: { id: number }): any;
-  addNewAlert(alert: { alert: IAlert }): any;
-  completeRemovalFromComponent(remove: { component: string }): any;
+  deleteItem(id: { id: number }): void;
+  addNewAlert(alert: { alert: IAlert }): void;
+  completeRemovalFromComponent(remove: { component: string }): void;
 }
 
 export interface IPropsItemsFooter {
   currentQuantity: string;
   currentPage: string;
   quantityPages: number;
-  changeCurrentQuantity(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;   // React.MouseEvent<HTMLButtonElement, MouseEvent>
+  changeCurrentQuantity(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
   changeCurrentPage(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
 }
 
@@ -55,11 +39,11 @@ export interface IStateAllItems {
 
 export interface IPropsAllItems {
   countItems: number;
-  addAllItems(): any;
-  addAllProperties(): any;
-  addFilterPage(page: { page: string }): any;
-  addFilterTitle(title: { title: string }): any;
-  addFilterQuantity(quantity: { quantity: string }): any;
+  addAllItems(): void;
+  addAllProperties(): void;
+  addFilterPage(page: { page: string }): void;
+  addFilterTitle(title: { title: string }): void;
+  addFilterQuantity(quantity: { quantity: string }): void;
 }
 
 export interface IAllTypesSorting {

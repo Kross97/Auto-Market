@@ -1,20 +1,4 @@
-interface IAlert {
-  id: string;
-  type: string;
-  component: string;
-}
-
-interface IItem {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: string;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  id: number;
-  allPropertiesData: any[];
-}
+import { IItem, IAlert } from '../../Interface_Application';
 
 export interface IPropsItemCard {
   match: {

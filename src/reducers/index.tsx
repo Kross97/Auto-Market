@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Slice, CaseReducerActions, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 import update from 'immutability-helper';
@@ -8,7 +8,7 @@ import * as PropertiesDefault from './Interface_PropertyDefault';
 import * as Alerts from './Interface_Alerts';
 
 export const listAllItems = createSlice({
-  name: 'allItem',
+  name: 'listAllItems',
   initialState: {
     countItems: 0,
     allItems: [],
@@ -106,19 +106,28 @@ export const allPropertyDefault = createSlice({
     increaseQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp: any = state.propertyDefault.find((prop) => prop.id === id);
+      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      if (!newProp || !newProp.values) {
+        return;
+      }
       newProp.values.push({ id: _.uniqueId(), value: '' });
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
+
     },
     reduceQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp: any = state.propertyDefault.find((prop) => prop.id === id);
+      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      if (!newProp || !newProp.values) {
+        return;
+      }
       newProp.values.pop();
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
     },
   },
 });
+
+const { loadingPositionsSucces } = listAllItems.actions;
 
 export const alerts = createSlice({
   name: 'alerts',

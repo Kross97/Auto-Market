@@ -12,7 +12,7 @@ import addItem from '../../styles/AddItem.css';
 import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
 import { IPropsAddNewItem, IStateAddNewItem, IAllTypeValidators } from './InterfaceAddItem';
-import { IAllStateApplication, IAlert, IItem, IPropDefault, IPropDefaultNormal, IPropDefaultSelect, IDataProperties } from '../../Interface_Application';
+import { IAllStateApplication, IAlert, IItem, IPropDefault, IPropDefaultNormal, IPropDefaultSelect, IDataPropertiesNormal, IDataPropertiesSelect } from '../../Interface_Application';
 
 const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
@@ -85,15 +85,18 @@ public spliceStateAndItem = async (idInURL: string) => {
 public addingItemNormalPropsInState = (item: IItem) => {
   const { dataPropertiesID, dataProperties } = this.state;
   const itemPropsNormal = item.allPropertiesData.filter((prop: IPropDefault) => prop.type !== 'Dropdown');
-  const itemPropsNormalID = itemPropsNormal.map((prop: IPropDefaultNormal) => prop.id);
-  const itemDataProperties: IDataProperties = {};
+  const itemPropsNormalID = itemPropsNormal.map((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id);
+  const itemDataProperties: IDataPropertiesNormal = {};
   itemPropsNormalID.map((id: number) => {
-    const currentProp = itemPropsNormal.find((prop: IPropDefaultNormal) => prop.id === id);
-    const dataProp = {
+    const currentProp = itemPropsNormal.find((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id === id);
+    if (!currentProp) {
+      return;
+    }
+    const dataProp: IPropDefaultNormal = {
       title: currentProp.title,
       type: currentProp.type,
-      isValid: currentProp.isValid,
-      value: currentProp.value,
+      isValid: (currentProp as IPropDefaultNormal).isValid,
+      value: (currentProp as IPropDefaultNormal).value,
       id,
     };
     return itemDataProperties[id] = dataProp;
@@ -107,11 +110,14 @@ public addingItemNormalPropsInState = (item: IItem) => {
 public addingItemDropdownPropsInState = (item: IItem) => {
   const { dataPropertiesID, dataProperties } = this.state;
   const itemPropsSelect = item.allPropertiesData.filter((prop: IPropDefault) => prop.type === 'Dropdown');
-  const itemsPropsSelectID = itemPropsSelect.map((prop: IPropDefaultSelect) => prop.id);
-  const itemDataProperties: IDataProperties = {};
+  const itemsPropsSelectID = itemPropsSelect.map((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id);
+  const itemDataProperties: IDataPropertiesSelect = {};
   itemsPropsSelectID.map((id: number) => {
-    const currentProp = itemPropsSelect.find((prop: IPropDefaultSelect) => prop.id === id);
-    const dataProp = {
+    const currentProp = itemPropsSelect.find((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id === id);
+    if (!currentProp) {
+      return;
+    }
+    const dataProp: IPropDefaultSelect = {
       title: currentProp.title,
       type: currentProp.type,
       values: [{ id: _.uniqueId(), value: '' }],
@@ -137,7 +143,10 @@ public addingItemDropdownPropsInState = (item: IItem) => {
   this.setState({ description: target.value });
 }
 
-  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement> | any) => {
+  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (event.target.files === null) {
+    return;
+  }
   const file = event.target.files[0];
   const reader = new FileReader();
   reader.readAsDataURL(file);
@@ -156,7 +165,7 @@ public addingItemDropdownPropsInState = (item: IItem) => {
     dataPropertiesID,
   } = this.state;
   const { addNewAlert } = this.props;
-  const allNotValidProps = dataPropertiesID.filter((id) => dataProperties[id].isValid === false);
+  const allNotValidProps = dataPropertiesID.filter((id) => (dataProperties[id] as IPropDefaultNormal).isValid === false);
   if (title.length > 30 || price.length > 15) {
     addNewAlert({ alert: { id: _.uniqueId(), type: 'mainPropsLength', component: 'addItem' } });
     check = 'notAdd';

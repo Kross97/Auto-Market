@@ -13,23 +13,20 @@ export interface IItem {
   imgSrc: string;
   imgName: string;
   id: number;
-  allPropertiesData: any[];
+  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
+}
+
+interface IDataInputSelect {
+  id: string;
+  value: string;
 }
 
 export interface IPropDefaultNormal {
   title: string;
   type: string;
   id: number;
+  isValid: boolean;
   value: string;
-}
-
-export interface IPropDefaultUnion {
-  title: string;
-  type: string;
-  id: number;
-  isValid?: boolean | undefined;
-  value?: string | undefined;
-  values?: IDataInputSelect[] | undefined;
 }
 
 export interface IPropDefaultSelect {
@@ -50,20 +47,12 @@ interface IStatelistAllItems {
   };
 }
 
-export interface IDataProperties {
-  [id: number]: {
-    id: number;
-    title: string;
-    type: string;
-    isValid?: boolean;
-    value?: string;
-    values?: IDataInputSelect[];
-  };
+export interface IDataPropertiesNormal {
+  [id: number]: IPropDefaultNormal;
 }
 
-interface IDataInputSelect {
-  id: string;
-  value: string;
+export interface IDataPropertiesSelect {
+  [id: number]: IPropDefaultSelect;
 }
 
 export interface IPropDefault {

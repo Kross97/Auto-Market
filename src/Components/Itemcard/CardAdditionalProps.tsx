@@ -3,6 +3,7 @@ import itemCard from '../../styles/ItemCard.css';
 import { InputSelect } from './InputSelect';
 import { InputNormal } from './InputNormal';
 import { IPropsAdditional } from './InterfaceCard';
+import { IPropDefaultNormal, IPropDefaultSelect } from '../../Interface_Application';
 
 export const CardAdditionalProps: React.FC<IPropsAdditional> = (props: IPropsAdditional) => {
   const { card } = props;
@@ -15,7 +16,7 @@ export const CardAdditionalProps: React.FC<IPropsAdditional> = (props: IPropsAdd
       )}
       {card.allPropertiesData.length !== 0 && (
       <div className={itemCard.conteinerAdditional}>
-        {card.allPropertiesData.map((data) => (data.type === 'Dropdown' ? <InputSelect data={data} /> : <InputNormal data={data} />))}
+        {card.allPropertiesData.map((data) => (data.type === 'Dropdown' ? <InputSelect data={data as IPropDefaultSelect} /> : <InputNormal data={data as IPropDefaultNormal} />))}
       </div>
       )}
     </div>

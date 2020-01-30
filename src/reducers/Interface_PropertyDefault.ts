@@ -7,7 +7,7 @@ export interface IPropDefault {
   title: string;
   type: string;
   id: number;
-  values?: IDataInputSelect[] | undefined;
+  values?: IDataInputSelect[];
 }
 
 export interface IStatePropertyDefault {
