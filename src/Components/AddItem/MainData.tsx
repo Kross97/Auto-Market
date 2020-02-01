@@ -39,7 +39,7 @@ export const MainData: React.FC<IPropsMainData> = (props: IPropsMainData) => {
         <div className={addItem.customInput}>{imgName}</div>
         <img className={addItem.customImg} src="../src/img/download-arrow.png" alt="download" />
       </label>
-      { imgSrc !== '' ? <img className={addItem.img} src={imgSrc as string} alt="img-auto" /> : null }
+      { imgSrc !== '' ? <img className={addItem.img} src={imgSrc} alt="img-auto" /> : null }
       <label>
    Описание товара
         <textarea onChange={changeDescription} value={description} />

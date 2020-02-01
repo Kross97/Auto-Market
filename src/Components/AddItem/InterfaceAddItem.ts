@@ -42,7 +42,7 @@ export interface IStateAddNewItem {
   title: string;
   price: string;
   description: string;
-  imgSrc: string | ArrayBuffer | null;
+  imgSrc: string;
   imgName: string;
 }
 

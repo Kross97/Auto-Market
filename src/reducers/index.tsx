@@ -7,18 +7,20 @@ import * as ListItems from './Interface_ListAllItems';
 import * as PropertiesDefault from './Interface_PropertyDefault';
 import * as Alerts from './Interface_Alerts';
 
+const stateAllItems: ListItems.IStatelistAllItems = {
+  countItems: 0,
+  allItems: [],
+  loadState: '',
+  filteringData: {
+    titleSearch: '',
+    currentPage: '',
+    quantityItems: '',
+  },
+}
+
 export const listAllItems = createSlice({
   name: 'listAllItems',
-  initialState: {
-    countItems: 0,
-    allItems: [],
-    loadState: '',
-    filteringData: {
-      titleSearch: '',
-      currentPage: '',
-      quantityItems: '',
-    },
-  } as ListItems.IStatelistAllItems,
+  initialState: stateAllItems,
   reducers: {
     loadingPositionsRequest: (state) => {
       state.loadState = 'Loading Positions Request';
@@ -62,12 +64,14 @@ export const listAllItems = createSlice({
   },
 });
 
+const stateProperties: PropertiesDefault.IStatePropertyDefault = {
+  propertyDefault: [],
+  loadState: '',
+};
+
 export const allPropertyDefault = createSlice({
   name: 'allPropertyDefault',
-  initialState: {
-    propertyDefault: [],
-    loadState: '',
-  } as PropertiesDefault.IStatePropertyDefault,
+  initialState: stateProperties,
   reducers: {
     loadingPropertiesRequest: (state) => {
       state.loadState = 'Loading Properties Request';
@@ -127,11 +131,13 @@ export const allPropertyDefault = createSlice({
   },
 });
 
-const { loadingPositionsSucces } = listAllItems.actions;
+const stateAlerts: Alerts.IStateAlerts = {
+  allAlerts: []
+};
 
 export const alerts = createSlice({
   name: 'alerts',
-  initialState: { allAlerts: [] } as Alerts.IStateAlerts,
+  initialState: stateAlerts,
   reducers: {
     addNewAlert: (state, action: PayloadAction<Alerts.IActionAddAlert>) => {
       const { alert } = action.payload;
@@ -159,28 +165,28 @@ export const alerts = createSlice({
     },
   },
   extraReducers: {
-    [listAllItems.actions.loadingPositionsSucces as any]: (state) => {
+    [listAllItems.actions.loadingPositionsSucces.type]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsSucces', component: 'allItems' }],
       };
     },
-    [listAllItems.actions.loadingPositionsFailed as any]: (state) => {
+    [listAllItems.actions.loadingPositionsFailed.type]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsFailed', component: 'allItems' }],
       };
     },
-    [allPropertyDefault.actions.loadingPropertiesSucces as any]: (state) => {
+    [allPropertyDefault.actions.loadingPropertiesSucces.type]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addPropsSucces', component: 'allProperty' }],
       };
     },
-    [allPropertyDefault.actions.loadingPropertiesFailed as any]: (state) => {
+    [allPropertyDefault.actions.loadingPropertiesFailed.type]: (state) => {
       const { allAlerts } = state;
       return {
         ...state,

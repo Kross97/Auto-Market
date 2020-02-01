@@ -88,7 +88,7 @@ public addingItemNormalPropsInState = (item: IItem) => {
   const itemPropsNormalID = itemPropsNormal.map((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id);
   const itemDataProperties: IDataPropertiesNormal = {};
   itemPropsNormalID.map((id: number) => {
-    const currentProp = itemPropsNormal.find((prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id === id);
+    const currentProp: IPropDefaultNormal | IPropDefaultSelect | undefined = itemPropsNormal.find((prop) => prop.id === id);
     if (!currentProp) {
       return;
     }
@@ -151,7 +151,7 @@ public addingItemDropdownPropsInState = (item: IItem) => {
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.onload = () => {
-    this.setState({ imgSrc: reader.result, imgName: String(file.name) });
+    this.setState({ imgSrc: String(reader.result), imgName: String(file.name) });
   };
 }
 

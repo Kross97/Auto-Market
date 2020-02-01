@@ -1,2 +1,2 @@
 lint:
-	npx eslint . --ext js,jsx
+	npx eslint . --ext js,jsx,ts,tsx
