@@ -1,4 +1,9 @@
-import { IItem, IAlert, IPropDefaultNormal, IPropDefaultSelect } from '../../Interface_Application';
+import {
+  IItem,
+  IAlert,
+  IPropDefaultNormal,
+  IPropDefaultSelect,
+} from '../../Interface_Application';
 
 interface IDataInputSelect {
   id: string;
@@ -13,19 +18,21 @@ interface IPropDefault {
 }
 
 export interface IPropsAddNewItem {
- propertyDefault: IPropDefault[];
- allItems: IItem[];
- allAlerts: IAlert[];
- match: {
-   params: {
-     id: string;
-   };
- };
- deleteProperty(id: { id: number }): void;
- addNewAlert(alert: { alert: IAlert }): void;
- completeRemovalFromComponent(remove: { component: string }): void;
- addAllProperties(): void;
- loadingPropertiesToChange(prop: { properties: Array<IPropDefaultSelect | IPropDefaultNormal>}): void;
+  propertyDefault: IPropDefault[];
+  allItems: IItem[];
+  allAlerts: IAlert[];
+  match: {
+    params: {
+      id: string;
+    };
+  };
+  deleteProperty(id: { id: number }): void;
+  addNewAlert(alert: { alert: IAlert }): void;
+  completeRemovalFromComponent(remove: { component: string }): void;
+  addAllProperties(): void;
+  loadingPropertiesToChange(
+    prop: { properties: Array<IPropDefaultSelect | IPropDefaultNormal>}
+  ): void;
 }
 
 export interface IStateAddNewItem {
@@ -63,7 +70,7 @@ export interface IPropsItemProp {
   prop: IPropDefault;
   index: number;
   addDataInput(event: React.ChangeEvent<HTMLInputElement>): void;
-  removeProp(event: React.MouseEvent<HTMLButtonElement> ): void;
+  removeProp(event: React.MouseEvent<HTMLButtonElement>): void;
 }
 
 export interface IPropsItemSelect {

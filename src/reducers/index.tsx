@@ -16,7 +16,7 @@ const stateAllItems: ListItems.IStatelistAllItems = {
     currentPage: '',
     quantityItems: '',
   },
-}
+};
 
 export const listAllItems = createSlice({
   name: 'listAllItems',
@@ -76,7 +76,9 @@ export const allPropertyDefault = createSlice({
     loadingPropertiesRequest: (state) => {
       state.loadState = 'Loading Properties Request';
     },
-    loadingPropertiesSucces: (state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>) => {
+    loadingPropertiesSucces: (
+      state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
+    ) => {
       const { properties } = action.payload;
       return {
         ...state,
@@ -87,7 +89,9 @@ export const allPropertyDefault = createSlice({
     loadingPropertiesFailed: (state) => {
       state.loadState = 'Loading Properties Failed';
     },
-    deleteProperty: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
+    deleteProperty: (
+      state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
+    ) => {
       const { id } = action.payload;
       const { propertyDefault } = state;
       return {
@@ -103,11 +107,15 @@ export const allPropertyDefault = createSlice({
         propertyDefault: [...propertyDefault, property],
       };
     },
-    loadingPropertiesToChange: (state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>) => {
+    loadingPropertiesToChange: (
+      state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
+    ) => {
       const { properties } = action.payload;
       state.propertyDefault = properties;
     },
-    increaseQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
+    increaseQuantityInputsDropdown: (
+      state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
+    ) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
       const newProp = state.propertyDefault.find((prop) => prop.id === id);
@@ -116,9 +124,11 @@ export const allPropertyDefault = createSlice({
       }
       newProp.values.push({ id: _.uniqueId(), value: '' });
       return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
-
     },
-    reduceQuantityInputsDropdown: (state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>) => {
+
+    reduceQuantityInputsDropdown: (
+      state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
+    ) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
       const newProp = state.propertyDefault.find((prop) => prop.id === id);
@@ -132,7 +142,7 @@ export const allPropertyDefault = createSlice({
 });
 
 const stateAlerts: Alerts.IStateAlerts = {
-  allAlerts: []
+  allAlerts: [],
 };
 
 export const alerts = createSlice({

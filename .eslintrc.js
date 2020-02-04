@@ -7,4 +7,12 @@ module.exports = {
   extends: [
     'airbnb-typescript',
   ],
+  rules: {
+    "no-return-assign": 0,
+    "consistent-return": 0,
+    "import/prefer-default-export": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "eqeqeq": 0,
+    "class-methods-use-this": 0,
+  },
 };

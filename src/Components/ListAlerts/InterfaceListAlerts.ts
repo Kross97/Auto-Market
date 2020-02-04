@@ -11,6 +11,6 @@ interface IAlert {
 }
 
 export interface IPropsListAlerts {
- allAlerts: IAlert[];
- removeAlert(remove: { id: string }): void;
+  allAlerts: IAlert[];
+  removeAlert(remove: { id: string }): void;
 }

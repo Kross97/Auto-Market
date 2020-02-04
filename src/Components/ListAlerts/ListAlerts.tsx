@@ -12,7 +12,7 @@ class Alerts extends React.Component<IPropsListAlerts, {}> {
   public removeCurrentAlert = (id: string) => () => {
     const { removeAlert } = this.props;
     removeAlert({ id });
-  }
+  };
 
   public render() {
     const { allAlerts } = this.props;

@@ -11,7 +11,9 @@ import * as actions from '../../actions';
 import { IPropsItemCard, IAuto } from './InterfaceCard';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = ({ listAllItems: { allItems }, alerts: { allAlerts } }: IAllStateApplication) => {
+const mapStateToProps = (
+  { listAllItems: { allItems }, alerts: { allAlerts } }: IAllStateApplication,
+) => {
   const props = {
     allItems,
     allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'itemCard'),
@@ -45,7 +47,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
     axios.post('http://localhost:3000/basket', auto).then(() => {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'addBasket', component: 'itemCard' } });
     });
-  }
+  };
 
   public render() {
     const { match, allItems, allAlerts } = this.props;

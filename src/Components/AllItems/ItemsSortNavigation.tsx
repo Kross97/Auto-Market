@@ -1,3 +1,4 @@
+/* eslint max-len: ["error", { "code": 180 }] */
 import React from 'react';
 import items from '../../styles/AllItems.css';
 import { IPropsSortNavigation } from './InterfaceAllItems';

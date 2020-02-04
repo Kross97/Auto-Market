@@ -11,7 +11,9 @@ import * as actions from '../../actions';
 import { IPropAllProperty } from './InterfaceAllProperty';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = ({ allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }: IAllStateApplication) => {
+const mapStateToProps = (
+  { allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }: IAllStateApplication,
+) => {
   const props = {
     propertyDefault,
     allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'allProperty'),
@@ -37,36 +39,36 @@ class Properties extends React.Component<IPropAllProperty, {}> {
     completeRemovalFromComponent({ component: 'allProperty' });
   }
 
-public removeProperty = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
-  e.preventDefault();
-  const { deleteProperty, addNewAlert } = this.props;
-  addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
-  deleteProperty({ id });
-  axios.delete(`http://localhost:3000/props/${id}`);
-}
+  public removeProperty = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const { deleteProperty, addNewAlert } = this.props;
+    addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
+    deleteProperty({ id });
+    axios.delete(`http://localhost:3000/props/${id}`);
+  };
 
-public render() {
-  const { propertyDefault, allAlerts } = this.props;
-  return (
-    <main className={properties.content}>
-      <div className={properties.btns}>
-        <Link to="/addProperty"><button type="button" className={properties.btn}>Добавить проперти</button></Link>
-      </div>
-      <div className={properties.navigation}>
-        <div className={properties.navigationData}>
-          <span>Перечень проперти</span>
-          <span>Тип</span>
+  public render() {
+    const { propertyDefault, allAlerts } = this.props;
+    return (
+      <main className={properties.content}>
+        <div className={properties.btns}>
+          <Link to="/addProperty"><button type="button" className={properties.btn}>Добавить проперти</button></Link>
         </div>
-        <span>Управление</span>
-      </div>
-      <PropertiesList
-        propertyDefault={propertyDefault}
-        removeProperty={this.removeProperty}
-      />
-      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
-    </main>
-  );
-}
+        <div className={properties.navigation}>
+          <div className={properties.navigationData}>
+            <span>Перечень проперти</span>
+            <span>Тип</span>
+          </div>
+          <span>Управление</span>
+        </div>
+        <PropertiesList
+          propertyDefault={propertyDefault}
+          removeProperty={this.removeProperty}
+        />
+        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+      </main>
+    );
+  }
 }
 
 export const AllProperty = connect(mapStateToProps, actionCreators)(Properties);

@@ -25,7 +25,7 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     } else {
       this.setState({ typePassword: 'password' });
     }
-  }
+  };
 
   public changeTypeInputReplayPassword = () => {
     const { typeReplayPassword } = this.state;
@@ -34,7 +34,7 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     } else {
       this.setState({ typeReplayPassword: 'password' });
     }
-  }
+  };
 
   public register = async () => {
     const { login, password, replayPassword } = this.state;
@@ -65,19 +65,19 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     } else {
       this.setState({ processRegistr: 'userExist' });
     }
-  }
+  };
 
   public changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ login: target.value });
-  }
+  };
 
   public changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: target.value });
-  }
+  };
 
   public changeReplayPassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ replayPassword: target.value });
-  }
+  };
 
   public render() {
     const {

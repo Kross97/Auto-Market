@@ -36,7 +36,7 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' } });
     deleteItem({ id });
     axios.delete(`http://localhost:3000/goods/${id}`);
-  }
+  };
 
   public sorting(itemsAfterFilters: IItem[], typeSort: string) {
     if (typeSort === '') {
@@ -59,10 +59,18 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
           Number(b.price.slice(0, indexLastSymbolB)) - Number(a.price.slice(0, indexLastSymbolA))
         );
       }),
-      Data: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(a.dateSort) - Date.parse(b.dateSort)),
-      DescData: (tasks: IItem[]): IItem[] => tasks.sort((a: IItem, b: IItem) => Date.parse(b.dateSort) - Date.parse(a.dateSort)),
-      Title: (tasks: IItem[]) => tasks.sort((a: IItem, b: IItem): number => Number(a.title > b.title)),
-      DescTitle: (tasks: IItem[]) => tasks.sort((a: IItem, b: IItem): number => Number(a.title < b.title)),
+      Data: (tasks: IItem[]): IItem[] => tasks.sort(
+        (a: IItem, b: IItem) => Date.parse(a.dateSort) - Date.parse(b.dateSort),
+      ),
+      DescData: (tasks: IItem[]): IItem[] => tasks.sort(
+        (a: IItem, b: IItem) => Date.parse(b.dateSort) - Date.parse(a.dateSort),
+      ),
+      Title: (tasks: IItem[]) => tasks.sort(
+        (a: IItem, b: IItem): number => Number(a.title > b.title),
+      ),
+      DescTitle: (tasks: IItem[]) => tasks.sort(
+        (a: IItem, b: IItem): number => Number(a.title < b.title),
+      ),
     };
     return allTypesSorting[typeSort](newSliceItems);
   }

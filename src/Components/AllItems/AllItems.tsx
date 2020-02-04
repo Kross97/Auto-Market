@@ -10,7 +10,9 @@ import { listAllItems } from '../../reducers';
 import { IPropsAllItems, IStateAllItems } from './InterfaceAllItems';
 import { IAllStateApplication } from '../../Interface_Application';
 
-const mapStateToProps = ({ listAllItems: { countItems } }: IAllStateApplication) => ({ countItems });
+const mapStateToProps = ({ listAllItems: { countItems } }: IAllStateApplication) => (
+  { countItems }
+);
 
 const actionCreators = {
   addAllItems: actions.addAllItems,
@@ -50,33 +52,33 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
     const { addFilterQuantity } = this.props;
     this.setState({ currentQuantity: currentTarget.value });
     addFilterQuantity({ quantity: currentTarget.value });
-  }
+  };
 
   public changeCurrentPage = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterPage } = this.props;
     this.setState({ currentPage: currentTarget.value });
     addFilterPage({ page: currentTarget.value });
-  }
+  };
 
- public currentSort = (type: string) => () => {
-   const { typeSort } = this.state;
-   if (type === typeSort) {
-     this.setState({ typeSort: `Desc${type}` });
-   } else {
-     this.setState({ typeSort: type });
-   }
- }
+  public currentSort = (type: string) => () => {
+    const { typeSort } = this.state;
+    if (type === typeSort) {
+      this.setState({ typeSort: `Desc${type}` });
+    } else {
+      this.setState({ typeSort: type });
+    }
+  };
 
   public addSearchTitle = () => {
     const { titleData } = this.state;
     const { addFilterTitle } = this.props;
     this.setState({ titleSearch: titleData });
     addFilterTitle({ title: titleData });
-  }
+  };
 
   public changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ titleData: target.value });
-  }
+  };
 
   public render() {
     const {
@@ -88,7 +90,7 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
     } = this.state;
     const { countItems } = this.props;
     const quantityPages: number = Math.ceil(countItems / Number(currentQuantity));
-    const userIsLogin: string | null  = localStorage.getItem('isLogin');
+    const userIsLogin: string | null = localStorage.getItem('isLogin');
     return (
       <div className={items.content}>
         <div className={items.btns}>

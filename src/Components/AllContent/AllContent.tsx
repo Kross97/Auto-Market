@@ -17,7 +17,7 @@ export class AllContent extends React.Component<{}, IStateAllContent> {
 
   public changeShow = (type: string) => () => {
     this.setState({ showPage: type });
-  }
+  };
 
   public render() {
     const userIsLogin: string | null = localStorage.getItem('isLogin');
