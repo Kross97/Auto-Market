@@ -68,9 +68,9 @@ interface IStatePropertyDefault {
 }
 
 export interface IAllStateApplication {
- listAllItems: IStatelistAllItems;
- allPropertyDefault: IStatePropertyDefault;
- alerts: {
-   allAlerts: IAlert[];
- };
+  listAllItems: IStatelistAllItems;
+  allPropertyDefault: IStatePropertyDefault;
+  alerts: {
+    allAlerts: IAlert[];
+  };
 }
