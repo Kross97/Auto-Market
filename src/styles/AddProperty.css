@@ -27,7 +27,7 @@
   width: 136px;
   height: 30px;
   border: none;
-  color:#fff;
+  color: #fff;
   margin-right: 25px;
   border-radius: 5px;
   font-size: 15px;
@@ -93,7 +93,7 @@ padding-top: 5px;
   left: 4px;
   width: 18px;
   height: 18px;
-  background-color:#fff;
+  background-color: #fff;
   border-radius: 13px;
   border: 2px solid#efefef;
 }
@@ -164,6 +164,7 @@ padding-top: 5px;
     justify-content: center;
     margin-left: 120px;
   }
+  
   .btn {
     width: 95px;
   }

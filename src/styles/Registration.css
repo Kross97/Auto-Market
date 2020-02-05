@@ -28,7 +28,6 @@ body {
 }
 
 
-
 .content {
  margin: 300px auto;
  background-color: #fff;
@@ -47,12 +46,12 @@ body {
 .register {
   display: block;
   margin: 45px auto 10px;
-  background-color:#ffba00;
+  background-color: #ffba00;
   width: 55%;
   height: 29px;
   border: none;
   border-radius: 5px;
-  color:#fff;
+  color: #fff;
 }
 
 .register:hover{
@@ -70,7 +69,7 @@ body {
   background-size: contain;
   width: 21px;
   height: 21px;
-  background-color:transparent;
+  background-color: transparent;
   border: none;
 }
 

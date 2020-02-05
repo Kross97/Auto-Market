@@ -47,7 +47,7 @@ width: 25%;
   width: 23px;
   height: 23px;
   background-size: contain;
-  background-color:transparent;
+  background-color: transparent;
   border: none;
   top: 3px;
   right: -50px;
@@ -58,12 +58,12 @@ width: 25%;
 }
 
 .btn {
-  background-color:#ffba00;
+  background-color: #ffba00;
   box-shadow: 3px 7px 10px #efefef;
   height: 28px;
   border: none;
   border-radius: 4px;
-  color:#fff;
+  color: #fff;
   width: 132px;
   font-size: 13px;
   margin-top: 2px;
@@ -81,7 +81,7 @@ width: 25%;
   width: 10px;
   height: 10px;
   border: none;
-  background-color:#fff;
+  background-color: #fff;
   background-size: contain;
   position: absolute;
   top: 6px;
@@ -151,11 +151,11 @@ margin-right: 70px;
 }
 
 .quantityPages .btnPage {
-  background-color:#fff;
+  background-color: #fff;
   width: 50px;
   height: 30px;
   border: 1px solid#ffba00;
-  color:#ffba00;
+  color: #ffba00;
   font-size: 20px;
   margin-right: 10px;
 }
@@ -163,9 +163,9 @@ margin-right: 70px;
 .quantityPages .active {
   width: 50px;
   height: 30px;
-  border: 1px solid#ffba00;
-  background-color:#ffba00;
-  color:#fff;
+  border: 1px solid #ffba00;
+  background-color: #ffba00;
+  color: #fff;
   font-size: 20px;
   margin-right: 10px;
 }
@@ -173,9 +173,9 @@ margin-right: 70px;
 .currentPage .btnPage {
   width: 30px;
   height: 33px;
-  background-color:#fff;
+  background-color: #fff;
   border: 1px solid #ffba00;
-  color:#ffba00;
+  color: #ffba00;
   font-size: 20px;
   border-radius: 20px;
   margin-right: 10px;
@@ -185,9 +185,9 @@ margin-right: 70px;
 .currentPage .active {
   width: 30px;
   height: 30px;
-  background-color:#ffba00;
+  background-color: #ffba00;
   border: 1px solid #ffba00;
-  color:#fff;
+  color: #fff;
   font-size: 20px;
   border-radius: 20px;
   margin-right: 10px;
@@ -222,9 +222,11 @@ margin-right: 70px;
   .navigation {
     padding-right: 0px;
 }
+
 .itemData span:nth-of-type(2) {
     margin-right: 60px;
 }
+
   .itemControl > a {
     margin-right: 40px;
 }
@@ -314,6 +316,7 @@ margin-right: 70px;
 .pageBtns {
     flex-direction: column;
   }
+
   .btnSort {
     top: -13px;
     left: -1px;
@@ -340,12 +343,15 @@ margin-right: 70px;
     font-size: 14px;
     padding-right: 20px;
   }
+
   .list ul {
     padding-left: 0px;
   }
+
   .item {
     font-size: 14px;
     }
+
   .itemData span:nth-of-type(2) {
     margin-right: 5px;
   }
@@ -359,6 +365,7 @@ margin-right: 70px;
   .btns > div {
     width: 85%;
 }
+
 .navigation span {
     font-size: 13px;
     padding-right: 7px;

@@ -41,7 +41,7 @@
   width: 136px;
   height: 30px;
   border: none;
-  color:#fff;
+  color: #fff;
   margin-right: 25px;
   border-radius: 5px;
   font-size: 15px;
@@ -82,7 +82,7 @@
   width: 302px;
   height: 33px;
   position: absolute;
-  background-color:#fff;
+  background-color: #fff;
   top: 20px;
   left: 1px;
 }
@@ -121,9 +121,9 @@
 .btnAction {
 height: 32px;
 width: 33px;
-background-color:#fff;
-border: 1px solid#0059ff;
-color:#0059ff;
+background-color: #fff;
+border: 1px solid #0059ff;
+color: #0059ff;
 border-radius: 20px;
 font-size: 20px;
 font-weight: 600;
@@ -132,9 +132,9 @@ font-weight: 600;
 .btnActionPlus {
   height: 32px;
   width: 33px;
-  background-color:#fff;
+  background-color: #fff;
   border: 1px solid#0059ff;
-  color:#0059ff;
+  color: #0059ff;
   border-radius: 20px;
   font-size: 20px;
   font-weight: 600;
@@ -143,18 +143,18 @@ font-weight: 600;
 .btnDelete {
   height: 32px;
   width: 33px;
-  background-color:#fff;
+  background-color: #fff;
   border: 1px solid#0059ff;
-  color:#0059ff;
+  color: #0059ff;
   border-radius: 20px;
   font-size: 20px;
   font-weight: 600;
   position: static;
 }
 
-.btnAction:hover ,  {
-  color:#fff;
-  background-color:#0059ff;
+.btnAction:hover {
+  color: #fff;
+  background-color: #0059ff;
 }
 
 .properties{
@@ -168,6 +168,7 @@ margin-top: 25px;
 .btnAction:hover , .btnDelete:hover{
   cursor: pointer;
 }
+
 /* PROP ITEMS */
 .propData {
   display: flex;
@@ -234,9 +235,10 @@ flex-wrap: wrap;
 /* MEDIA */
 
 @media(max-width:1360px)  {
-  .conteiner {
+   .conteiner {
    width: 80%;
  }
+
  .content > ul {
     right: -90px;
   }
@@ -258,20 +260,25 @@ flex-wrap: wrap;
   .propData {
     flex-direction: column;
   }
+
   .properties {
     width: 370px;
-  }
+    }
+
   .propHeader {
     margin-left: 35px;
   }
+
   .propInput {
     margin-left: 37px;
     margin-top: 20px;
 
   }
+
   .propInput .btnAction {
     margin-right: 5px;
   }
+
   .selected input {
     flex-basis: 60%;
   }
@@ -299,16 +306,20 @@ flex-wrap: wrap;
   .properties {
     width: 250px;
   }
+
   .selected input {
     width: 109px;
     flex-basis: -1%;
   }
+
   .propInput {
     margin-left: 0px;
 }
+
   .propInput input {
     margin-right: 5px;
   }
+
   .propTitle {
     width: 135px;
   }
@@ -318,16 +329,20 @@ flex-wrap: wrap;
   .form input{
     width: 199px;
   }
+
   .form textarea {
     width: 200px;
   }
+
   .customImg {
     top: 20px;
     right: 105px;
 }
+
   label {
     font-size: 14px;
   }
+
   .customInput {
     width: 199px;
   }
@@ -338,6 +353,7 @@ flex-wrap: wrap;
     justify-content: center;
     padding-left: 80px;
   }
+
   .btn {
     width: 92px;
   }
@@ -347,40 +363,50 @@ flex-wrap: wrap;
   .properties {
     width: 170px;
   }
+
   .propTitle {
     width: 90px;
     font-size: 12px;
 }
+
 .customInput {
   width: 100px;
     top: 16px;
 }
+
 .selected input {
     width: 80px;
     flex-basis: auto;
 }
+
 .form input {
     width: 100px;
   }
+
   .propInput input {
 
     flex-basis: auto;
   }
+
   .customImg {
     top: 22px;
     right: 46px;
     width: 17px;
     height: 19px;
 }
+
   label {
     font-size: 12px;
   }
+
   .form label {
     width: 140px;
 }
+
   .form textarea {
     width: 150px;
   }
+  
   .btnAction {
     height: 25px;
     width: 33px;

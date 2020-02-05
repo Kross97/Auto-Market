@@ -44,12 +44,12 @@ overflow: auto;
 
 
 .btn {
-background-color:#ffba00;
+background-color: #ffba00;
 box-shadow: 3px 7px 10px #efefef;
 height: 28px;
 border: none;
 border-radius: 3px;
-color:#fff;
+color: #fff;
 width: 132px;
 font-size: 12px;
 margin-right: 10px;
@@ -144,6 +144,7 @@ padding-right: 46px;
   .navigation {
     padding-left: 50px;
   }
+
   .list li {
     padding-left: 0px;
   }
@@ -157,13 +158,16 @@ padding-right: 46px;
 .navigationData > span {
     margin-right: 30px;
   }
+
   .navigation > span {
     flex-basis: 50%;
 }
+
 .list li a {
   padding-right: 90px;
   padding-left: 20px;
   }
+
   .properties p:nth-of-type(2) {
     flex-basis: 45%;
   }
@@ -180,6 +184,7 @@ padding-right: 46px;
   .list li a {
     padding-right: 15px;
   }
+  
   .content > ul {
     display: none;
   }
