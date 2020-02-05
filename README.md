@@ -1,6 +1,6 @@
 # Dex-test-quest-TypeScript
 
-[![Build Status](https://travis-ci.org/Kross97/Dex-test-quest.svg?branch=master)](https://travis-ci.org/Kross97/Dex-test-quest)
+[![Build Status](https://travis-ci.org/Kross97/Dex-test-quest-TypeScript.svg?branch=master)](https://travis-ci.org/Kross97/Dex-test-quest-TypeScript)
 
 Шаг 1: запустить сервер  npm run start
 
