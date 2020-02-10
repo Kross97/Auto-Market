@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import validator from 'validator';
 import _ from 'lodash';
 import { ItemProp } from './ItemProp';
@@ -25,6 +24,7 @@ import {
 
 const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
+    positionForEdit: state.itemForEdit.positionForEdit,
     propertyDefault: state.allPropertyDefault.propertyDefault,
     allItems: state.listAllItems.allItems,
     allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addItem'),
@@ -33,10 +33,13 @@ const mapStateToProps = (state: IAllStateApplication) => {
 };
 
 const actionCreators = {
-  deleteProperty: allPropertyDefault.actions.deleteProperty,
+  deleteProperty: allPropertyDefault.actions.deletePropertySucces,
   addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
   addAllProperties: actions.addAllProperties,
+  getCurrentItem: actions.getCurrentItem,
+  setCurrentItemForEdit: actions.setCurrentItemForEdit,
+  addNewItem: actions.addNewItem,
   loadingPropertiesToChange: allPropertyDefault.actions.loadingPropertiesToChange,
 };
 
@@ -57,10 +60,11 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
   }
 
   public componentDidMount() {
-    const { addAllProperties } = this.props;
+    const { addAllProperties, getCurrentItem } = this.props;
     const { match: { params: { id } } } = this.props;
     if (id) {
-      this.spliceStateAndItem(id);
+      const idInURL = id.slice(1);
+      getCurrentItem(idInURL, this.spliceStateAndItem);
     } else {
       addAllProperties();
     }
@@ -73,21 +77,18 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
 
   // Возврат данных элемента для редактирования
   // методы (spliceStateAndItem, addingItemNormalPropsInState, addingItemDropdownPropsInState)
-  public spliceStateAndItem = async (idInURL: string) => {
-    const { loadingPropertiesToChange } = this.props;
-    const id = idInURL.slice(1);
-    const responce = await axios.get(`http://localhost:3000/goods/?id=${id}`);
-    const item = { ...responce.data[0] };
-    this.addingItemNormalPropsInState(item);
-    this.addingItemDropdownPropsInState(item);
-    loadingPropertiesToChange({ properties: item.allPropertiesData });
-    const indexSymbol$ = item.price.length;
+  public spliceStateAndItem = () => {
+    const { loadingPropertiesToChange, positionForEdit } = this.props;
+    this.addingItemNormalPropsInState(positionForEdit);
+    this.addingItemDropdownPropsInState(positionForEdit);
+    loadingPropertiesToChange({ properties: positionForEdit.allPropertiesData });
+    const indexSymbol$ = positionForEdit.price.length;
     this.setState({
-      title: item.title,
-      price: item.price.slice(0, indexSymbol$ - 1),
-      description: item.description,
-      imgSrc: item.imgSrc,
-      imgName: item.imgName,
+      title: positionForEdit.title,
+      price: positionForEdit.price.slice(0, indexSymbol$ - 1),
+      description: positionForEdit.description,
+      imgSrc: positionForEdit.imgSrc,
+      imgName: positionForEdit.imgName,
     });
   };
 
@@ -219,7 +220,6 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       dataPropertiesID,
     } = this.state;
 
-    const { addNewAlert } = this.props;
     const date = new Date();
     let month;
     if (date.getMonth() <= 9) {
@@ -240,13 +240,11 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       allPropertiesData,
     };
 
-    const { match: { params: { id } } } = this.props;
+    const { match: { params: { id } }, setCurrentItemForEdit, addNewItem } = this.props;
     if (id) {
-      axios.patch(`http://localhost:3000/goods/${id.slice(1)}`, item);
-      addNewAlert({ alert: { id: _.uniqueId(), type: 'succesEditItem', component: 'addItem' } });
+      setCurrentItemForEdit(id, item);
     } else {
-      axios.post('http://localhost:3000/goods', item);
-      addNewAlert({ alert: { id: _.uniqueId(), type: 'succesAddItem', component: 'addItem' } });
+      addNewItem(item);
     }
 
     this.setState({

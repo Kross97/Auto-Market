@@ -11,13 +11,13 @@ import { AddItem } from './Components/AddItem/AddItem';
 import { AddProperty } from './Components/AddProperty/AddProperty';
 import { ItemCard } from './Components/Itemcard/ItemCard';
 
-const store = configureStore({
+export const store = configureStore({
   reducer,
   preloadedState: {
     listAllItems: {
       countItems: 0,
       allItems: [],
-      loadState: '',
+      statusOperation: '',
       filteringData: {
         titleSearch: '',
         currentPage: '1',

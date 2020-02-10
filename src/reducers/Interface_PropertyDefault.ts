@@ -10,9 +10,16 @@ export interface IPropDefault {
   values?: IDataInputSelect[];
 }
 
+export interface IPropToAdd {
+  title: string;
+  type: string;
+  values?: IDataInputSelect[] | undefined;
+}
+
+
 export interface IStatePropertyDefault {
   propertyDefault: IPropDefault[];
-  loadState: string;
+  statusOperation: string;
 }
 
 export interface IActionPropertiesSucces {

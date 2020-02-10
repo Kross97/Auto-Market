@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
-import axios from 'axios';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
-import { listAllItems, alerts } from '../../reducers';
+import { alerts } from '../../reducers';
 import items from '../../styles/AllItems.css';
 import { allItemsFiltered } from '../../selectors';
+import * as actions from '../../actions';
 import { ListItems } from './ListItems';
 import { IPropsMainContent, IAllTypesSorting } from './InterfaceAllItems';
 import { IAllStateApplication, IAlert, IItem } from '../../Interface_Application';
@@ -19,7 +18,7 @@ const mapStateToProps = (state: IAllStateApplication) => {
 };
 
 const actionCreators = {
-  deleteItem: listAllItems.actions.deleteItem,
+  deleteItem: actions.deleteItem,
   addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
@@ -32,10 +31,8 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
 
   public removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const { deleteItem, addNewAlert } = this.props;
-    addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' } });
-    deleteItem({ id });
-    axios.delete(`http://localhost:3000/goods/${id}`);
+    const { deleteItem } = this.props;
+    deleteItem(id);
   };
 
   public sorting(itemsAfterFilters: IItem[], typeSort: string) {

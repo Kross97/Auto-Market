@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import _ from 'lodash';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { PropertyMain } from './PropertyMain';
 import addProp from '../../styles/AddProperty.css';
-import { allPropertyDefault, alerts } from '../../reducers';
+import { alerts } from '../../reducers';
 import { defaultPropsTitles } from '../../selectors';
 import { IPropsAddNewProperty, IStateAddNewProperty } from './InterfaceAddProperty';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
+import * as actions from '../../actions';
 
 const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
@@ -20,7 +20,8 @@ const mapStateToProps = (state: IAllStateApplication) => {
 };
 
 const actionCreators = {
-  addProperty: allPropertyDefault.actions.addProperty,
+  addPropertyInEdit: actions.addPropertyInEdit,
+  addNewProperty: actions.addNewProperty,
   addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
@@ -46,7 +47,7 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
   };
 
   public addNewProperty = () => {
-    const { propertyDefaultTitles, addProperty, addNewAlert } = this.props;
+    const { propertyDefaultTitles, addNewAlert } = this.props;
     const { type, title } = this.state;
     const allPropTitles = new Set(propertyDefaultTitles);
     if (allPropTitles.has(title) || title === '') {
@@ -59,17 +60,12 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
     }
 
     const property = this.constructorProp();
-    const { match: { params: { from } } } = this.props;
+    const { match: { params: { from } }, addPropertyInEdit, addNewProperty } = this.props;
 
     if (from !== ':addItem' && from != undefined) {
-      axios.get(`http://localhost:3000/goods/?id=${from.slice(1)}`).then((responce) => {
-        const item = { ...responce.data[0] };
-        item.allPropertiesData = [...item.allPropertiesData, { id: _.uniqueId(), ...property }];
-        axios.patch(`http://localhost:3000/goods/${from.slice(1)}`, item);
-      });
+      addPropertyInEdit(from, property);
     } else {
-      axios.post('http://localhost:3000/props', property);
-      addProperty({ property });
+      addNewProperty(property);
     }
     addNewAlert({ alert: { id: _.uniqueId(), type: 'successProp', component: 'addProp' } });
     this.setState({ title: '', type: '' });

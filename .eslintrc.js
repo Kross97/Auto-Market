@@ -14,5 +14,6 @@ module.exports = {
     "jsx-a11y/label-has-associated-control": 0,
     "eqeqeq": 0,
     "class-methods-use-this": 0,
+    "import/no-cycle": 0,
   },
 };

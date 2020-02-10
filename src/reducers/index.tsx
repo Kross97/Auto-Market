@@ -6,11 +6,45 @@ import update from 'immutability-helper';
 import * as ListItems from './Interface_ListAllItems';
 import * as PropertiesDefault from './Interface_PropertyDefault';
 import * as Alerts from './Interface_Alerts';
+import * as ItemEdit from './Interface_itemForEdit';
+
+const stateItemForEdit : ItemEdit.IstateItemForEdit = {
+  statusLoadingItem: '',
+  positionForEdit: {
+    title: '',
+    price: '',
+    itemDate: '',
+    dateSort: '',
+    description: '',
+    imgSrc: '',
+    imgName: '',
+    id: 0,
+    allPropertiesData: [],
+  },
+};
+
+export const itemForEdit = createSlice({
+  name: 'currentitem',
+  initialState: stateItemForEdit,
+  reducers: {
+    loadingItemRequest: (state) => {
+      state.statusLoadingItem = 'Loading Item Request';
+    },
+    loadingItemSucces: (state, action: PayloadAction<ListItems.IActionItemSucces>) => {
+      const { item } = action.payload;
+      state.statusLoadingItem = 'Loading Item Succes';
+      state.positionForEdit = item;
+    },
+    loadingItemfailed: (state) => {
+      state.statusLoadingItem = 'Loading Item Failed';
+    },
+  },
+});
 
 const stateAllItems: ListItems.IStatelistAllItems = {
   countItems: 0,
   allItems: [],
-  loadState: '',
+  statusOperation: '',
   filteringData: {
     titleSearch: '',
     currentPage: '',
@@ -23,7 +57,7 @@ export const listAllItems = createSlice({
   initialState: stateAllItems,
   reducers: {
     loadingPositionsRequest: (state) => {
-      state.loadState = 'Loading Positions Request';
+      state.statusOperation = 'Loading Positions Request';
     },
     loadingPositionsSucces: (state, action: PayloadAction<ListItems.IActionPositionSucces>) => {
       const { items } = action.payload;
@@ -35,9 +69,39 @@ export const listAllItems = createSlice({
       };
     },
     loadingPositionsFailed: (state) => {
-      state.loadState = 'Loading Positions Failed';
+      state.statusOperation = 'Loading Positions Failed';
     },
-    deleteItem: (state, action: PayloadAction<ListItems.IActionDeleteItem>) => {
+    setNewItemRequest: (state) => {
+      state.statusOperation = 'Set New Data Item Request';
+    },
+    setNewItemSucces: (state, action: PayloadAction<ListItems.IActionSetItemSucces>) => {
+      const { id, item } = action.payload;
+      const currentIndex = state.allItems.findIndex((it) => it.id === Number(id));
+      state.statusOperation = 'Set New Data Item Succes';
+      update(state, { allItems: { [currentIndex]: { $set: item } } });
+    },
+    setNewItemFailed: (state) => {
+      state.statusOperation = 'Set New Data Item Failed';
+    },
+    addItemRequest: (state) => {
+      state.statusOperation = 'Add New Item Request';
+    },
+    addItemSucces: (state, action: PayloadAction<ListItems.IActionItemSucces>) => {
+      const { item } = action.payload;
+      const { allItems } = state;
+      return {
+        ...state,
+        allItems: [...allItems, item],
+        statusOperation: 'Add New Item Succes',
+      };
+    },
+    addItemFailed: (state) => {
+      state.statusOperation = 'Add New Item Failed';
+    },
+    deleteItemRequest: (state) => {
+      state.statusOperation = 'Delete Item Request';
+    },
+    deleteItemSucces: (state, action: PayloadAction<ListItems.IActionDeleteItem>) => {
       const { id } = action.payload;
       const { allItems, countItems } = state;
       return {
@@ -45,6 +109,9 @@ export const listAllItems = createSlice({
         allItems: allItems.filter((it) => it.id !== id),
         countItems: countItems - 1,
       };
+    },
+    deleteItemFailed: (state) => {
+      state.statusOperation = 'Delete Item Failed';
     },
     addFilterPage: (state, action: PayloadAction<ListItems.IActionAddFilterPage>) => {
       const { page } = action.payload;
@@ -66,7 +133,7 @@ export const listAllItems = createSlice({
 
 const stateProperties: PropertiesDefault.IStatePropertyDefault = {
   propertyDefault: [],
-  loadState: '',
+  statusOperation: '',
 };
 
 export const allPropertyDefault = createSlice({
@@ -74,7 +141,7 @@ export const allPropertyDefault = createSlice({
   initialState: stateProperties,
   reducers: {
     loadingPropertiesRequest: (state) => {
-      state.loadState = 'Loading Properties Request';
+      state.statusOperation = 'Loading Properties Request';
     },
     loadingPropertiesSucces: (
       state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
@@ -83,13 +150,16 @@ export const allPropertyDefault = createSlice({
       return {
         ...state,
         propertyDefault: properties,
-        loadState: 'loading Properties Succes',
+        statusOperation: 'loading Properties Succes',
       };
     },
     loadingPropertiesFailed: (state) => {
-      state.loadState = 'Loading Properties Failed';
+      state.statusOperation = 'Loading Properties Failed';
     },
-    deleteProperty: (
+    deletePropertyRequest: (state) => {
+      state.statusOperation = 'Delete Property Request';
+    },
+    deletePropertySucces: (
       state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
     ) => {
       const { id } = action.payload;
@@ -99,13 +169,23 @@ export const allPropertyDefault = createSlice({
         propertyDefault: propertyDefault.filter((prop) => prop.id !== id),
       };
     },
+    deletePropertyFailed: (state) => {
+      state.statusOperation = 'Delete Property Failed';
+    },
+    addPropRequest: (state) => {
+      state.statusOperation = 'Add Propertie Request';
+    },
     addProperty: (state, action: PayloadAction<PropertiesDefault.IActionAddProp>) => {
       const { property } = action.payload;
       const { propertyDefault } = state;
       return {
         ...state,
+        statusOperation: 'Add Propertie Succes',
         propertyDefault: [...propertyDefault, property],
       };
+    },
+    addPropFailed: (state) => {
+      state.statusOperation = 'Add Propertie Failed';
     },
     loadingPropertiesToChange: (
       state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
@@ -203,6 +283,27 @@ export const alerts = createSlice({
         allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addPropsFailed', component: 'allProperty' }],
       };
     },
+    [listAllItems.actions.setNewItemSucces.type]: (state) => {
+      const { allAlerts } = state;
+      return {
+        ...state,
+        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'succesEditItem', component: 'addItem' }],
+      };
+    },
+    [listAllItems.actions.addItemSucces.type]: (state) => {
+      const { allAlerts } = state;
+      return {
+        ...state,
+        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'succesAddItem', component: 'addItem' }],
+      };
+    },
+    [listAllItems.actions.deleteItemSucces.type]: (state) => {
+      const { allAlerts } = state;
+      return {
+        ...state,
+        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' }],
+      };
+    },
   },
 });
 
@@ -210,4 +311,5 @@ export const reducer = combineReducers({
   listAllItems: listAllItems.reducer,
   allPropertyDefault: allPropertyDefault.reducer,
   alerts: alerts.reducer,
+  itemForEdit: itemForEdit.reducer,
 });

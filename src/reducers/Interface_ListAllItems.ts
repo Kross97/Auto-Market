@@ -3,7 +3,7 @@ import { IItem } from '../Interface_Application';
 export interface IStatelistAllItems {
   countItems: number;
   allItems: IItem[];
-  loadState: string;
+  statusOperation: string;
   filteringData: {
     titleSearch: string;
     currentPage: string;
@@ -13,6 +13,15 @@ export interface IStatelistAllItems {
 
 export interface IActionPositionSucces {
   items: IItem[];
+}
+
+export interface IActionItemSucces {
+  item: IItem;
+}
+
+export interface IActionSetItemSucces {
+  id: string;
+  item: IItem;
 }
 
 export interface IActionDeleteItem {

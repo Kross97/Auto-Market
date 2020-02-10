@@ -1,3 +1,5 @@
+import { reducer } from './reducers';
+
 export interface IAlert {
   id: string;
   type: string;
@@ -36,17 +38,6 @@ export interface IPropDefaultSelect {
   values: IDataInputSelect[];
 }
 
-interface IStatelistAllItems {
-  countItems: number;
-  allItems: IItem[];
-  loadState: string;
-  filteringData: {
-    titleSearch: string;
-    currentPage: string;
-    quantityItems: string;
-  };
-}
-
 export interface IDataPropertiesNormal {
   [id: number]: IPropDefaultNormal;
 }
@@ -62,15 +53,5 @@ export interface IPropDefault {
   values?: IDataInputSelect[];
 }
 
-interface IStatePropertyDefault {
-  propertyDefault: IPropDefault[];
-  loadState: string;
-}
 
-export interface IAllStateApplication {
-  listAllItems: IStatelistAllItems;
-  allPropertyDefault: IStatePropertyDefault;
-  alerts: {
-    allAlerts: IAlert[];
-  };
-}
+export type IAllStateApplication = ReturnType<typeof reducer>;

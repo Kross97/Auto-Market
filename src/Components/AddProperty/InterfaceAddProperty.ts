@@ -12,7 +12,14 @@ interface IDataInputSelect {
   value: string;
 }
 
-interface IPropToAdd {
+export interface IPropDefault {
+  title: string;
+  type: string;
+  id: number;
+  values?: IDataInputSelect[];
+}
+
+export interface IPropToAdd {
   title: string;
   type: string;
   values?: IDataInputSelect[] | undefined;
@@ -31,7 +38,8 @@ export interface IPropsAddNewProperty {
       from: string;
     };
   };
-  addProperty(prop: { property: IPropToAdd }): void;
+  addPropertyInEdit(id: string, property: IPropToAdd): void;
+  addNewProperty(property: IPropToAdd): void;
   addNewAlert(alert: { alert: IAlert }): void;
   completeRemovalFromComponent(remove: { component: string }): void;
 }

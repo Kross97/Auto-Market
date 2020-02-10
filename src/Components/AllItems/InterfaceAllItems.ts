@@ -16,7 +16,7 @@ export interface IPropsMainContent {
   allAlerts: IAlert[];
   currentQuantity: string;
   typeSort: string;
-  deleteItem(id: { id: number }): void;
+  deleteItem(id: number): void;
   addNewAlert(alert: { alert: IAlert }): void;
   completeRemovalFromComponent(remove: { component: string }): void;
 }

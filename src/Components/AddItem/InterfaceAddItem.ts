@@ -5,6 +5,17 @@ import {
   IPropDefaultSelect,
 } from '../../Interface_Application';
 
+export interface IItemBeforeServer {
+  title: string;
+  price: string;
+  itemDate: string;
+  dateSort: Date;
+  description: string;
+  imgSrc: string;
+  imgName: string;
+  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
+}
+
 interface IDataInputSelect {
   id: string;
   value: string;
@@ -26,7 +37,11 @@ export interface IPropsAddNewItem {
       id: string;
     };
   };
+  positionForEdit: IItem;
   deleteProperty(id: { id: number }): void;
+  getCurrentItem(id: string, startEdit: () => void): void;
+  setCurrentItemForEdit(id: string, item: IItemBeforeServer): void;
+  addNewItem(item: IItemBeforeServer): void;
   addNewAlert(alert: { alert: IAlert }): void;
   completeRemovalFromComponent(remove: { component: string }): void;
   addAllProperties(): void;

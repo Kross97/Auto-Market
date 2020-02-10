@@ -21,7 +21,7 @@ export interface IPropAllProperty {
   propertyDefault: IPropDefault[];
   allAlerts: IAlert[];
   addNewAlert(alert: { alert: IAlert }): void;
-  deleteProperty(id: { id: number }): void;
+  deleteProperty(id: number): void;
   addAllProperties(): void;
   completeRemovalFromComponent(remove: { component: string }): void;
 }

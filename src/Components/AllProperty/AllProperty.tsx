@@ -2,11 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import axios from 'axios';
 import properties from '../../styles/AllProperty.css';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { PropertiesList } from './PropertiesList';
-import { allPropertyDefault, alerts } from '../../reducers';
+import { alerts } from '../../reducers';
 import * as actions from '../../actions';
 import { IPropAllProperty } from './InterfaceAllProperty';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
@@ -23,7 +22,7 @@ const mapStateToProps = (
 
 const actionCreators = {
   addNewAlert: alerts.actions.addNewAlert,
-  deleteProperty: allPropertyDefault.actions.deleteProperty,
+  deleteProperty: actions.deleteProperty,
   addAllProperties: actions.addAllProperties,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
@@ -43,8 +42,7 @@ class Properties extends React.Component<IPropAllProperty, {}> {
     e.preventDefault();
     const { deleteProperty, addNewAlert } = this.props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
-    deleteProperty({ id });
-    axios.delete(`http://localhost:3000/props/${id}`);
+    deleteProperty(id);
   };
 
   public render() {
