@@ -3,18 +3,8 @@ import {
   IAlert,
   IPropDefaultNormal,
   IPropDefaultSelect,
+  IItemBeforeServer,
 } from '../../Interface_Application';
-
-export interface IItemBeforeServer {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: Date;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
-}
 
 interface IDataInputSelect {
   id: string;
@@ -30,7 +20,7 @@ interface IPropDefault {
 
 export interface IPropsAddNewItem {
   propertyDefault: IPropDefault[];
-  allItems: IItem[];
+  allItems: (IItem | IItemBeforeServer)[];
   allAlerts: IAlert[];
   match: {
     params: {

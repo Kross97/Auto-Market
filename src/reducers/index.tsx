@@ -7,6 +7,7 @@ import * as ListItems from './Interface_ListAllItems';
 import * as PropertiesDefault from './Interface_PropertyDefault';
 import * as Alerts from './Interface_Alerts';
 import * as ItemEdit from './Interface_itemForEdit';
+import { IItem } from '../Interface_Application';
 
 const stateItemForEdit : ItemEdit.IstateItemForEdit = {
   statusLoadingItem: '',
@@ -76,7 +77,7 @@ export const listAllItems = createSlice({
     },
     setNewItemSucces: (state, action: PayloadAction<ListItems.IActionSetItemSucces>) => {
       const { id, item } = action.payload;
-      const currentIndex = state.allItems.findIndex((it) => it.id === Number(id));
+      const currentIndex = state.allItems.findIndex((it) => (it as IItem).id === Number(id));
       state.statusOperation = 'Set New Data Item Succes';
       update(state, { allItems: { [currentIndex]: { $set: item } } });
     },
@@ -86,7 +87,7 @@ export const listAllItems = createSlice({
     addItemRequest: (state) => {
       state.statusOperation = 'Add New Item Request';
     },
-    addItemSucces: (state, action: PayloadAction<ListItems.IActionItemSucces>) => {
+    addItemSucces: (state, action: PayloadAction<ListItems.IActionItemBeforeServerSucces>) => {
       const { item } = action.payload;
       const { allItems } = state;
       return {
@@ -106,7 +107,7 @@ export const listAllItems = createSlice({
       const { allItems, countItems } = state;
       return {
         ...state,
-        allItems: allItems.filter((it) => it.id !== id),
+        allItems: allItems.filter((it) => (it as IItem).id !== id),
         countItems: countItems - 1,
       };
     },
@@ -256,53 +257,40 @@ export const alerts = createSlice({
   },
   extraReducers: {
     [listAllItems.actions.loadingPositionsSucces.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsSucces', component: 'allItems' }],
-      };
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'addItemsSucces', component: 'allItems' });
     },
     [listAllItems.actions.loadingPositionsFailed.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addItemsFailed', component: 'allItems' }],
-      };
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'addItemsFailed', component: 'allItems' });
     },
-    [allPropertyDefault.actions.loadingPropertiesSucces.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addPropsSucces', component: 'allProperty' }],
-      };
+    [itemForEdit.actions.loadingItemRequest.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'RequestEditItem', component: 'addItem' });
     },
-    [allPropertyDefault.actions.loadingPropertiesFailed.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'addPropsFailed', component: 'allProperty' }],
-      };
+    [itemForEdit.actions.loadingItemSucces.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'SuccesForEditItem', component: 'addItem' });
     },
     [listAllItems.actions.setNewItemSucces.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'succesEditItem', component: 'addItem' }],
-      };
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'succesEditItem', component: 'addItem' });
+    },
+    [listAllItems.actions.setNewItemFailed.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'FailedEditItem', component: 'addItem' });
+    },
+    [listAllItems.actions.addItemRequest.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'RequestAddItem', component: 'addItem' });
     },
     [listAllItems.actions.addItemSucces.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'succesAddItem', component: 'addItem' }],
-      };
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'succesAddItem', component: 'addItem' });
+    },
+    [listAllItems.actions.addItemFailed.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'FailedAddItem', component: 'addItem' });
     },
     [listAllItems.actions.deleteItemSucces.type]: (state) => {
-      const { allAlerts } = state;
-      return {
-        ...state,
-        allAlerts: [...allAlerts, { id: _.uniqueId(), type: 'deleteItem', component: 'allItems' }],
-      };
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'deleteItem', component: 'allItems' });
+    },
+    [allPropertyDefault.actions.loadingPropertiesSucces.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'addPropsSucces', component: 'allProperty' });
+    },
+    [allPropertyDefault.actions.loadingPropertiesFailed.type]: (state) => {
+      state.allAlerts.unshift({ id: _.uniqueId(), type: 'addPropsFailed', component: 'allProperty' });
     },
   },
 });

@@ -18,6 +18,17 @@ export interface IItem {
   allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
 }
 
+export interface IItemBeforeServer {
+  title: string;
+  price: string;
+  itemDate: string;
+  dateSort: Date;
+  description: string;
+  imgSrc: string;
+  imgName: string;
+  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
+}
+
 interface IDataInputSelect {
   id: string;
   value: string;

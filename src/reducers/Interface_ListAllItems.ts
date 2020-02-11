@@ -1,8 +1,8 @@
-import { IItem } from '../Interface_Application';
+import { IItem, IItemBeforeServer } from '../Interface_Application';
 
 export interface IStatelistAllItems {
   countItems: number;
-  allItems: IItem[];
+  allItems: (IItem| IItemBeforeServer)[];
   statusOperation: string;
   filteringData: {
     titleSearch: string;
@@ -19,9 +19,13 @@ export interface IActionItemSucces {
   item: IItem;
 }
 
+export interface IActionItemBeforeServerSucces {
+  item: IItemBeforeServer;
+}
+
 export interface IActionSetItemSucces {
   id: string;
-  item: IItem;
+  item: IItemBeforeServer;
 }
 
 export interface IActionDeleteItem {

@@ -11,8 +11,12 @@
   position: relative;
 }
 
-.erorTitle , .addPropsFailed, .addItemsFailed {
+.erorTitle , .addPropsFailed, .addItemsFailed, .FailedAddItem, .FailedEditItem {
   background-color: #f00;
+}
+
+.RequestAddItem , .RequestEditItem {
+  background-color: #f5b514;
 }
 
 .erorType, {
@@ -21,7 +25,7 @@
   box-sizing: border-box;
 }
 
-.successProp {
+.successProp, .SuccesForEditItem {
 background-color: #31c35a;
 opacity: 0.7;
 }

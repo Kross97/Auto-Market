@@ -6,7 +6,7 @@ import {
   itemForEdit,
 } from '../reducers';
 import { IPropDefault } from '../Components/AddProperty/InterfaceAddProperty';
-import { IItemBeforeServer } from '../Components/AddItem/InterfaceAddItem';
+import { IItemBeforeServer } from '../Interface_Application';
 import { AppDispatch, AppThunk } from './Async-actions-types';
 
 /* ITEMS */

@@ -9,7 +9,7 @@ import itemCard from '../../styles/ItemCard.css';
 import { alerts } from '../../reducers';
 import * as actions from '../../actions';
 import { IPropsItemCard, IAuto } from './InterfaceCard';
-import { IAllStateApplication, IAlert } from '../../Interface_Application';
+import { IAllStateApplication, IAlert, IItem } from '../../Interface_Application';
 
 const mapStateToProps = (
   { listAllItems: { allItems }, alerts: { allAlerts } }: IAllStateApplication,
@@ -52,7 +52,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
   public render() {
     const { match, allItems, allAlerts } = this.props;
     const id: string = match.params.id.slice(1);
-    const card = allItems.find((item) => item.id === Number(id));
+    const card = allItems.find((item) => (item as IItem).id === Number(id));
     if (card == undefined) {
       return <CardUndefined />;
     }
@@ -68,7 +68,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
               <p>{card.description}</p>
             </div>
           </div>
-          <CardAdditionalProps card={card} />
+          <CardAdditionalProps card={card as IItem} />
           <p>{`Цена : ${card.price}`}</p>
           <button onClick={this.addBasket(card)} className={itemCard.addBasket} type="button">Беру!!!</button>
           {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}

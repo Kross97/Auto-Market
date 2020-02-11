@@ -27,11 +27,26 @@ class Alerts extends React.Component<IPropsListAlerts, {}> {
             case 'priceNotString':
               text = 'Цена указанна неверно!';
               break;
+            case 'RequestAddItem':
+              text = 'Идет добавление товара на сервер!';
+              break;
             case 'succesAddItem':
-              text = 'Товар успешно добавлен на страницу!';
+              text = 'Товар успешно добавлен!';
+              break;
+            case 'FailedAddItem':
+              text = 'Ошибка! Товар не загружен на сервер!';
+              break;
+            case 'RequestEditItem':
+              text = 'Товар загружается для редактирования!';
+              break;
+            case 'SuccesForEditItem':
+              text = 'Товар загружен для редактирования!';
               break;
             case 'succesEditItem':
               text = 'Товар успешно отредактирован!';
+              break;
+            case 'FailedEditItem':
+              text = 'Ошибка! Товар не отредактирован!';
               break;
             case 'limitItems':
               text = 'На этой странице превышен лимит записей. Перейдите на следующую';
