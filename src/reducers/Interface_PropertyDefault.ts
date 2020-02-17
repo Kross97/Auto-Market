@@ -3,33 +3,39 @@ interface IDataInputSelect {
   value: string;
 }
 
-export interface IPropDefault {
+export interface IPropDefaultNormal {
   title: string;
   type: string;
-  id: number;
-  values?: IDataInputSelect[];
+  id: string;
 }
 
-export interface IPropToAdd {
+export interface IPropDefaultDropdown {
   title: string;
   type: string;
-  values?: IDataInputSelect[] | undefined;
+  id: string;
+  values: IDataInputSelect[];
 }
-
 
 export interface IStatePropertyDefault {
-  propertyDefault: IPropDefault[];
+  propertyDefaultNormal: IPropDefaultNormal[];
+  propertyDefaultDropdown: IPropDefaultDropdown[];
   statusOperation: string;
 }
 
 export interface IActionPropertiesSucces {
-  properties: IPropDefault[];
+  propertiesNormal: IPropDefaultNormal[];
+  propertiesDropdown: IPropDefaultDropdown[];
 }
 
 export interface IActionDeletePropOrQuantityInputs {
-  id: number;
+  type: string;
+  id: string;
 }
 
-export interface IActionAddProp {
-  property: IPropDefault;
+export interface IActionAddPropNormal {
+  property: IPropDefaultNormal;
+}
+
+export interface IActionAddPropDropdown {
+  property: IPropDefaultDropdown;
 }

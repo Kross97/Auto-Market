@@ -24,18 +24,18 @@ const actionCreators = {
 };
 
 class MainContent extends React.Component<IPropsMainContent, {}> {
-  public componentWillUnmount() {
+  componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'allItems' });
   }
 
-  public removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const { deleteItem } = this.props;
     deleteItem(id);
   };
 
-  public sorting(itemsAfterFilters: IItem[], typeSort: string) {
+  sorting(itemsAfterFilters: IItem[], typeSort: string) {
     if (typeSort === '') {
       return itemsAfterFilters;
     }

@@ -3,7 +3,7 @@ import cn from 'classnames';
 import items from '../../styles/AllItems.css';
 import { IPropsItemsFooter } from './InterfaceAllItems';
 
-export const ItemsFooter: React.FC<IPropsItemsFooter> = (props: IPropsItemsFooter) => {
+export const ItemsFooter = (props: IPropsItemsFooter) => {
   const constructorPages = (pages: string[], quantity: number, valuePage: number): string[] => {
     if (quantity === 0) {
       return pages;

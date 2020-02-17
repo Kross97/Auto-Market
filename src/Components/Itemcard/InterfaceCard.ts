@@ -23,7 +23,7 @@ interface IDataInputSelect {
 }
 export interface IPropSelect {
   data: {
-    id: number;
+    id: string;
     title: string;
     type: string;
     values: IDataInputSelect[];
@@ -32,7 +32,7 @@ export interface IPropSelect {
 
 export interface IPropNormal {
   data: {
-    id: number;
+    id: string;
     title: string;
     type: string;
     isValid: boolean;
@@ -41,5 +41,5 @@ export interface IPropNormal {
 }
 
 export interface IPropsAdditional {
-  card: IItem;
+  card: IItem | IItemBeforeServer;
 }

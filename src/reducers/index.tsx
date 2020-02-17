@@ -20,7 +20,8 @@ const stateItemForEdit : ItemEdit.IstateItemForEdit = {
     imgSrc: '',
     imgName: '',
     id: 0,
-    allPropertiesData: [],
+    allPropertiesDataDropdown: [],
+    allPropertiesDataNormal: [],
   },
 };
 
@@ -133,7 +134,8 @@ export const listAllItems = createSlice({
 });
 
 const stateProperties: PropertiesDefault.IStatePropertyDefault = {
-  propertyDefault: [],
+  propertyDefaultNormal: [],
+  propertyDefaultDropdown: [],
   statusOperation: '',
 };
 
@@ -147,11 +149,12 @@ export const allPropertyDefault = createSlice({
     loadingPropertiesSucces: (
       state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
     ) => {
-      const { properties } = action.payload;
+      const { propertiesNormal, propertiesDropdown } = action.payload;
       return {
         ...state,
-        propertyDefault: properties,
-        statusOperation: 'loading Properties Succes',
+        propertyDefaultNormal: propertiesNormal,
+        propertyDefaultDropdown: propertiesDropdown,
+        statusOperation: 'loading Properties  Succes',
       };
     },
     loadingPropertiesFailed: (state) => {
@@ -163,12 +166,16 @@ export const allPropertyDefault = createSlice({
     deletePropertySucces: (
       state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
     ) => {
-      const { id } = action.payload;
-      const { propertyDefault } = state;
-      return {
-        ...state,
-        propertyDefault: propertyDefault.filter((prop) => prop.id !== id),
-      };
+      const { id, type } = action.payload;
+      if (type === 'Dropdown') {
+        state.propertyDefaultDropdown = state.propertyDefaultDropdown.filter(
+          (prop) => prop.id !== id,
+        );
+      } else {
+        state.propertyDefaultNormal = state.propertyDefaultNormal.filter(
+          (prop) => prop.id !== id,
+        );
+      }
     },
     deletePropertyFailed: (state) => {
       state.statusOperation = 'Delete Property Failed';
@@ -176,14 +183,15 @@ export const allPropertyDefault = createSlice({
     addPropRequest: (state) => {
       state.statusOperation = 'Add Propertie Request';
     },
-    addProperty: (state, action: PayloadAction<PropertiesDefault.IActionAddProp>) => {
+    addPropertyNormal: (state, action: PayloadAction<PropertiesDefault.IActionAddPropNormal>) => {
       const { property } = action.payload;
-      const { propertyDefault } = state;
-      return {
-        ...state,
-        statusOperation: 'Add Propertie Succes',
-        propertyDefault: [...propertyDefault, property],
-      };
+      state.propertyDefaultNormal.push(property);
+    },
+    addPropertyDropdown: (
+      state, action: PayloadAction<PropertiesDefault.IActionAddPropDropdown>,
+    ) => {
+      const { property } = action.payload;
+      state.propertyDefaultDropdown.push(property);
     },
     addPropFailed: (state) => {
       state.statusOperation = 'Add Propertie Failed';
@@ -191,33 +199,34 @@ export const allPropertyDefault = createSlice({
     loadingPropertiesToChange: (
       state, action: PayloadAction<PropertiesDefault.IActionPropertiesSucces>,
     ) => {
-      const { properties } = action.payload;
-      state.propertyDefault = properties;
+      const { propertiesNormal, propertiesDropdown } = action.payload;
+      state.propertyDefaultNormal = propertiesNormal;
+      state.propertyDefaultDropdown = propertiesDropdown;
     },
     increaseQuantityInputsDropdown: (
       state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
     ) => {
       const { id } = action.payload;
-      const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      const currentIndex = state.propertyDefaultDropdown.findIndex((prop) => prop.id === id);
+      const newProp = state.propertyDefaultDropdown.find((prop) => prop.id === id);
       if (!newProp || !newProp.values) {
         return;
       }
       newProp.values.push({ id: _.uniqueId(), value: '' });
-      return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
+      return update(state, { propertyDefaultDropdown: { [currentIndex]: { $set: newProp } } });
     },
 
     reduceQuantityInputsDropdown: (
       state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
     ) => {
       const { id } = action.payload;
-      const currentIndex = state.propertyDefault.findIndex((prop) => prop.id === id);
-      const newProp = state.propertyDefault.find((prop) => prop.id === id);
+      const currentIndex = state.propertyDefaultDropdown.findIndex((prop) => prop.id === id);
+      const newProp = state.propertyDefaultDropdown.find((prop) => prop.id === id);
       if (!newProp || !newProp.values) {
         return;
       }
       newProp.values.pop();
-      return update(state, { propertyDefault: { [currentIndex]: { $set: newProp } } });
+      return update(state, { propertyDefaultDropdown: { [currentIndex]: { $set: newProp } } });
     },
   },
 });

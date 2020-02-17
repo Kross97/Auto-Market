@@ -19,7 +19,7 @@ export class Login extends React.Component<{}, IStateLogin> {
     };
   }
 
-  public changeTypeInput = () => {
+  changeTypeInput = () => {
     const { typePassword } = this.state;
     if (typePassword === 'password') {
       this.setState({ typePassword: 'text' });
@@ -28,14 +28,14 @@ export class Login extends React.Component<{}, IStateLogin> {
     }
   };
 
-  public changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ login: target.value });
     axios.get(`http://localhost:3000/users?login=${target.value}`).then(({ data }) => {
       this.setState({ user: { ...data[0] } });
     });
   };
 
-  public changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: target.value });
   };
 

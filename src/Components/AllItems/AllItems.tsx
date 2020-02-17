@@ -34,7 +34,7 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
     };
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     const {
       addAllItems,
       addFilterPage,
@@ -48,19 +48,19 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
     addFilterQuantity({ quantity: currentQuantity });
   }
 
-  public changeCurrentQuantity = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
+  changeCurrentQuantity = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterQuantity } = this.props;
     this.setState({ currentQuantity: currentTarget.value });
     addFilterQuantity({ quantity: currentTarget.value });
   };
 
-  public changeCurrentPage = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
+  changeCurrentPage = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
     const { addFilterPage } = this.props;
     this.setState({ currentPage: currentTarget.value });
     addFilterPage({ page: currentTarget.value });
   };
 
-  public currentSort = (type: string) => () => {
+  currentSort = (type: string) => () => {
     const { typeSort } = this.state;
     if (type === typeSort) {
       this.setState({ typeSort: `Desc${type}` });
@@ -69,14 +69,14 @@ class Items extends React.Component<IPropsAllItems, IStateAllItems> {
     }
   };
 
-  public addSearchTitle = () => {
+  addSearchTitle = () => {
     const { titleData } = this.state;
     const { addFilterTitle } = this.props;
     this.setState({ titleSearch: titleData });
     addFilterTitle({ title: titleData });
   };
 
-  public changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ titleData: target.value });
   };
 

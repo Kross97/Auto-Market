@@ -8,7 +8,12 @@ import addProp from '../../styles/AddProperty.css';
 import { alerts } from '../../reducers';
 import { defaultPropsTitles } from '../../selectors';
 import { IPropsAddNewProperty, IStateAddNewProperty } from './InterfaceAddProperty';
-import { IAllStateApplication, IAlert } from '../../Interface_Application';
+import {
+  IAllStateApplication,
+  IAlert,
+  IPropDefaultNormal,
+  IPropDefaultDropdown,
+} from '../../Interface_Application';
 import * as actions from '../../actions';
 
 const mapStateToProps = (state: IAllStateApplication) => {
@@ -20,8 +25,10 @@ const mapStateToProps = (state: IAllStateApplication) => {
 };
 
 const actionCreators = {
-  addPropertyInEdit: actions.addPropertyInEdit,
-  addNewProperty: actions.addNewProperty,
+  addPropertyInEditNormal: actions.addPropertyInEditNormal,
+  addPropertyInEditDropdown: actions.addPropertyInEditDropdown,
+  addNewPropertyNormal: actions.addNewPropertyNormal,
+  addNewPropertyDropdown: actions.addNewPropertyDropdown,
   addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
@@ -32,21 +39,29 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
     this.state = { title: '', type: '' };
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'addProp' });
   }
 
-  public constructorProp = () => {
+  constructorPropNormal = () => {
     const { title, type } = this.state;
-    const property = { title, type };
-    if (type === 'Dropdown') {
-      return { ...property, values: [{ id: _.uniqueId(), value: '' }] };
-    }
+    const property = { id: `@idP${_.uniqueId()}`, title, type };
     return property;
   };
 
-  public addNewProperty = () => {
+  constructorPropDropdown = () => {
+    const { title, type } = this.state;
+    const property = {
+      id: `@idP${_.uniqueId()}`,
+      title,
+      type,
+      values: [{ id: _.uniqueId(), value: '' }],
+    };
+    return property;
+  };
+
+  addNewProperty = () => {
     const { propertyDefaultTitles, addNewAlert } = this.props;
     const { type, title } = this.state;
     const allPropTitles = new Set(propertyDefaultTitles);
@@ -59,23 +74,44 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
       return;
     }
 
-    const property = this.constructorProp();
-    const { match: { params: { from } }, addPropertyInEdit, addNewProperty } = this.props;
+    const {
+      match: { params: { from } },
+      addPropertyInEditNormal,
+      addPropertyInEditDropdown,
+      addNewPropertyNormal,
+      addNewPropertyDropdown,
+    } = this.props;
 
     if (from !== ':addItem' && from != undefined) {
-      addPropertyInEdit(from, property);
+      switch (type) {
+        case 'Dropdown':
+          const propertyDropdown: IPropDefaultDropdown = this.constructorPropDropdown();
+          addPropertyInEditDropdown(from, propertyDropdown);
+          break;
+        default:
+          const propertyNormal: IPropDefaultNormal = this.constructorPropNormal();
+          addPropertyInEditNormal(from, propertyNormal);
+      }
     } else {
-      addNewProperty(property);
+      switch (type) {
+        case 'Dropdown':
+          const propertyDropdown: IPropDefaultDropdown = this.constructorPropDropdown();
+          addNewPropertyDropdown(propertyDropdown);
+          break;
+        default:
+          const propertyNormal: IPropDefaultNormal = this.constructorPropNormal();
+          addNewPropertyNormal(propertyNormal);
+      }
     }
     addNewAlert({ alert: { id: _.uniqueId(), type: 'successProp', component: 'addProp' } });
     this.setState({ title: '', type: '' });
   };
 
-  public changePropTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changePropTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ title: target.value });
   };
 
-  public changePropType = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changePropType = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ type: target.value });
   };
 

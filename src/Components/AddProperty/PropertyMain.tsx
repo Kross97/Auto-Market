@@ -3,7 +3,7 @@ import cn from 'classnames';
 import addProp from '../../styles/AddProperty.css';
 import { IPropsPropertyMain } from './InterfaceAddProperty';
 
-export const PropertyMain: React.FC<IPropsPropertyMain> = (props: IPropsPropertyMain) => {
+export const PropertyMain = (props: IPropsPropertyMain) => {
   const {
     changePropTitle,
     changePropType,

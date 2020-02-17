@@ -10,11 +10,12 @@ import * as actions from '../../actions';
 import { IPropAllProperty } from './InterfaceAllProperty';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
 
-const mapStateToProps = (
-  { allPropertyDefault: { propertyDefault }, alerts: { allAlerts } }: IAllStateApplication,
-) => {
+const mapStateToProps = ({
+  allPropertyDefault: { propertyDefaultNormal, propertyDefaultDropdown },
+  alerts: { allAlerts },
+}: IAllStateApplication) => {
   const props = {
-    propertyDefault,
+    propertyDefault: [...propertyDefaultNormal, ...propertyDefaultDropdown],
     allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'allProperty'),
   };
   return props;
@@ -28,21 +29,23 @@ const actionCreators = {
 };
 
 class Properties extends React.Component<IPropAllProperty, {}> {
-  public componentDidMount() {
+  componentDidMount() {
     const { addAllProperties } = this.props;
     addAllProperties();
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'allProperty' });
   }
 
-  public removeProperty = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  removeProperty = (
+    type: string, id: string,
+  ) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const { deleteProperty, addNewAlert } = this.props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
-    deleteProperty(id);
+    deleteProperty(type, id);
   };
 
   public render() {

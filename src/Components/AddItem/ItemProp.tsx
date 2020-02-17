@@ -2,9 +2,8 @@ import React from 'react';
 import cn from 'classnames';
 import addItem from '../../styles/AddItem.css';
 import { IPropsItemProp } from './InterfaceAddItem';
-import { IPropDefaultNormal } from '../../Interface_Application';
 
-export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
+export const ItemProp = (props: IPropsItemProp) => {
   const {
     dataPropertiesID,
     dataProperties,
@@ -14,20 +13,16 @@ export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
     removeProp,
   } = props;
   const propIsHaveData = dataPropertiesID.filter((id) => id === prop.id).length;
-  let dataPropInitial: IPropDefaultNormal = {
-    title: prop.title,
-    type: prop.type,
-    id: prop.id,
-    isValid: true,
-    value: '',
-  };
-  let erorStyle;
+
+  let valueProp = '';
   if (propIsHaveData !== 0) {
-    dataPropInitial = (dataProperties[prop.id] as IPropDefaultNormal);
-    erorStyle = cn({
-      [addItem.erorValid]: dataPropInitial.isValid === false,
-    });
+    valueProp = dataProperties[prop.id].value;
   }
+
+  const erorStyle = cn({
+    [addItem.erorValid]: propIsHaveData !== 0 && dataProperties[prop.id].isValid === false,
+  });
+
   return (
     <div key={prop.id} className={addItem.propData}>
       <button onClick={removeProp} className={addItem.btnAction} type="button">-</button>
@@ -37,7 +32,7 @@ export const ItemProp: React.FC<IPropsItemProp> = (props: IPropsItemProp) => {
       </div>
       <div className={addItem.propInput}>
         <span>Значение</span>
-        <input className={`${erorStyle}`} onChange={addDataInput} value={dataPropInitial.value} type="text" />
+        <input className={`${erorStyle}`} onChange={addDataInput} value={valueProp} type="text" />
       </div>
     </div>
   );

@@ -1,28 +1,10 @@
-import { IAlert } from '../../Interface_Application';
+import { IAlert, IPropDefaultDropdown, IPropDefaultNormal } from '../../Interface_Application';
 
 export interface IPropsPropertyMain {
   type: string;
   title: string;
   changePropTitle(event: React.ChangeEvent<HTMLInputElement>): void;
   changePropType(event: React.ChangeEvent<HTMLInputElement>): void;
-}
-
-interface IDataInputSelect {
-  id: string;
-  value: string;
-}
-
-export interface IPropDefault {
-  title: string;
-  type: string;
-  id: number;
-  values?: IDataInputSelect[];
-}
-
-export interface IPropToAdd {
-  title: string;
-  type: string;
-  values?: IDataInputSelect[] | undefined;
 }
 
 export interface IStateAddNewProperty {
@@ -38,8 +20,10 @@ export interface IPropsAddNewProperty {
       from: string;
     };
   };
-  addPropertyInEdit(id: string, property: IPropToAdd): void;
-  addNewProperty(property: IPropToAdd): void;
+  addPropertyInEditNormal(id: string, property: IPropDefaultNormal): void;
+  addPropertyInEditDropdown(id: string, property: IPropDefaultDropdown): void;
+  addNewPropertyNormal(property: IPropDefaultNormal): void;
+  addNewPropertyDropdown(property: IPropDefaultDropdown): void;
   addNewAlert(alert: { alert: IAlert }): void;
   completeRemovalFromComponent(remove: { component: string }): void;
 }

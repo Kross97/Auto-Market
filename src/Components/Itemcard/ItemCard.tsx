@@ -26,7 +26,7 @@ const actionCreators = {
   addNewAlert: alerts.actions.addNewAlert,
 };
 
-const CardUndefined: React.FC = () => (
+const CardUndefined = () => (
   <div className={itemCard.undefinedContainer}>
     <div className={itemCard.undefinedContent}>
       <h2>Товар не найден!</h2>
@@ -41,7 +41,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
     addAllItems();
   }
 
-  public addBasket = ({ title, price }: IAuto) => () => {
+  addBasket = ({ title, price }: IAuto) => () => {
     const { addNewAlert } = this.props;
     const auto: IAuto = { title, price };
     axios.post('http://localhost:3000/basket', auto).then(() => {
@@ -60,7 +60,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
       <div className={itemCard.container}>
         <main className={itemCard.content}>
           <Link to="/">вернуться</Link>
-          <hr />
+          <div className={itemCard.line} />
           <div className={itemCard.defaultProps}>
             <img className={itemCard.img} src={card.imgSrc} alt="img-card" />
             <div className={itemCard.description}>
@@ -68,7 +68,7 @@ class Card extends React.Component<IPropsItemCard, {}> {
               <p>{card.description}</p>
             </div>
           </div>
-          <CardAdditionalProps card={card as IItem} />
+          <CardAdditionalProps card={card} />
           <p>{`Цена : ${card.price}`}</p>
           <button onClick={this.addBasket(card)} className={itemCard.addBasket} type="button">Беру!!!</button>
           {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}

@@ -18,7 +18,7 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     };
   }
 
-  public changeTypeInputPassword = () => {
+  changeTypeInputPassword = () => {
     const { typePassword } = this.state;
     if (typePassword === 'password') {
       this.setState({ typePassword: 'text' });
@@ -27,7 +27,7 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     }
   };
 
-  public changeTypeInputReplayPassword = () => {
+  changeTypeInputReplayPassword = () => {
     const { typeReplayPassword } = this.state;
     if (typeReplayPassword === 'password') {
       this.setState({ typeReplayPassword: 'text' });
@@ -36,7 +36,7 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     }
   };
 
-  public register = async () => {
+  register = async () => {
     const { login, password, replayPassword } = this.state;
     if (login === '') {
       this.setState({ processRegistr: 'loginEmpty' });
@@ -67,15 +67,15 @@ export class Registration extends React.Component<{}, IStateRegistr> {
     }
   };
 
-  public changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changeLogin = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ login: target.value });
   };
 
-  public changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changePassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ password: target.value });
   };
 
-  public changeReplayPassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changeReplayPassword = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ replayPassword: target.value });
   };
 

@@ -15,7 +15,7 @@ export class AllContent extends React.Component<{}, IStateAllContent> {
     this.state = { showPage: 'goods' };
   }
 
-  public changeShow = (type: string) => () => {
+  changeShow = (type: string) => () => {
     this.setState({ showPage: type });
   };
 

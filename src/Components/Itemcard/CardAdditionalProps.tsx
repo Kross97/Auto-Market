@@ -3,20 +3,24 @@ import itemCard from '../../styles/ItemCard.css';
 import { InputSelect } from './InputSelect';
 import { InputNormal } from './InputNormal';
 import { IPropsAdditional } from './InterfaceCard';
-import { IPropDefaultNormal, IPropDefaultSelect } from '../../Interface_Application';
 
-export const CardAdditionalProps: React.FC<IPropsAdditional> = (props: IPropsAdditional) => {
+export const CardAdditionalProps = (props: IPropsAdditional) => {
   const { card } = props;
   return (
     <div className={itemCard.additionalProps}>
-      {card.allPropertiesData.length === 0 && (
+      {card.allPropertiesDataDropdown.length === 0 && card.allPropertiesDataNormal.length === 0 && (
       <p>
      Дополнительное описание товара отсутсвует
       </p>
       )}
-      {card.allPropertiesData.length !== 0 && (
+      {card.allPropertiesDataDropdown.length !== 0 && (
       <div className={itemCard.conteinerAdditional}>
-        {card.allPropertiesData.map((data) => (data.type === 'Dropdown' ? <InputSelect data={data as IPropDefaultSelect} /> : <InputNormal data={data as IPropDefaultNormal} />))}
+        {card.allPropertiesDataDropdown.map((data) => <InputSelect data={data} />)}
+      </div>
+      )}
+      {card.allPropertiesDataNormal.length !== 0 && (
+      <div className={itemCard.conteinerAdditional}>
+        {card.allPropertiesDataNormal.map((data) => <InputNormal data={data} />)}
       </div>
       )}
     </div>

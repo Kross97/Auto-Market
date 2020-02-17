@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import items from '../../styles/AllItems.css';
 import { IPropsListItems } from './InterfaceAllItems';
 
-export const ListItems: React.FC<IPropsListItems> = (props: IPropsListItems) => {
+export const ListItems = (props: IPropsListItems) => {
   const { itemsAfterFilterAndSort, removeItem, currentQuantity } = props;
   return (
     <>

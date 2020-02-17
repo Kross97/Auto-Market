@@ -15,7 +15,8 @@ export interface IItem {
   imgSrc: string;
   imgName: string;
   id: number;
-  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
+  allPropertiesDataDropdown: IPropDropdownForItem[];
+  allPropertiesDataNormal: IPropNormalForItem[];
 }
 
 export interface IItemBeforeServer {
@@ -26,7 +27,8 @@ export interface IItemBeforeServer {
   description: string;
   imgSrc: string;
   imgName: string;
-  allPropertiesData: Array<IPropDefaultSelect | IPropDefaultNormal>;
+  allPropertiesDataDropdown: IPropDropdownForItem[];
+  allPropertiesDataNormal: IPropNormalForItem[];
 }
 
 interface IDataInputSelect {
@@ -34,35 +36,40 @@ interface IDataInputSelect {
   value: string;
 }
 
-export interface IPropDefaultNormal {
+export interface IPropNormalForItem {
   title: string;
   type: string;
-  id: number;
+  id: string;
   isValid: boolean;
   value: string;
 }
 
-export interface IPropDefaultSelect {
+export interface IPropDropdownForItem {
   title: string;
   type: string;
-  id: number;
+  id: string;
+  values: IDataInputSelect[];
+}
+
+export interface IPropDefaultNormal {
+  title: string;
+  type: string;
+  id: string;
+}
+
+export interface IPropDefaultDropdown {
+  title: string;
+  type: string;
+  id: string;
   values: IDataInputSelect[];
 }
 
 export interface IDataPropertiesNormal {
-  [id: number]: IPropDefaultNormal;
+  [id: string]: IPropNormalForItem;
 }
 
 export interface IDataPropertiesSelect {
-  [id: number]: IPropDefaultSelect;
+  [id: string]: IPropDropdownForItem;
 }
-
-export interface IPropDefault {
-  title: string;
-  type: string;
-  id: number;
-  values?: IDataInputSelect[];
-}
-
 
 export type IAllStateApplication = ReturnType<typeof reducer>;

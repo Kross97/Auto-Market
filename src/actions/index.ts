@@ -1,13 +1,16 @@
 import axios from 'axios';
-import _ from 'lodash';
 import {
   listAllItems,
   allPropertyDefault,
   itemForEdit,
 } from '../reducers';
-import { IPropDefault } from '../Components/AddProperty/InterfaceAddProperty';
 import { IItemBeforeServer } from '../Interface_Application';
-import { AppDispatch, AppThunk } from './Async-actions-types';
+import {
+  AppDispatch,
+  AppThunk,
+  IPropDefaultNormal,
+  IPropDefaultDropdown,
+} from './Async-actions-types';
 
 /* ITEMS */
 export const addAllItems = (): AppThunk => async (dispatch: AppDispatch) => {
@@ -25,8 +28,10 @@ export const addAllProperties = (): AppThunk => async (dispatch: AppDispatch) =>
   dispatch(allPropertyDefault.actions.loadingPropertiesRequest());
   try {
     const arrProps = await axios.get('http://localhost:3000/props');
+    const propertiesNormal: IPropDefaultNormal[] = arrProps.data.filter((prop: IPropDefaultNormal) => prop.type !== 'Dropdown');
+    const propertiesDropdown: IPropDefaultDropdown[] = arrProps.data.filter((prop: IPropDefaultDropdown) => prop.type === 'Dropdown');
     dispatch(
-      allPropertyDefault.actions.loadingPropertiesSucces({ properties: arrProps.data }),
+      allPropertyDefault.actions.loadingPropertiesSucces({ propertiesNormal, propertiesDropdown }),
     );
   } catch (e) {
     dispatch(allPropertyDefault.actions.loadingPropertiesFailed());
@@ -87,15 +92,30 @@ export const deleteItem = (id: number): AppThunk => async (dispatch: AppDispatch
 
 /* ADD  PROPERTY IN EDIT ITEM */
 
-export const addPropertyInEdit = (
-  id: string, property: IPropDefault,
+export const addPropertyInEditNormal = (
+  id: string, property: IPropDefaultNormal,
 ): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(allPropertyDefault.actions.addPropRequest());
   try {
-    dispatch(allPropertyDefault.actions.addProperty({ property }));
+    dispatch(allPropertyDefault.actions.addPropertyNormal({ property }));
     const responce = await axios.get(`http://localhost:3000/goods/?id=${id.slice(1)}`);
     const item = { ...responce.data[0] };
-    item.allPropertiesData = [...item.allPropertiesData, { id: Number(_.uniqueId()), ...property }];
+    item.allPropertiesDataNormal = [...item.allPropertiesDataNormal, { ...property }];
+    axios.patch(`http://localhost:3000/goods/${id.slice(1)}`, item);
+  } catch (e) {
+    dispatch(allPropertyDefault.actions.addPropFailed());
+  }
+};
+
+export const addPropertyInEditDropdown = (
+  id: string, property: IPropDefaultDropdown,
+): AppThunk => async (dispatch: AppDispatch) => {
+  dispatch(allPropertyDefault.actions.addPropRequest());
+  try {
+    dispatch(allPropertyDefault.actions.addPropertyDropdown({ property }));
+    const responce = await axios.get(`http://localhost:3000/goods/?id=${id.slice(1)}`);
+    const item = { ...responce.data[0] };
+    item.allPropertiesDataDropdown = [...item.allPropertiesDataDropdown, { ...property }];
     axios.patch(`http://localhost:3000/goods/${id.slice(1)}`, item);
   } catch (e) {
     dispatch(allPropertyDefault.actions.addPropFailed());
@@ -104,12 +124,24 @@ export const addPropertyInEdit = (
 
 /* ADD NEW PROPERTY */
 
-export const addNewProperty = (
-  property: IPropDefault,
+export const addNewPropertyNormal = (
+  property: IPropDefaultNormal,
 ): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(allPropertyDefault.actions.addPropRequest());
   try {
-    dispatch(allPropertyDefault.actions.addProperty({ property }));
+    dispatch(allPropertyDefault.actions.addPropertyNormal({ property }));
+    await axios.post('http://localhost:3000/props', property);
+  } catch (e) {
+    dispatch(allPropertyDefault.actions.addPropFailed());
+  }
+};
+
+export const addNewPropertyDropdown = (
+  property: IPropDefaultDropdown,
+): AppThunk => async (dispatch: AppDispatch) => {
+  dispatch(allPropertyDefault.actions.addPropRequest());
+  try {
+    dispatch(allPropertyDefault.actions.addPropertyDropdown({ property }));
     await axios.post('http://localhost:3000/props', property);
   } catch (e) {
     dispatch(allPropertyDefault.actions.addPropFailed());
@@ -118,10 +150,12 @@ export const addNewProperty = (
 
 /* DELETE PROPERTY */
 
-export const deleteProperty = (id: number): AppThunk => async (dispatch: AppDispatch) => {
+export const deleteProperty = (type: string, id: string): AppThunk => async (
+  dispatch: AppDispatch,
+) => {
   dispatch(allPropertyDefault.actions.deletePropertyRequest());
   try {
-    dispatch(allPropertyDefault.actions.deletePropertySucces({ id }));
+    dispatch(allPropertyDefault.actions.deletePropertySucces({ type, id }));
     await axios.delete(`http://localhost:3000/props/${id}`);
   } catch (e) {
     dispatch(allPropertyDefault.actions.deletePropertyFailed());

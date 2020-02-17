@@ -2,7 +2,7 @@ import React from 'react';
 import itemCard from '../../styles/ItemCard.css';
 import { IPropSelect } from './InterfaceCard';
 
-export const InputSelect: React.FC<IPropSelect> = (props: IPropSelect) => {
+export const InputSelect = (props: IPropSelect) => {
   const { data } = props;
   return (
     <div className={itemCard.propSelect} key={data.id}>

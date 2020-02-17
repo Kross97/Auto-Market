@@ -11,12 +11,12 @@ const actionCreators = {
 };
 
 class ItemSelect extends React.Component<IPropsItemSelect, {}> {
-  public increaseInput = (id: number) => () => {
+  increaseInput = (id: string) => () => {
     const { increaseQuantityInputsDropdown } = this.props;
     increaseQuantityInputsDropdown({ id });
   };
 
-  public reduceInput = (id: number) => () => {
+  reduceInput = (id: string) => () => {
     const { reduceQuantityInputsDropdown } = this.props;
     reduceQuantityInputsDropdown({ id });
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import properties from '../../styles/AllProperty.css';
 import { IPropsList } from './InterfaceAllProperty';
 
-export const PropertiesList: React.FC<IPropsList> = (props: IPropsList) => {
+export const PropertiesList = (props: IPropsList) => {
   const { propertyDefault, removeProperty } = props;
   return (
     <div className={properties.listConteiner}>
@@ -14,7 +14,7 @@ export const PropertiesList: React.FC<IPropsList> = (props: IPropsList) => {
               <p>{prop.title}</p>
               <p>{prop.type}</p>
             </div>
-            <a onClick={removeProperty(prop.id)} href="/">Удалить</a>
+            <a onClick={removeProperty(prop.type, prop.id)} href="/">Удалить</a>
           </li>
         ))}
       </ul>

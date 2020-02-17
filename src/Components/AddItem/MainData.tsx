@@ -2,22 +2,19 @@ import React from 'react';
 import addItem from '../../styles/AddItem.css';
 import { IPropsMainData } from './InterfaceAddItem';
 
-export const MainData: React.FC<IPropsMainData> = (props: IPropsMainData) => {
+export const MainData = (props: IPropsMainData) => {
   const {
     changeTitle,
     changePrice,
     getImgUrl,
     changeDescription,
     imgName,
-    state,
-  } = props;
-
-  const {
     title,
     price,
     imgSrc,
     description,
-  } = state;
+  } = props;
+
   return (
     <>
       <label>

@@ -1,10 +1,13 @@
 import { createSelector } from 'reselect';
 
-const getDefaultProps = (state) => state.allPropertyDefault.propertyDefault;
+const getDefaultPropsNormal = (state) => state.allPropertyDefault.propertyDefaultNormal;
+
+const getDefaultPropsDropdown = (state) => state.allPropertyDefault.propertyDefaultDropdown;
 
 export const defaultPropsTitles = createSelector(
-  getDefaultProps,
-  (props) => props.map((prop) => prop.title),
+  getDefaultPropsNormal,
+  getDefaultPropsDropdown,
+  (propsNormal, propDropdown) => [...propsNormal, ...propDropdown].map((prop) => prop.title),
 );
 
 const getFilterPage = ({ listAllItems }) => listAllItems.filteringData.currentPage;

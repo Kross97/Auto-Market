@@ -10,14 +10,19 @@ import { MainData } from './MainData';
 import addItem from '../../styles/AddItem.css';
 import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
-import { IPropsAddNewItem, IStateAddNewItem, IAllTypeValidators } from './InterfaceAddItem';
+import {
+  IPropsAddNewItem,
+  IStateAddNewItem,
+  IAllTypeValidators,
+  IPropNormalForItem,
+  IPropDropdownForItem,
+} from './InterfaceAddItem';
 import {
   IAllStateApplication,
   IAlert,
   IItem,
-  IPropDefault,
   IPropDefaultNormal,
-  IPropDefaultSelect,
+  IPropDefaultDropdown,
   IDataPropertiesNormal,
   IDataPropertiesSelect,
 } from '../../Interface_Application';
@@ -25,7 +30,8 @@ import {
 const mapStateToProps = (state: IAllStateApplication) => {
   const props = {
     positionForEdit: state.itemForEdit.positionForEdit,
-    propertyDefault: state.allPropertyDefault.propertyDefault,
+    propertyDefaultNormal: state.allPropertyDefault.propertyDefaultNormal,
+    propertyDefaultDropdown: state.allPropertyDefault.propertyDefaultDropdown,
     allItems: state.listAllItems.allItems,
     allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addItem'),
   };
@@ -49,8 +55,10 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     this.state = {
       dataAllPropsSelect: {},
       dataAllPropsSelectID: [],
-      dataProperties: {},
-      dataPropertiesID: [],
+      dataPropertiesNormal: {},
+      dataPropertiesDropdown: {},
+      dataPropertiesNormalID: [],
+      dataPropertiesDropdownID: [],
       title: '',
       price: '',
       description: '',
@@ -59,7 +67,7 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     };
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     const { addAllProperties, getCurrentItem } = this.props;
     const { match: { params: { id } } } = this.props;
     if (id) {
@@ -70,18 +78,21 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     }
   }
 
-  public componentWillUnmount() {
+  componentWillUnmount() {
     const { completeRemovalFromComponent } = this.props;
     completeRemovalFromComponent({ component: 'addItem' });
   }
 
   // Возврат данных элемента для редактирования
   // методы (spliceStateAndItem, addingItemNormalPropsInState, addingItemDropdownPropsInState)
-  public spliceStateAndItem = () => {
+  spliceStateAndItem = () => {
     const { loadingPropertiesToChange, positionForEdit } = this.props;
     this.addingItemNormalPropsInState(positionForEdit);
     this.addingItemDropdownPropsInState(positionForEdit);
-    loadingPropertiesToChange({ properties: positionForEdit.allPropertiesData });
+    loadingPropertiesToChange({
+      propertiesNormal: positionForEdit.allPropertiesDataNormal,
+      propertiesDropdown: positionForEdit.allPropertiesDataDropdown,
+    });
     const indexSymbol$ = positionForEdit.price.length;
     this.setState({
       title: positionForEdit.title,
@@ -92,50 +103,50 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     });
   };
 
-  public addingItemNormalPropsInState = (item: IItem) => {
-    const { dataPropertiesID, dataProperties } = this.state;
-    const itemPropsNormal = item.allPropertiesData.filter((prop: IPropDefault) => prop.type !== 'Dropdown');
+  addingItemNormalPropsInState = (item: IItem) => {
+    const { dataPropertiesNormalID, dataPropertiesNormal } = this.state;
+    const itemPropsNormal = item.allPropertiesDataNormal;
     const itemPropsNormalID = itemPropsNormal.map(
-      (prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id,
+      (prop: IPropNormalForItem) => prop.id,
     );
     const itemDataProperties: IDataPropertiesNormal = {};
-    itemPropsNormalID.map((id: number) => {
-      const currentProp: IPropDefaultNormal | IPropDefaultSelect | undefined = itemPropsNormal.find(
+    itemPropsNormalID.map((id: string) => {
+      const currentProp: IPropNormalForItem | undefined = itemPropsNormal.find(
         (prop) => prop.id === id,
       );
       if (!currentProp) {
         return;
       }
-      const dataProp: IPropDefaultNormal = {
+      const dataProp: IPropNormalForItem = {
         title: currentProp.title,
         type: currentProp.type,
-        isValid: (currentProp as IPropDefaultNormal).isValid,
-        value: (currentProp as IPropDefaultNormal).value,
+        isValid: currentProp.isValid,
+        value: currentProp.value,
         id,
       };
       return itemDataProperties[id] = dataProp;
     });
     this.setState({
-      dataPropertiesID: [...dataPropertiesID, ...itemPropsNormalID],
-      dataProperties: { ...dataProperties, ...itemDataProperties },
+      dataPropertiesNormalID: [...dataPropertiesNormalID, ...itemPropsNormalID],
+      dataPropertiesNormal: { ...dataPropertiesNormal, ...itemDataProperties },
     });
   };
 
-  public addingItemDropdownPropsInState = (item: IItem) => {
-    const { dataPropertiesID, dataProperties } = this.state;
-    const itemPropsSelect = item.allPropertiesData.filter((prop: IPropDefault) => prop.type === 'Dropdown');
+  addingItemDropdownPropsInState = (item: IItem) => {
+    const { dataPropertiesDropdownID, dataPropertiesDropdown } = this.state;
+    const itemPropsSelect = item.allPropertiesDataDropdown;
     const itemsPropsSelectID = itemPropsSelect.map(
-      (prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id,
+      (prop: IPropDropdownForItem) => prop.id,
     );
     const itemDataProperties: IDataPropertiesSelect = {};
-    itemsPropsSelectID.map((id: number) => {
+    itemsPropsSelectID.map((id: string) => {
       const currentProp = itemPropsSelect.find(
-        (prop: IPropDefaultNormal | IPropDefaultSelect) => prop.id === id,
+        (prop: IPropDropdownForItem) => prop.id === id,
       );
       if (!currentProp) {
         return;
       }
-      const dataProp: IPropDefaultSelect = {
+      const dataProp: IPropDropdownForItem = {
         title: currentProp.title,
         type: currentProp.type,
         values: [{ id: _.uniqueId(), value: '' }],
@@ -144,24 +155,24 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       return itemDataProperties[id] = dataProp;
     });
     this.setState({
-      dataPropertiesID: [...dataPropertiesID, ...itemsPropsSelectID],
-      dataProperties: { ...dataProperties, ...itemDataProperties },
+      dataPropertiesDropdownID: [...dataPropertiesDropdownID, ...itemsPropsSelectID],
+      dataPropertiesDropdown: { ...dataPropertiesDropdown, ...itemDataProperties },
     });
   };
 
-  public changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ title: target.value });
   };
 
-  public changePrice = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  changePrice = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ price: target.value });
   };
 
-  public changeDescription = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
+  changeDescription = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({ description: target.value });
   };
 
-  public getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+  getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null) {
       return;
     }
@@ -173,19 +184,19 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     };
   };
 
-  public validationCheck = () => {
+  validationCheck = () => {
     let check = 'add';
     const {
       title,
       price,
       imgSrc,
-      dataProperties,
-      dataPropertiesID,
+      dataPropertiesNormalID,
+      dataPropertiesNormal,
     } = this.state;
     const { addNewAlert } = this.props;
-    const allNotValidProps = dataPropertiesID.filter(
-      (id) => (dataProperties[id] as IPropDefaultNormal).isValid === false,
-    );
+    const allNotValidProps = dataPropertiesNormalID.map(
+      (id) => dataPropertiesNormal[id],
+    ).filter((prop) => prop.isValid === false);
     if (title.length > 30 || price.length > 15) {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'mainPropsLength', component: 'addItem' } });
       check = 'notAdd';
@@ -205,7 +216,7 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     return check;
   };
 
-  public addNewOrEditItem = () => {
+  addNewOrEditItem = () => {
     const validAllForm = this.validationCheck();
     if (validAllForm === 'notAdd') {
       return;
@@ -216,8 +227,10 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       description,
       imgSrc,
       imgName,
-      dataProperties,
-      dataPropertiesID,
+      dataPropertiesNormal,
+      dataPropertiesDropdown,
+      dataPropertiesNormalID,
+      dataPropertiesDropdownID,
     } = this.state;
 
     const date = new Date();
@@ -228,7 +241,12 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       month = date.getMonth();
     }
     const itemDate = `${date.getDate()}.${month}.${date.getFullYear()}`;
-    const allPropertiesData = dataPropertiesID.map((iden) => dataProperties[iden]);
+    const allPropertiesDataNormal: IPropNormalForItem[] = dataPropertiesNormalID.map(
+      (id) => dataPropertiesNormal[id],
+    );
+    const allPropertiesDataDropdown: IPropDropdownForItem[] = dataPropertiesDropdownID.map(
+      (id) => dataPropertiesDropdown[id],
+    );
     const item = {
       title,
       price: `${price}$`,
@@ -237,7 +255,8 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       description,
       imgSrc,
       imgName,
-      allPropertiesData,
+      allPropertiesDataDropdown,
+      allPropertiesDataNormal,
     };
 
     const { match: { params: { id } }, setCurrentItemForEdit, addNewItem } = this.props;
@@ -250,8 +269,10 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     this.setState({
       dataAllPropsSelect: {},
       dataAllPropsSelectID: [],
-      dataProperties: {},
-      dataPropertiesID: [],
+      dataPropertiesNormal: {},
+      dataPropertiesDropdown: {},
+      dataPropertiesNormalID: [],
+      dataPropertiesDropdownID: [],
       title: '',
       price: '',
       description: '',
@@ -260,7 +281,7 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     });
   };
 
-  public createValuesSelect = (id: number, index: number, value: string) => {
+  createValuesSelect = (id: string, index: number, value: string) => {
     const { dataAllPropsSelect, dataAllPropsSelectID } = this.state;
     const valueOneInput = { id: _.uniqueId(), value };
     let currentStorageSelect;
@@ -279,14 +300,14 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     });
   };
 
-  public addDataInputSelect = (
-    { id, title, type }: IPropDefault, index: number,
+  addDataInputSelect = (
+    { id, title, type }: IPropDefaultDropdown, index: number,
   ) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const {
       dataAllPropsSelect,
       dataAllPropsSelectID,
-      dataProperties,
-      dataPropertiesID,
+      dataPropertiesDropdown,
+      dataPropertiesDropdownID,
     } = this.state;
     this.createValuesSelect(id, index, target.value);
     const valuesNotFilter = dataAllPropsSelectID.map((i) => dataAllPropsSelect[id][i]);
@@ -297,13 +318,13 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       values,
       id,
     };
-    if (!dataPropertiesID.includes(id)) {
-      this.setState({ dataPropertiesID: [...dataPropertiesID, id] });
+    if (!dataPropertiesDropdownID.includes(id)) {
+      this.setState({ dataPropertiesDropdownID: [...dataPropertiesDropdownID, id] });
     }
-    this.setState({ dataProperties: { ...dataProperties, [id]: dataProp } });
+    this.setState({ dataPropertiesDropdown: { ...dataPropertiesDropdown, [id]: dataProp } });
   };
 
-  public validator = (type: string, value: string) => {
+  validator = (type: string, value: string) => {
     const allTypeValidators: IAllTypeValidators = {
       Number: (val: string) => validator.isInt(val),
       String: (val: string) => !validator.isInt(val),
@@ -312,10 +333,10 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     return allTypeValidators[type](value);
   };
 
-  public addDataInput = (
-    { id, title, type }: IPropDefault,
+  addDataInput = (
+    { id, title, type }: IPropDefaultNormal,
   ) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { dataProperties, dataPropertiesID } = this.state;
+    const { dataPropertiesNormal, dataPropertiesNormalID } = this.state;
     const isValid = this.validator(type, target.value);
     const dataProp = {
       title,
@@ -324,23 +345,39 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       id,
       value: target.value,
     };
-    if (!dataPropertiesID.includes(id)) {
-      this.setState({ dataPropertiesID: [...dataPropertiesID, id] });
+
+    if (!dataPropertiesNormalID.includes(id)) {
+      this.setState({ dataPropertiesNormalID: [...dataPropertiesNormalID, id] });
     }
-    this.setState({ dataProperties: { ...dataProperties, [id]: dataProp } });
+    this.setState({ dataPropertiesNormal: { ...dataPropertiesNormal, [id]: dataProp } });
   };
 
-  public removeProp = (id: number) => () => {
+  removeProp = (type: string, id: string) => () => {
     const { deleteProperty } = this.props;
-    const { dataPropertiesID } = this.state;
-    const dataPropertiesIDFiltered = dataPropertiesID.filter((i) => i !== id);
-    this.setState({ dataPropertiesID: dataPropertiesIDFiltered });
-    deleteProperty({ id });
+    const { dataPropertiesNormalID, dataPropertiesDropdownID } = this.state;
+    if (type === 'Dropdown') {
+      const dataPropFiltered = dataPropertiesDropdownID.filter((i) => i !== id);
+      this.setState({ dataPropertiesDropdownID: dataPropFiltered });
+    } else {
+      const dataPropFiltered = dataPropertiesNormalID.filter((i) => i !== id);
+      this.setState({ dataPropertiesNormalID: dataPropFiltered });
+    }
+    deleteProperty({ id, type });
   };
 
   public render() {
-    const { dataPropertiesID, dataProperties, imgName } = this.state;
-    const { propertyDefault, allAlerts } = this.props;
+    const {
+      dataPropertiesNormalID,
+      dataPropertiesDropdownID,
+      dataPropertiesNormal,
+      title,
+      price,
+      imgSrc,
+      description,
+      imgName,
+    } = this.state;
+
+    const { propertyDefaultNormal, propertyDefaultDropdown, allAlerts } = this.props;
 
     let returnPath;
     const { match: { params: { id } } } = this.props;
@@ -366,32 +403,32 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
               getImgUrl={this.getImgUrl}
               changeDescription={this.changeDescription}
               imgName={imgName}
-              state={this.state}
+              title={title}
+              price={price}
+              imgSrc={imgSrc}
+              description={description}
             />
             <h3>Добавление товару свойства</h3>
             <Link to={`${returnPath}`}><button className={addItem.btnAction} type="button">+</button></Link>
             <div className={addItem.properties}>
-              {propertyDefault.map((prop, i) => (
-                prop.type === 'Dropdown'
-                  ? (
-                    <ItemPropSelect
-                      dataPropertiesID={dataPropertiesID}
-                      prop={prop}
-                      removeProp={this.removeProp(prop.id)}
-                      addDataInputSelect={this.addDataInputSelect}
-                      index={i}
-                    />
-                  )
-                  : (
-                    <ItemProp
-                      dataPropertiesID={dataPropertiesID}
-                      dataProperties={dataProperties}
-                      prop={prop}
-                      index={i}
-                      addDataInput={this.addDataInput(prop)}
-                      removeProp={this.removeProp(prop.id)}
-                    />
-                  )
+              {propertyDefaultDropdown.map((prop, i) => (
+                <ItemPropSelect
+                  dataPropertiesID={dataPropertiesDropdownID}
+                  prop={prop}
+                  removeProp={this.removeProp(prop.type, prop.id)}
+                  addDataInputSelect={this.addDataInputSelect}
+                  index={i}
+                />
+              ))}
+              {propertyDefaultNormal.map((prop, i) => (
+                <ItemProp
+                  dataPropertiesID={dataPropertiesNormalID}
+                  dataProperties={dataPropertiesNormal}
+                  prop={prop}
+                  index={i}
+                  addDataInput={this.addDataInput(prop)}
+                  removeProp={this.removeProp(prop.type, prop.id)}
+                />
               ))}
             </div>
           </form>
