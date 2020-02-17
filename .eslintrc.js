@@ -15,5 +15,6 @@ module.exports = {
     "eqeqeq": 0,
     "class-methods-use-this": 0,
     "import/no-cycle": 0,
+    "no-case-declarations": 0,
   },
 };
