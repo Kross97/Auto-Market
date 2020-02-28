@@ -13,7 +13,6 @@ export const ItemProp = (props: IPropsItemProp) => {
     removeProp,
   } = props;
   const propIsHaveData = dataPropertiesID.filter((id) => id === prop.id).length;
-
   let valueProp = '';
   if (propIsHaveData !== 0) {
     valueProp = dataProperties[prop.id].value;

@@ -138,16 +138,17 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     setImgName(positionForEdit.imgName);
   };
 
-  useEffect(() => {
-    const {
-      addAllProperties,
-      getCurrentItem,
-      match: { params: { id } },
-      completeRemovalFromComponent,
-    } = props;
+  const {
+    addAllProperties,
+    getCurrentItem,
+    completeRemovalFromComponent,
+    match: { params },
+  } = props;
 
-    if (id) {
-      const idInURL = id.slice(1);
+
+  useEffect(() => {
+    if (params.id) {
+      const idInURL = params.id.slice(1);
       getCurrentItem(idInURL, spliceStateAndItem);
     } else {
       addAllProperties();
@@ -155,7 +156,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     return () => {
       completeRemovalFromComponent({ component: 'addItem' });
     };
-  }, []);
+  }, [params.id]);
 
   const changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(target.value);
@@ -239,9 +240,9 @@ const AddNewItem = (props: IPropsAddNewItem) => {
       allPropertiesDataNormal,
     };
 
-    const { match: { params: { id } }, setCurrentItemForEdit, addNewItem } = props;
-    if (id) {
-      setCurrentItemForEdit(id, item);
+    const { setCurrentItemForEdit, addNewItem } = props;
+    if (params.id) {
+      setCurrentItemForEdit(params.id, item);
     } else {
       addNewItem(item);
     }
@@ -335,9 +336,8 @@ const AddNewItem = (props: IPropsAddNewItem) => {
   const { propertyDefaultNormal, propertyDefaultDropdown, allAlerts } = props;
 
   let returnPath;
-  const { match: { params: { id } } } = props;
-  if (id) {
-    returnPath = `/addProperty/${id}`;
+  if (params.id) {
+    returnPath = `/addProperty/${params.id}`;
   } else {
     returnPath = '/addProperty/:addItem';
   }
