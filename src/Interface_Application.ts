@@ -19,18 +19,6 @@ export interface IItem {
   allPropertiesDataNormal: IPropNormalForItem[];
 }
 
-export interface IItemBeforeServer {
-  title: string;
-  price: string;
-  itemDate: string;
-  dateSort: Date;
-  description: string;
-  imgSrc: string;
-  imgName: string;
-  allPropertiesDataDropdown: IPropDropdownForItem[];
-  allPropertiesDataNormal: IPropNormalForItem[];
-}
-
 interface IDataInputSelect {
   id: string;
   value: string;

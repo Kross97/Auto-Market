@@ -78,7 +78,7 @@ export const listAllItems = createSlice({
     },
     setNewItemSucces: (state, action: PayloadAction<ListItems.IActionSetItemSucces>) => {
       const { id, item } = action.payload;
-      const currentIndex = state.allItems.findIndex((it) => (it as IItem).id === Number(id));
+      const currentIndex = state.allItems.findIndex((it) => it.id === Number(id));
       state.statusOperation = 'Set New Data Item Succes';
       update(state, { allItems: { [currentIndex]: { $set: item } } });
     },

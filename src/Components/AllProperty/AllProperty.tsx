@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -28,48 +28,45 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class Properties extends React.Component<IPropAllProperty, {}> {
-  componentDidMount() {
-    const { addAllProperties } = this.props;
+const Properties = (props: IPropAllProperty) => {
+  const { completeRemovalFromComponent, addAllProperties, propertyDefault } = props;
+
+  useEffect(() => {
     addAllProperties();
-  }
+    return () => {
+      completeRemovalFromComponent({ component: 'allProperty' });
+    };
+  }, [propertyDefault.length]);
 
-  componentWillUnmount() {
-    const { completeRemovalFromComponent } = this.props;
-    completeRemovalFromComponent({ component: 'allProperty' });
-  }
-
-  removeProperty = (
+  const removeProperty = (
     type: string, id: string,
   ) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const { deleteProperty, addNewAlert } = this.props;
+    const { deleteProperty, addNewAlert } = props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
     deleteProperty(type, id);
   };
 
-  public render() {
-    const { propertyDefault, allAlerts } = this.props;
-    return (
-      <main className={properties.content}>
-        <div className={properties.btns}>
-          <Link to="/addProperty"><button type="button" className={properties.btn}>Добавить проперти</button></Link>
+  const { allAlerts } = props;
+  return (
+    <main className={properties.content}>
+      <div className={properties.btns}>
+        <Link to="/addProperty"><button type="button" className={properties.btn}>Добавить проперти</button></Link>
+      </div>
+      <div className={properties.navigation}>
+        <div className={properties.navigationData}>
+          <span>Перечень проперти</span>
+          <span>Тип</span>
         </div>
-        <div className={properties.navigation}>
-          <div className={properties.navigationData}>
-            <span>Перечень проперти</span>
-            <span>Тип</span>
-          </div>
-          <span>Управление</span>
-        </div>
-        <PropertiesList
-          propertyDefault={propertyDefault}
-          removeProperty={this.removeProperty}
-        />
-        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
-      </main>
-    );
-  }
-}
+        <span>Управление</span>
+      </div>
+      <PropertiesList
+        propertyDefault={propertyDefault}
+        removeProperty={removeProperty}
+      />
+      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+    </main>
+  );
+};
 
 export const AllProperty = connect(mapStateToProps, actionCreators)(Properties);

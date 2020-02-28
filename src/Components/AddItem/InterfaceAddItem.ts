@@ -3,7 +3,6 @@ import {
   IAlert,
   IPropDefaultNormal,
   IPropDefaultDropdown,
-  IItemBeforeServer,
 } from '../../Interface_Application';
 
 interface IDataInputSelect {
@@ -29,7 +28,7 @@ export interface IPropDropdownForItem {
 export interface IPropsAddNewItem {
   propertyDefaultDropdown: IPropDefaultDropdown[];
   propertyDefaultNormal: IPropDefaultNormal[];
-  allItems: (IItem | IItemBeforeServer)[];
+  allItems: IItem[];
   allAlerts: IAlert[];
   match: {
     params: {
@@ -39,14 +38,28 @@ export interface IPropsAddNewItem {
   positionForEdit: IItem;
   deleteProperty(id: { id: string, type: string }): void;
   getCurrentItem(id: string, startEdit: () => void): void;
-  setCurrentItemForEdit(id: string, item: IItemBeforeServer): void;
-  addNewItem(item: IItemBeforeServer): void;
+  setCurrentItemForEdit(id: string, item: IItem): void;
+  addNewItem(item: IItem): void;
   addNewAlert(alert: { alert: IAlert }): void;
   completeRemovalFromComponent(remove: { component: string }): void;
   addAllProperties(): void;
   loadingPropertiesToChange(
     prop: { propertiesNormal: IPropDefaultNormal[], propertiesDropdown: IPropDefaultDropdown[]}
   ): void;
+}
+
+export interface IdataPropertiesNormal {
+  [id: string]: IPropNormalForItem;
+}
+
+export interface IdataPropertiesDropdown {
+  [id: string]: IPropDropdownForItem;
+}
+
+export interface IdataAllPropsSelect {
+  [id: string]: {
+    [index: number]: IDataInputSelect;
+  };
 }
 
 export interface IStateAddNewItem {

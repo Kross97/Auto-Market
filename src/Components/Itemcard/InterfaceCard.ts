@@ -1,4 +1,4 @@
-import { IItem, IAlert, IItemBeforeServer } from '../../Interface_Application';
+import { IItem, IAlert } from '../../Interface_Application';
 
 export interface IPropsItemCard {
   match: {
@@ -7,7 +7,7 @@ export interface IPropsItemCard {
     };
   };
   allAlerts: IAlert[];
-  allItems: (IItem | IItemBeforeServer)[];
+  allItems: IItem[];
   addAllItems(): void;
   addNewAlert(alert: { alert: IAlert }): void;
 }
@@ -41,5 +41,5 @@ export interface IPropNormal {
 }
 
 export interface IPropsAdditional {
-  card: IItem | IItemBeforeServer;
+  card: IItem;
 }

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import validator from 'validator';
+import valid from 'validator';
 import _ from 'lodash';
 import { ItemProp } from './ItemProp';
 import { ItemPropSelect } from './ItemPropSelect';
@@ -12,10 +12,12 @@ import { allPropertyDefault, alerts } from '../../reducers';
 import * as actions from '../../actions';
 import {
   IPropsAddNewItem,
-  IStateAddNewItem,
   IAllTypeValidators,
   IPropNormalForItem,
   IPropDropdownForItem,
+  IdataPropertiesNormal,
+  IdataPropertiesDropdown,
+  IdataAllPropsSelect,
 } from './InterfaceAddItem';
 import {
   IAllStateApplication,
@@ -49,62 +51,27 @@ const actionCreators = {
   loadingPropertiesToChange: allPropertyDefault.actions.loadingPropertiesToChange,
 };
 
-class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
-  constructor(props: IPropsAddNewItem) {
-    super(props);
-    this.state = {
-      dataAllPropsSelect: {},
-      dataAllPropsSelectID: [],
-      dataPropertiesNormal: {},
-      dataPropertiesDropdown: {},
-      dataPropertiesNormalID: [],
-      dataPropertiesDropdownID: [],
-      title: '',
-      price: '',
-      description: '',
-      imgSrc: '',
-      imgName: '',
-    };
-  }
-
-  componentDidMount() {
-    const { addAllProperties, getCurrentItem } = this.props;
-    const { match: { params: { id } } } = this.props;
-    if (id) {
-      const idInURL = id.slice(1);
-      getCurrentItem(idInURL, this.spliceStateAndItem);
-    } else {
-      addAllProperties();
-    }
-  }
-
-  componentWillUnmount() {
-    const { completeRemovalFromComponent } = this.props;
-    completeRemovalFromComponent({ component: 'addItem' });
-  }
+const AddNewItem = (props: IPropsAddNewItem) => {
+  const typeForArrId: string[] = [];
+  const typeForSelectsID: number[] = [];
+  const typeForDataAllSelect: IdataAllPropsSelect = {};
+  const typeForDataNormal: IdataPropertiesNormal = {};
+  const typeForDataDropdown: IdataPropertiesDropdown = {};
+  const [dataAllPropsSelect, setDataAllPropsSelect] = useState(typeForDataAllSelect);
+  const [dataAllPropsSelectID, setDataAllPropsSelectID] = useState(typeForSelectsID);
+  const [dataPropertiesNormal, setDataPropertiesNormal] = useState(typeForDataNormal);
+  const [dataPropertiesDropdown, setDataPropertiesDropdown] = useState(typeForDataDropdown);
+  const [dataPropertiesNormalID, setDataPropertiesNormalID] = useState(typeForArrId);
+  const [dataPropertiesDropdownID, setDataPropertiesDropdownID] = useState(typeForArrId);
+  const [titleState, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [imgSrc, setImgSrc] = useState('');
+  const [imgName, setImgName] = useState('');
 
   // Возврат данных элемента для редактирования
   // методы (spliceStateAndItem, addingItemNormalPropsInState, addingItemDropdownPropsInState)
-  spliceStateAndItem = () => {
-    const { loadingPropertiesToChange, positionForEdit } = this.props;
-    this.addingItemNormalPropsInState(positionForEdit);
-    this.addingItemDropdownPropsInState(positionForEdit);
-    loadingPropertiesToChange({
-      propertiesNormal: positionForEdit.allPropertiesDataNormal,
-      propertiesDropdown: positionForEdit.allPropertiesDataDropdown,
-    });
-    const indexSymbol$ = positionForEdit.price.length;
-    this.setState({
-      title: positionForEdit.title,
-      price: positionForEdit.price.slice(0, indexSymbol$ - 1),
-      description: positionForEdit.description,
-      imgSrc: positionForEdit.imgSrc,
-      imgName: positionForEdit.imgName,
-    });
-  };
-
-  addingItemNormalPropsInState = (item: IItem) => {
-    const { dataPropertiesNormalID, dataPropertiesNormal } = this.state;
+  const addingItemNormalPropsInState = (item: IItem) => {
     const itemPropsNormal = item.allPropertiesDataNormal;
     const itemPropsNormalID = itemPropsNormal.map(
       (prop: IPropNormalForItem) => prop.id,
@@ -126,14 +93,11 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       };
       return itemDataProperties[id] = dataProp;
     });
-    this.setState({
-      dataPropertiesNormalID: [...dataPropertiesNormalID, ...itemPropsNormalID],
-      dataPropertiesNormal: { ...dataPropertiesNormal, ...itemDataProperties },
-    });
+    setDataPropertiesNormalID([...dataPropertiesNormalID, ...itemPropsNormalID]);
+    setDataPropertiesNormal({ ...dataPropertiesNormal, ...itemDataProperties });
   };
 
-  addingItemDropdownPropsInState = (item: IItem) => {
-    const { dataPropertiesDropdownID, dataPropertiesDropdown } = this.state;
+  const addingItemDropdownPropsInState = (item: IItem) => {
     const itemPropsSelect = item.allPropertiesDataDropdown;
     const itemsPropsSelectID = itemPropsSelect.map(
       (prop: IPropDropdownForItem) => prop.id,
@@ -154,25 +118,58 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       };
       return itemDataProperties[id] = dataProp;
     });
-    this.setState({
-      dataPropertiesDropdownID: [...dataPropertiesDropdownID, ...itemsPropsSelectID],
-      dataPropertiesDropdown: { ...dataPropertiesDropdown, ...itemDataProperties },
+    setDataPropertiesDropdownID([...dataPropertiesDropdownID, ...itemsPropsSelectID]);
+    setDataPropertiesDropdown({ ...dataPropertiesDropdown, ...itemDataProperties });
+  };
+
+  const spliceStateAndItem = () => {
+    const { loadingPropertiesToChange, positionForEdit } = props;
+    addingItemNormalPropsInState(positionForEdit);
+    addingItemDropdownPropsInState(positionForEdit);
+    loadingPropertiesToChange({
+      propertiesNormal: positionForEdit.allPropertiesDataNormal,
+      propertiesDropdown: positionForEdit.allPropertiesDataDropdown,
     });
+    const indexSymbol$ = positionForEdit.price.length;
+    setTitle(positionForEdit.title);
+    setPrice(positionForEdit.price.slice(0, indexSymbol$ - 1));
+    setDescription(positionForEdit.description);
+    setImgSrc(positionForEdit.imgSrc);
+    setImgName(positionForEdit.imgName);
   };
 
-  changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ title: target.value });
+  useEffect(() => {
+    const {
+      addAllProperties,
+      getCurrentItem,
+      match: { params: { id } },
+      completeRemovalFromComponent,
+    } = props;
+
+    if (id) {
+      const idInURL = id.slice(1);
+      getCurrentItem(idInURL, spliceStateAndItem);
+    } else {
+      addAllProperties();
+    }
+    return () => {
+      completeRemovalFromComponent({ component: 'addItem' });
+    };
+  }, []);
+
+  const changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(target.value);
   };
 
-  changePrice = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ price: target.value });
+  const changePrice = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(target.value);
   };
 
-  changeDescription = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.setState({ description: target.value });
+  const changeDescription = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(target.value);
   };
 
-  getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const getImgUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files === null) {
       return;
     }
@@ -180,32 +177,26 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.setState({ imgSrc: String(reader.result), imgName: String(file.name) });
+      setImgSrc(String(reader.result));
+      setImgName(String(file.name));
     };
   };
 
-  validationCheck = () => {
+  const validationCheck = () => {
     let check = 'add';
-    const {
-      title,
-      price,
-      imgSrc,
-      dataPropertiesNormalID,
-      dataPropertiesNormal,
-    } = this.state;
-    const { addNewAlert } = this.props;
+    const { addNewAlert } = props;
     const allNotValidProps = dataPropertiesNormalID.map(
       (id) => dataPropertiesNormal[id],
     ).filter((prop) => prop.isValid === false);
-    if (title.length > 30 || price.length > 15) {
+    if (titleState.length > 30 || price.length > 15) {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'mainPropsLength', component: 'addItem' } });
       check = 'notAdd';
     }
-    if (title === '' || price === '' || imgSrc === '') {
+    if (titleState === '' || price === '' || imgSrc === '') {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'mainPropsEmpty', component: 'addItem' } });
       check = 'notAdd';
     }
-    if (!validator.isInt(price)) {
+    if (!valid.isInt(price)) {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'priceNotString', component: 'addItem' } });
       check = 'notAdd';
     }
@@ -216,23 +207,11 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     return check;
   };
 
-  addNewOrEditItem = () => {
-    const validAllForm = this.validationCheck();
+  const addNewOrEditItem = () => {
+    const validAllForm = validationCheck();
     if (validAllForm === 'notAdd') {
       return;
     }
-    const {
-      title,
-      price,
-      description,
-      imgSrc,
-      imgName,
-      dataPropertiesNormal,
-      dataPropertiesDropdown,
-      dataPropertiesNormalID,
-      dataPropertiesDropdownID,
-    } = this.state;
-
     const date = new Date();
     let month;
     if (date.getMonth() <= 9) {
@@ -248,10 +227,11 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       (id) => dataPropertiesDropdown[id],
     );
     const item = {
-      title,
+      id: Number(_.uniqueId()),
+      title: titleState,
       price: `${price}$`,
       itemDate,
-      dateSort: date,
+      dateSort: String(date),
       description,
       imgSrc,
       imgName,
@@ -259,30 +239,26 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       allPropertiesDataNormal,
     };
 
-    const { match: { params: { id } }, setCurrentItemForEdit, addNewItem } = this.props;
+    const { match: { params: { id } }, setCurrentItemForEdit, addNewItem } = props;
     if (id) {
       setCurrentItemForEdit(id, item);
     } else {
       addNewItem(item);
     }
-
-    this.setState({
-      dataAllPropsSelect: {},
-      dataAllPropsSelectID: [],
-      dataPropertiesNormal: {},
-      dataPropertiesDropdown: {},
-      dataPropertiesNormalID: [],
-      dataPropertiesDropdownID: [],
-      title: '',
-      price: '',
-      description: '',
-      imgSrc: '',
-      imgName: '',
-    });
+    setDataAllPropsSelect({});
+    setDataAllPropsSelectID([]);
+    setDataPropertiesNormal({});
+    setDataPropertiesDropdown({});
+    setDataPropertiesNormalID([]);
+    setDataPropertiesDropdownID([]);
+    setTitle('');
+    setPrice('');
+    setDescription('');
+    setImgSrc('');
+    setImgName('');
   };
 
-  createValuesSelect = (id: string, index: number, value: string) => {
-    const { dataAllPropsSelect, dataAllPropsSelectID } = this.state;
+  const createValuesSelect = (id: string, index: number, value: string) => {
     const valueOneInput = { id: _.uniqueId(), value };
     let currentStorageSelect;
 
@@ -292,24 +268,17 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       currentStorageSelect = {};
     }
     if (!dataAllPropsSelectID.includes(index)) {
-      this.setState({ dataAllPropsSelectID: [...dataAllPropsSelectID, index] });
+      setDataAllPropsSelectID([...dataAllPropsSelectID, index]);
     }
-    this.setState({
-      dataAllPropsSelect:
-    { ...dataAllPropsSelect, [id]: { ...currentStorageSelect, [index]: valueOneInput } },
-    });
+    setDataAllPropsSelect(
+      { ...dataAllPropsSelect, [id]: { ...currentStorageSelect, [index]: valueOneInput } },
+    );
   };
 
-  addDataInputSelect = (
+  const addDataInputSelect = (
     { id, title, type }: IPropDefaultDropdown, index: number,
   ) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      dataAllPropsSelect,
-      dataAllPropsSelectID,
-      dataPropertiesDropdown,
-      dataPropertiesDropdownID,
-    } = this.state;
-    this.createValuesSelect(id, index, target.value);
+    createValuesSelect(id, index, target.value);
     const valuesNotFilter = dataAllPropsSelectID.map((i) => dataAllPropsSelect[id][i]);
     const values = valuesNotFilter.filter((val) => val);
     const dataProp = {
@@ -319,25 +288,24 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
       id,
     };
     if (!dataPropertiesDropdownID.includes(id)) {
-      this.setState({ dataPropertiesDropdownID: [...dataPropertiesDropdownID, id] });
+      setDataPropertiesDropdownID([...dataPropertiesDropdownID, id]);
     }
-    this.setState({ dataPropertiesDropdown: { ...dataPropertiesDropdown, [id]: dataProp } });
+    setDataPropertiesDropdown({ ...dataPropertiesDropdown, [id]: dataProp });
   };
 
-  validator = (type: string, value: string) => {
+  const validator = (type: string, value: string) => {
     const allTypeValidators: IAllTypeValidators = {
-      Number: (val: string) => validator.isInt(val),
-      String: (val: string) => !validator.isInt(val),
+      Number: (val: string) => valid.isInt(val),
+      String: (val: string) => !valid.isInt(val),
     };
 
     return allTypeValidators[type](value);
   };
 
-  addDataInput = (
+  const addDataInput = (
     { id, title, type }: IPropDefaultNormal,
   ) => ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { dataPropertiesNormal, dataPropertiesNormalID } = this.state;
-    const isValid = this.validator(type, target.value);
+    const isValid = validator(type, target.value);
     const dataProp = {
       title,
       type,
@@ -347,96 +315,82 @@ class AddNewItem extends React.Component<IPropsAddNewItem, IStateAddNewItem> {
     };
 
     if (!dataPropertiesNormalID.includes(id)) {
-      this.setState({ dataPropertiesNormalID: [...dataPropertiesNormalID, id] });
+      setDataPropertiesNormalID([...dataPropertiesNormalID, id]);
     }
-    this.setState({ dataPropertiesNormal: { ...dataPropertiesNormal, [id]: dataProp } });
+    setDataPropertiesNormal({ ...dataPropertiesNormal, [id]: dataProp });
   };
 
-  removeProp = (type: string, id: string) => () => {
-    const { deleteProperty } = this.props;
-    const { dataPropertiesNormalID, dataPropertiesDropdownID } = this.state;
+  const removeProp = (type: string, id: string) => () => {
+    const { deleteProperty } = props;
     if (type === 'Dropdown') {
       const dataPropFiltered = dataPropertiesDropdownID.filter((i) => i !== id);
-      this.setState({ dataPropertiesDropdownID: dataPropFiltered });
+      setDataPropertiesDropdownID(dataPropFiltered);
     } else {
       const dataPropFiltered = dataPropertiesNormalID.filter((i) => i !== id);
-      this.setState({ dataPropertiesNormalID: dataPropFiltered });
+      setDataPropertiesNormalID(dataPropFiltered);
     }
     deleteProperty({ id, type });
   };
 
-  public render() {
-    const {
-      dataPropertiesNormalID,
-      dataPropertiesDropdownID,
-      dataPropertiesNormal,
-      title,
-      price,
-      imgSrc,
-      description,
-      imgName,
-    } = this.state;
+  const { propertyDefaultNormal, propertyDefaultDropdown, allAlerts } = props;
 
-    const { propertyDefaultNormal, propertyDefaultDropdown, allAlerts } = this.props;
-
-    let returnPath;
-    const { match: { params: { id } } } = this.props;
-    if (id) {
-      returnPath = `/addProperty/${id}`;
-    } else {
-      returnPath = '/addProperty/:addItem';
-    }
-    return (
-      <div className={addItem.conteiner}>
-        <nav>
-          <div className={addItem.buttonsGrp}>
-            <Link to="/"><button type="button" className={`${addItem.btn} ${addItem.comeBack}`}>Вернуться</button></Link>
-            <button onClick={this.addNewOrEditItem} type="button" className={`${addItem.btn} ${addItem.save}`}>Сохранить</button>
-          </div>
-        </nav>
-        <main className={addItem.content}>
-          <h3>Добавление товара</h3>
-          <form className={addItem.form}>
-            <MainData
-              changeTitle={this.changeTitle}
-              changePrice={this.changePrice}
-              getImgUrl={this.getImgUrl}
-              changeDescription={this.changeDescription}
-              imgName={imgName}
-              title={title}
-              price={price}
-              imgSrc={imgSrc}
-              description={description}
-            />
-            <h3>Добавление товару свойства</h3>
-            <Link to={`${returnPath}`}><button className={addItem.btnAction} type="button">+</button></Link>
-            <div className={addItem.properties}>
-              {propertyDefaultDropdown.map((prop, i) => (
-                <ItemPropSelect
-                  dataPropertiesID={dataPropertiesDropdownID}
-                  prop={prop}
-                  removeProp={this.removeProp(prop.type, prop.id)}
-                  addDataInputSelect={this.addDataInputSelect}
-                  index={i}
-                />
-              ))}
-              {propertyDefaultNormal.map((prop, i) => (
-                <ItemProp
-                  dataPropertiesID={dataPropertiesNormalID}
-                  dataProperties={dataPropertiesNormal}
-                  prop={prop}
-                  index={i}
-                  addDataInput={this.addDataInput(prop)}
-                  removeProp={this.removeProp(prop.type, prop.id)}
-                />
-              ))}
-            </div>
-          </form>
-          {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
-        </main>
-      </div>
-    );
+  let returnPath;
+  const { match: { params: { id } } } = props;
+  if (id) {
+    returnPath = `/addProperty/${id}`;
+  } else {
+    returnPath = '/addProperty/:addItem';
   }
-}
+  return (
+    <div className={addItem.conteiner}>
+      <nav>
+        <div className={addItem.buttonsGrp}>
+          <Link to="/"><button type="button" className={`${addItem.btn} ${addItem.comeBack}`}>Вернуться</button></Link>
+          <button onClick={addNewOrEditItem} type="button" className={`${addItem.btn} ${addItem.save}`}>Сохранить</button>
+        </div>
+      </nav>
+      <main className={addItem.content}>
+        <h3>Добавление товара</h3>
+        <form className={addItem.form}>
+          <MainData
+            changeTitle={changeTitle}
+            changePrice={changePrice}
+            getImgUrl={getImgUrl}
+            changeDescription={changeDescription}
+            imgName={imgName}
+            title={titleState}
+            price={price}
+            imgSrc={imgSrc}
+            description={description}
+          />
+          <h3>Добавление товару свойства</h3>
+          <Link to={`${returnPath}`}><button className={addItem.btnAction} type="button">+</button></Link>
+          <div className={addItem.properties}>
+            {propertyDefaultDropdown.map((prop, i) => (
+              <ItemPropSelect
+                dataPropertiesID={dataPropertiesDropdownID}
+                prop={prop}
+                removeProp={removeProp(prop.type, prop.id)}
+                addDataInputSelect={addDataInputSelect}
+                index={i}
+              />
+            ))}
+            {propertyDefaultNormal.map((prop, i) => (
+              <ItemProp
+                dataPropertiesID={dataPropertiesNormalID}
+                dataProperties={dataPropertiesNormal}
+                prop={prop}
+                index={i}
+                addDataInput={addDataInput(prop)}
+                removeProp={removeProp(prop.type, prop.id)}
+              />
+            ))}
+          </div>
+        </form>
+        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+      </main>
+    </div>
+  );
+};
 
 export const AddItem = connect(mapStateToProps, actionCreators)(AddNewItem);

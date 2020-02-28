@@ -7,11 +7,6 @@ export interface IPropsPropertyMain {
   changePropType(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export interface IStateAddNewProperty {
-  title: string;
-  type: string;
-}
-
 export interface IPropsAddNewProperty {
   propertyDefaultTitles: string[];
   allAlerts: IAlert[];

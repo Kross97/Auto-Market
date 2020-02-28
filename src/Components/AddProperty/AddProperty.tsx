@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -7,7 +7,7 @@ import { PropertyMain } from './PropertyMain';
 import addProp from '../../styles/AddProperty.css';
 import { alerts } from '../../reducers';
 import { defaultPropsTitles } from '../../selectors';
-import { IPropsAddNewProperty, IStateAddNewProperty } from './InterfaceAddProperty';
+import { IPropsAddNewProperty } from './InterfaceAddProperty';
 import {
   IAllStateApplication,
   IAlert,
@@ -33,25 +33,20 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewProperty> {
-  constructor(props: IPropsAddNewProperty) {
-    super(props);
-    this.state = { title: '', type: '' };
-  }
+const AddNewProperty = (props: IPropsAddNewProperty) => {
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
 
-  componentWillUnmount() {
-    const { completeRemovalFromComponent } = this.props;
-    completeRemovalFromComponent({ component: 'addProp' });
-  }
+  const { completeRemovalFromComponent } = props;
 
-  constructorPropNormal = () => {
-    const { title, type } = this.state;
+  useEffect(() => () => completeRemovalFromComponent({ component: 'addProp' }), []);
+
+  const constructorPropNormal = () => {
     const property = { id: `@idP${_.uniqueId()}`, title, type };
     return property;
   };
 
-  constructorPropDropdown = () => {
-    const { title, type } = this.state;
+  const constructorPropDropdown = () => {
     const property = {
       id: `@idP${_.uniqueId()}`,
       title,
@@ -61,9 +56,8 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
     return property;
   };
 
-  addNewProperty = () => {
-    const { propertyDefaultTitles, addNewAlert } = this.props;
-    const { type, title } = this.state;
+  const addNewProperty = () => {
+    const { propertyDefaultTitles, addNewAlert } = props;
     const allPropTitles = new Set(propertyDefaultTitles);
     if (allPropTitles.has(title) || title === '') {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'erorTitle', component: 'addProp' } });
@@ -80,74 +74,72 @@ class AddNewProperty extends React.Component<IPropsAddNewProperty, IStateAddNewP
       addPropertyInEditDropdown,
       addNewPropertyNormal,
       addNewPropertyDropdown,
-    } = this.props;
+    } = props;
 
     if (from !== ':addItem' && from != undefined) {
       switch (type) {
         case 'Dropdown':
-          const propertyDropdown: IPropDefaultDropdown = this.constructorPropDropdown();
+          const propertyDropdown: IPropDefaultDropdown = constructorPropDropdown();
           addPropertyInEditDropdown(from, propertyDropdown);
           break;
         default:
-          const propertyNormal: IPropDefaultNormal = this.constructorPropNormal();
+          const propertyNormal: IPropDefaultNormal = constructorPropNormal();
           addPropertyInEditNormal(from, propertyNormal);
       }
     } else {
       switch (type) {
         case 'Dropdown':
-          const propertyDropdown: IPropDefaultDropdown = this.constructorPropDropdown();
+          const propertyDropdown: IPropDefaultDropdown = constructorPropDropdown();
           addNewPropertyDropdown(propertyDropdown);
           break;
         default:
-          const propertyNormal: IPropDefaultNormal = this.constructorPropNormal();
+          const propertyNormal: IPropDefaultNormal = constructorPropNormal();
           addNewPropertyNormal(propertyNormal);
       }
     }
     addNewAlert({ alert: { id: _.uniqueId(), type: 'successProp', component: 'addProp' } });
-    this.setState({ title: '', type: '' });
+    setTitle('');
+    setType('');
   };
 
-  changePropTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ title: target.value });
+  const changePropTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(target.value);
   };
 
-  changePropType = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ type: target.value });
+  const changePropType = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setType(target.value);
   };
 
-  public render() {
-    const { title, type } = this.state;
-    const { allAlerts } = this.props;
-    const { match: { params: { from } } } = this.props;
-    let returnPath;
-    switch (from) {
-      case ':addItem':
-        returnPath = '/addItem';
-        break;
-      case `${from}`:
-        returnPath = `/addItem/${from}`;
-        break;
-      default:
-        returnPath = '/';
-    }
-    return (
-      <div className={addProp.conteiner}>
-        <nav>
-          <div className={addProp.btns}>
-            <Link to={returnPath}><button type="button" className={`${addProp.btn} ${addProp.comeBack}`}>Вернуться</button></Link>
-            <button onClick={this.addNewProperty} type="button" className={`${addProp.btn} ${addProp.save}`}>Сохранить</button>
-          </div>
-        </nav>
-        <PropertyMain
-          changePropTitle={this.changePropTitle}
-          changePropType={this.changePropType}
-          type={type}
-          title={title}
-        />
-        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
-      </div>
-    );
+  const { allAlerts } = props;
+  const { match: { params: { from } } } = props;
+  let returnPath;
+  switch (from) {
+    case ':addItem':
+      returnPath = '/addItem';
+      break;
+    case `${from}`:
+      returnPath = `/addItem/${from}`;
+      break;
+    default:
+      returnPath = '/';
   }
-}
+  return (
+    <div className={addProp.conteiner}>
+      <nav>
+        <div className={addProp.btns}>
+          <Link to={returnPath}><button type="button" className={`${addProp.btn} ${addProp.comeBack}`}>Вернуться</button></Link>
+          <button onClick={addNewProperty} type="button" className={`${addProp.btn} ${addProp.save}`}>Сохранить</button>
+        </div>
+      </nav>
+      <PropertyMain
+        changePropTitle={changePropTitle}
+        changePropType={changePropType}
+        type={type}
+        title={title}
+      />
+      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+    </div>
+  );
+};
 
 export const AddProperty = connect(mapStateToProps, actionCreators)(AddNewProperty);

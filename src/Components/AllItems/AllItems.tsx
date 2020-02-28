@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ItemsFooter } from './ItemsFooter';
@@ -7,7 +7,7 @@ import { ItemsSortNavigation } from './ItemsSortNavigation';
 import items from '../../styles/AllItems.css';
 import * as actions from '../../actions';
 import { listAllItems } from '../../reducers';
-import { IPropsAllItems, IStateAllItems } from './InterfaceAllItems';
+import { IPropsAllItems } from './InterfaceAllItems';
 import { IAllStateApplication } from '../../Interface_Application';
 
 const mapStateToProps = ({ listAllItems: { countItems } }: IAllStateApplication) => (
@@ -22,104 +22,86 @@ const actionCreators = {
   addFilterQuantity: listAllItems.actions.addFilterQuantity,
 };
 
-class Items extends React.Component<IPropsAllItems, IStateAllItems> {
-  constructor(props: IPropsAllItems) {
-    super(props);
-    this.state = {
-      currentQuantity: '10',
-      currentPage: '1',
-      typeSort: '',
-      titleSearch: '',
-      titleData: '',
-    };
-  }
+const Items = (props: IPropsAllItems) => {
+  const [currentQuantity, setCurrentQuantity] = useState('10');
+  const [currentPage, setCurrentPage] = useState('1');
+  const [typeSort, setTypeSort] = useState('');
+  const [titleSearch, setTitleSearch] = useState('');
+  const [titleData, setTitleData] = useState('');
 
-  componentDidMount() {
-    const {
-      addAllItems,
-      addFilterPage,
-      addFilterTitle,
-      addFilterQuantity,
-    } = this.props;
+  const {
+    addAllItems,
+    addFilterPage,
+    addFilterTitle,
+    addFilterQuantity,
+    countItems,
+  } = props;
+
+  useEffect(() => {
     addAllItems();
     addFilterTitle({ title: '' });
-    const { currentQuantity, currentPage } = this.state;
     addFilterPage({ page: currentPage });
     addFilterQuantity({ quantity: currentQuantity });
-  }
+  }, [countItems]);
 
-  changeCurrentQuantity = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
-    const { addFilterQuantity } = this.props;
-    this.setState({ currentQuantity: currentTarget.value });
+
+  const changeCurrentQuantity = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
+    setCurrentQuantity(currentTarget.value);
     addFilterQuantity({ quantity: currentTarget.value });
   };
 
-  changeCurrentPage = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
-    const { addFilterPage } = this.props;
-    this.setState({ currentPage: currentTarget.value });
+  const changeCurrentPage = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
+    setCurrentPage(currentTarget.value);
     addFilterPage({ page: currentTarget.value });
   };
 
-  currentSort = (type: string) => () => {
-    const { typeSort } = this.state;
+  const currentSort = (type: string) => () => {
     if (type === typeSort) {
-      this.setState({ typeSort: `Desc${type}` });
+      setTypeSort(`Desc${type}`);
     } else {
-      this.setState({ typeSort: type });
+      setTypeSort(type);
     }
   };
 
-  addSearchTitle = () => {
-    const { titleData } = this.state;
-    const { addFilterTitle } = this.props;
-    this.setState({ titleSearch: titleData });
+  const addSearchTitle = () => {
+    setTitleSearch(titleData);
     addFilterTitle({ title: titleData });
   };
 
-  changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ titleData: target.value });
+  const changeTitleData = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleData(target.value);
   };
 
-  public render() {
-    const {
-      titleData,
-      titleSearch,
-      typeSort,
-      currentQuantity,
-      currentPage,
-    } = this.state;
-    const { countItems } = this.props;
-    const quantityPages: number = Math.ceil(countItems / Number(currentQuantity));
-    const userIsLogin: string | null = localStorage.getItem('isLogin');
-    return (
-      <div className={items.content}>
-        <div className={items.btns}>
-          <div>
-            <input onChange={this.changeTitleData} type="text" placeholder="поиск" value={titleData} />
-            <button onClick={this.addSearchTitle} type="button" aria-label="search" />
-          </div>
-          <Link to={`${userIsLogin === null ? '/login' : '/addItem'}`}><button type="button" className={items.btn}>Добавить товар</button></Link>
+  const quantityPages: number = Math.ceil(countItems / Number(currentQuantity));
+  const userIsLogin: string | null = localStorage.getItem('isLogin');
+  return (
+    <div className={items.content}>
+      <div className={items.btns}>
+        <div>
+          <input onChange={changeTitleData} type="text" placeholder="поиск" value={titleData} />
+          <button onClick={addSearchTitle} type="button" aria-label="search" />
         </div>
-        <ItemsSortNavigation
-          currentSort={this.currentSort}
-          typeSort={typeSort}
-        />
-        <ItemsMain
-          titleSearch={titleSearch}
-          typeSort={typeSort}
-          currentQuantity={currentQuantity}
-          currentPage={currentPage}
-        />
-        <ItemsFooter
-          currentPage={currentPage}
-          currentQuantity={currentQuantity}
-          changeCurrentQuantity={this.changeCurrentQuantity}
-          changeCurrentPage={this.changeCurrentPage}
-          quantityPages={quantityPages}
-        />
+        <Link to={`${userIsLogin === null ? '/login' : '/addItem'}`}><button type="button" className={items.btn}>Добавить товар</button></Link>
       </div>
-    );
-  }
-}
+      <ItemsSortNavigation
+        currentSort={currentSort}
+        typeSort={typeSort}
+      />
+      <ItemsMain
+        titleSearch={titleSearch}
+        typeSort={typeSort}
+        currentQuantity={currentQuantity}
+        currentPage={currentPage}
+      />
+      <ItemsFooter
+        currentPage={currentPage}
+        currentQuantity={currentQuantity}
+        changeCurrentQuantity={changeCurrentQuantity}
+        changeCurrentPage={changeCurrentPage}
+        quantityPages={quantityPages}
+      />
+    </div>
+  );
+};
 
 export const AllItems = connect(mapStateToProps, actionCreators)(Items);

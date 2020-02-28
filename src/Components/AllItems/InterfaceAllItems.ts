@@ -29,14 +29,6 @@ export interface IPropsItemsFooter {
   changeCurrentPage(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
 }
 
-export interface IStateAllItems {
-  currentQuantity: string;
-  currentPage: string;
-  typeSort: string;
-  titleSearch: string;
-  titleData: string;
-}
-
 export interface IPropsAllItems {
   countItems: number;
   addAllItems(): void;

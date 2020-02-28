@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { alerts } from '../../reducers';
@@ -23,19 +23,17 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-class MainContent extends React.Component<IPropsMainContent, {}> {
-  componentWillUnmount() {
-    const { completeRemovalFromComponent } = this.props;
-    completeRemovalFromComponent({ component: 'allItems' });
-  }
+const MainContent = (props: IPropsMainContent) => {
+  const { completeRemovalFromComponent, allItems } = props;
+  useEffect(() => () => completeRemovalFromComponent({ component: 'allItems' }), [allItems.length]);
 
-  removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const { deleteItem } = this.props;
+    const { deleteItem } = props;
     deleteItem(id);
   };
 
-  sorting(itemsAfterFilters: IItem[], typeSort: string) {
+  const sorting = (itemsAfterFilters: IItem[], typeSort: string) => {
     if (typeSort === '') {
       return itemsAfterFilters;
     }
@@ -70,27 +68,25 @@ class MainContent extends React.Component<IPropsMainContent, {}> {
       ),
     };
     return allTypesSorting[typeSort](newSliceItems);
-  }
+  };
 
-  public render() {
-    const {
-      allAlerts,
-      allItems,
-      currentQuantity,
-      typeSort,
-    } = this.props;
-    const itemsAfterFilterAndSort: IItem[] = this.sorting(allItems, typeSort);
-    return (
-      <main className={items.list}>
-        <ListItems
-          removeItem={this.removeItem}
-          currentQuantity={currentQuantity}
-          itemsAfterFilterAndSort={itemsAfterFilterAndSort}
-        />
-        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
-      </main>
-    );
-  }
-}
+  const {
+    allAlerts,
+    currentQuantity,
+    typeSort,
+  } = props;
+  const itemsAfterFilterAndSort: IItem[] = sorting(allItems, typeSort);
+  return (
+    <main className={items.list}>
+      <ListItems
+        removeItem={removeItem}
+        currentQuantity={currentQuantity}
+        itemsAfterFilterAndSort={itemsAfterFilterAndSort}
+      />
+      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+    </main>
+  );
+};
+
 
 export const ItemsMain = connect(mapStateToProps, actionCreators)(MainContent);

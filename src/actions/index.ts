@@ -4,7 +4,7 @@ import {
   allPropertyDefault,
   itemForEdit,
 } from '../reducers';
-import { IItemBeforeServer } from '../Interface_Application';
+import { IItem } from '../Interface_Application';
 import {
   AppDispatch,
   AppThunk,
@@ -56,7 +56,7 @@ export const getCurrentItem = (
 /* SET ITEM AFTER EDIT */
 
 export const setCurrentItemForEdit = (
-  id: string, item: IItemBeforeServer,
+  id: string, item: IItem,
 ): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(listAllItems.actions.setNewItemRequest());
   try {
@@ -69,7 +69,7 @@ export const setCurrentItemForEdit = (
 
 /* ADD NEW ITEM */
 
-export const addNewItem = (item: IItemBeforeServer): AppThunk => async (dispatch: AppDispatch) => {
+export const addNewItem = (item: IItem): AppThunk => async (dispatch: AppDispatch) => {
   dispatch(listAllItems.actions.addItemRequest());
   try {
     dispatch(listAllItems.actions.addItemSucces({ item }));
