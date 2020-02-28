@@ -143,8 +143,10 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     getCurrentItem,
     completeRemovalFromComponent,
     match: { params },
+    positionForEdit,
+    propertyDefaultNormal,
+    propertyDefaultDropdown,
   } = props;
-
 
   useEffect(() => {
     if (params.id) {
@@ -156,7 +158,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     return () => {
       completeRemovalFromComponent({ component: 'addItem' });
     };
-  }, [params.id]);
+  }, [params.id, positionForEdit.id]);
 
   const changeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(target.value);
@@ -333,7 +335,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     deleteProperty({ id, type });
   };
 
-  const { propertyDefaultNormal, propertyDefaultDropdown, allAlerts } = props;
+  const { allAlerts } = props;
 
   let returnPath;
   if (params.id) {
@@ -377,7 +379,6 @@ const AddNewItem = (props: IPropsAddNewItem) => {
             ))}
             {propertyDefaultNormal.map((prop, i) => (
               <ItemProp
-                dataPropertiesID={dataPropertiesNormalID}
                 dataProperties={dataPropertiesNormal}
                 prop={prop}
                 index={i}

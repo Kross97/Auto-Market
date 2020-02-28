@@ -97,7 +97,6 @@ export interface IPropsMainData {
 }
 
 export interface IPropsItemProp {
-  dataPropertiesID: string[];
   dataProperties: {
     [id: string]: IPropNormalForItem;
   };

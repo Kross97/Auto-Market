@@ -5,21 +5,23 @@ import { IPropsItemProp } from './InterfaceAddItem';
 
 export const ItemProp = (props: IPropsItemProp) => {
   const {
-    dataPropertiesID,
     dataProperties,
     prop,
     index,
     addDataInput,
     removeProp,
   } = props;
-  const propIsHaveData = dataPropertiesID.filter((id) => id === prop.id).length;
+  const propIsHaveData = Object.keys(dataProperties).includes(prop.id);
+  console.log(dataProperties);
+  console.log(propIsHaveData);
+  console.log('id', prop.id);
   let valueProp = '';
-  if (propIsHaveData !== 0) {
+  if (propIsHaveData) {
     valueProp = dataProperties[prop.id].value;
   }
 
   const erorStyle = cn({
-    [addItem.erorValid]: propIsHaveData !== 0 && dataProperties[prop.id].isValid === false,
+    [addItem.erorValid]: propIsHaveData && dataProperties[prop.id].isValid === false,
   });
 
   return (
@@ -27,7 +29,7 @@ export const ItemProp = (props: IPropsItemProp) => {
       <button onClick={removeProp} className={addItem.btnAction} type="button">-</button>
       <div className={addItem.propHeader}>
         <span>{`Свойство${index + 1}`}</span>
-        <div className={`${addItem.propTitle}  ${erorStyle}`}>{prop.title}</div>
+        <div className={`${addItem.propTitle} ${erorStyle}`}>{prop.title}</div>
       </div>
       <div className={addItem.propInput}>
         <span>Значение</span>
