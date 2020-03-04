@@ -1,4 +1,4 @@
-import { IItem, IAlert } from '../../Interface_Application';
+import { IItem } from '../../Interface_Application';
 
 export interface IPropsListItems {
   itemsAfterFilterAndSort: IItem[];
@@ -12,13 +12,8 @@ export interface IPropsSortNavigation {
 }
 
 export interface IPropsMainContent {
-  allItems: IItem[];
-  allAlerts: IAlert[];
   currentQuantity: string;
   typeSort: string;
-  deleteItem(id: number): void;
-  addNewAlert(alert: { alert: IAlert }): void;
-  completeRemovalFromComponent(remove: { component: string }): void;
 }
 
 export interface IPropsItemsFooter {
@@ -27,15 +22,6 @@ export interface IPropsItemsFooter {
   quantityPages: number;
   changeCurrentQuantity(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
   changeCurrentPage(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
-}
-
-export interface IPropsAllItems {
-  countItems: number;
-  addAllItems(): void;
-  addAllProperties(): void;
-  addFilterPage(page: { page: string }): void;
-  addFilterTitle(title: { title: string }): void;
-  addFilterQuantity(quantity: { quantity: string }): void;
 }
 
 export interface IAllTypesSorting {

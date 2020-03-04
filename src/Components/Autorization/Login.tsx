@@ -29,6 +29,7 @@ export const Login = () => {
     setPassword(target.value);
   };
 
+
   if (user.login === login && user.password === password) {
     localStorage.setItem('isLogin', 'true');
   } else {
@@ -38,6 +39,7 @@ export const Login = () => {
     [logined.login]: 'true',
     [logined.notLogin]: localStorage.getItem('isLogin') === 'false',
   });
+
   return (
     <div className={logined.content}>
       <h1>Вход</h1>

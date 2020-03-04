@@ -6,42 +6,7 @@ import update from 'immutability-helper';
 import * as ListItems from './Interface_ListAllItems';
 import * as PropertiesDefault from './Interface_PropertyDefault';
 import * as Alerts from './Interface_Alerts';
-import * as ItemEdit from './Interface_itemForEdit';
 import { IItem } from '../Interface_Application';
-
-const stateItemForEdit : ItemEdit.IstateItemForEdit = {
-  statusLoadingItem: '',
-  positionForEdit: {
-    title: '',
-    price: '',
-    itemDate: '',
-    dateSort: '',
-    description: '',
-    imgSrc: '',
-    imgName: '',
-    id: 0,
-    allPropertiesDataDropdown: [],
-    allPropertiesDataNormal: [],
-  },
-};
-
-export const itemForEdit = createSlice({
-  name: 'currentitem',
-  initialState: stateItemForEdit,
-  reducers: {
-    loadingItemRequest: (state) => {
-      state.statusLoadingItem = 'Loading Item Request';
-    },
-    loadingItemSucces: (state, action: PayloadAction<ListItems.IActionItemSucces>) => {
-      const { item } = action.payload;
-      state.statusLoadingItem = 'Loading Item Succes';
-      state.positionForEdit = item;
-    },
-    loadingItemfailed: (state) => {
-      state.statusLoadingItem = 'Loading Item Failed';
-    },
-  },
-});
 
 const stateAllItems: ListItems.IStatelistAllItems = {
   countItems: 0,
@@ -204,7 +169,7 @@ export const allPropertyDefault = createSlice({
       state.propertyDefaultDropdown = propertiesDropdown;
     },
     increaseQuantityInputsDropdown: (
-      state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
+      state, action: PayloadAction<PropertiesDefault.IActionAddOrDeleteQuantityInputs>,
     ) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefaultDropdown.findIndex((prop) => prop.id === id);
@@ -217,7 +182,7 @@ export const allPropertyDefault = createSlice({
     },
 
     reduceQuantityInputsDropdown: (
-      state, action: PayloadAction<PropertiesDefault.IActionDeletePropOrQuantityInputs>,
+      state, action: PayloadAction<PropertiesDefault.IActionAddOrDeleteQuantityInputs>,
     ) => {
       const { id } = action.payload;
       const currentIndex = state.propertyDefaultDropdown.findIndex((prop) => prop.id === id);
@@ -271,12 +236,6 @@ export const alerts = createSlice({
     [listAllItems.actions.loadingPositionsFailed.type]: (state) => {
       state.allAlerts.unshift({ id: _.uniqueId(), type: 'addItemsFailed', component: 'allItems' });
     },
-    [itemForEdit.actions.loadingItemRequest.type]: (state) => {
-      state.allAlerts.unshift({ id: _.uniqueId(), type: 'RequestEditItem', component: 'addItem' });
-    },
-    [itemForEdit.actions.loadingItemSucces.type]: (state) => {
-      state.allAlerts.unshift({ id: _.uniqueId(), type: 'SuccesForEditItem', component: 'addItem' });
-    },
     [listAllItems.actions.setNewItemSucces.type]: (state) => {
       state.allAlerts.unshift({ id: _.uniqueId(), type: 'succesEditItem', component: 'addItem' });
     },
@@ -308,5 +267,4 @@ export const reducer = combineReducers({
   listAllItems: listAllItems.reducer,
   allPropertyDefault: allPropertyDefault.reducer,
   alerts: alerts.reducer,
-  itemForEdit: itemForEdit.reducer,
 });

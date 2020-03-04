@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { alerts } from '../../reducers';
 import items from '../../styles/AllItems.css';
@@ -9,27 +10,32 @@ import { ListItems } from './ListItems';
 import { IPropsMainContent, IAllTypesSorting } from './InterfaceAllItems';
 import { IAllStateApplication, IAlert, IItem } from '../../Interface_Application';
 
-const mapStateToProps = (state: IAllStateApplication) => {
-  const props = {
-    allItems: allItemsFiltered(state),
-    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'allItems'),
-  };
-  return props;
-};
-
 const actionCreators = {
   deleteItem: actions.deleteItem,
-  addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-const MainContent = (props: IPropsMainContent) => {
-  const { completeRemovalFromComponent, allItems } = props;
-  useEffect(() => () => completeRemovalFromComponent({ component: 'allItems' }), [allItems.length]);
+export const ItemsMain = (props: IPropsMainContent) => {
+  const dispatch = useDispatch();
+  const {
+    completeRemovalFromComponent,
+    deleteItem,
+  } = bindActionCreators(actionCreators, dispatch);
+
+  const allItems = useSelector((state: IAllStateApplication) => allItemsFiltered(state));
+
+  const { allAlertsFiltered } = useSelector(
+    ({ alerts: { allAlerts } }: IAllStateApplication) => (
+      { allAlertsFiltered: allAlerts.filter((alert: IAlert) => alert.component === 'allItems') }
+    ), shallowEqual,
+  );
+
+  useEffect(() => () => {
+    completeRemovalFromComponent({ component: 'allItems' });
+  }, []);
 
   const removeItem = (id: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const { deleteItem } = props;
     deleteItem(id);
   };
 
@@ -71,7 +77,6 @@ const MainContent = (props: IPropsMainContent) => {
   };
 
   const {
-    allAlerts,
     currentQuantity,
     typeSort,
   } = props;
@@ -83,10 +88,7 @@ const MainContent = (props: IPropsMainContent) => {
         currentQuantity={currentQuantity}
         itemsAfterFilterAndSort={itemsAfterFilterAndSort}
       />
-      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+      {allAlertsFiltered.length !== 0 && <ListAlerts allAlerts={allAlertsFiltered} />}
     </main>
   );
 };
-
-
-export const ItemsMain = connect(mapStateToProps, actionCreators)(MainContent);

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import axios from 'axios';
 import valid from 'validator';
 import _ from 'lodash';
 import { ItemProp } from './ItemProp';
@@ -29,34 +31,35 @@ import {
   IDataPropertiesSelect,
 } from '../../Interface_Application';
 
-const mapStateToProps = (state: IAllStateApplication) => {
-  const props = {
-    positionForEdit: state.itemForEdit.positionForEdit,
-    propertyDefaultNormal: state.allPropertyDefault.propertyDefaultNormal,
-    propertyDefaultDropdown: state.allPropertyDefault.propertyDefaultDropdown,
-    allItems: state.listAllItems.allItems,
-    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addItem'),
-  };
-  return props;
-};
-
 const actionCreators = {
   deleteProperty: allPropertyDefault.actions.deletePropertySucces,
   addNewAlert: alerts.actions.addNewAlert,
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
   addAllProperties: actions.addAllProperties,
-  getCurrentItem: actions.getCurrentItem,
   setCurrentItemForEdit: actions.setCurrentItemForEdit,
   addNewItem: actions.addNewItem,
   loadingPropertiesToChange: allPropertyDefault.actions.loadingPropertiesToChange,
 };
 
-const AddNewItem = (props: IPropsAddNewItem) => {
-  const typeForArrId: string[] = [];
+export const AddItem = (props: IPropsAddNewItem) => {
+  const typeForArrId: number[] = [];
   const typeForSelectsID: number[] = [];
   const typeForDataAllSelect: IdataAllPropsSelect = {};
   const typeForDataNormal: IdataPropertiesNormal = {};
   const typeForDataDropdown: IdataPropertiesDropdown = {};
+  const typePositionForEdit: IItem = {
+    title: '',
+    price: '',
+    itemDate: '',
+    dateSort: '',
+    description: '',
+    imgSrc: '',
+    imgName: '',
+    id: 0,
+    allPropertiesDataDropdown: [],
+    allPropertiesDataNormal: [],
+  };
+  const [positionForEdit, setPositionForEdit] = useState(typePositionForEdit);
   const [dataAllPropsSelect, setDataAllPropsSelect] = useState(typeForDataAllSelect);
   const [dataAllPropsSelectID, setDataAllPropsSelectID] = useState(typeForSelectsID);
   const [dataPropertiesNormal, setDataPropertiesNormal] = useState(typeForDataNormal);
@@ -69,6 +72,28 @@ const AddNewItem = (props: IPropsAddNewItem) => {
   const [imgSrc, setImgSrc] = useState('');
   const [imgName, setImgName] = useState('');
 
+  const dispatch = useDispatch();
+  const {
+    deleteProperty,
+    addNewAlert,
+    completeRemovalFromComponent,
+    addAllProperties,
+    setCurrentItemForEdit,
+    addNewItem,
+    loadingPropertiesToChange,
+  } = bindActionCreators(actionCreators, dispatch);
+
+  const propertyDefaultNormal = useSelector(
+    (state: IAllStateApplication) => state.allPropertyDefault.propertyDefaultNormal, shallowEqual,
+  );
+
+  const propertyDefaultDropdown = useSelector(
+    (state: IAllStateApplication) => state.allPropertyDefault.propertyDefaultDropdown, shallowEqual,
+  );
+
+  const allAlertsFiltered = useSelector(
+    (state: IAllStateApplication) => state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addItem'), shallowEqual,
+  );
   // Возврат данных элемента для редактирования
   // методы (spliceStateAndItem, addingItemNormalPropsInState, addingItemDropdownPropsInState)
   const addingItemNormalPropsInState = (item: IItem) => {
@@ -77,7 +102,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
       (prop: IPropNormalForItem) => prop.id,
     );
     const itemDataProperties: IDataPropertiesNormal = {};
-    itemPropsNormalID.map((id: string) => {
+    itemPropsNormalID.map((id: number) => {
       const currentProp: IPropNormalForItem | undefined = itemPropsNormal.find(
         (prop) => prop.id === id,
       );
@@ -103,7 +128,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
       (prop: IPropDropdownForItem) => prop.id,
     );
     const itemDataProperties: IDataPropertiesSelect = {};
-    itemsPropsSelectID.map((id: string) => {
+    itemsPropsSelectID.map((id: number) => {
       const currentProp = itemPropsSelect.find(
         (prop: IPropDropdownForItem) => prop.id === id,
       );
@@ -123,7 +148,6 @@ const AddNewItem = (props: IPropsAddNewItem) => {
   };
 
   const spliceStateAndItem = () => {
-    const { loadingPropertiesToChange, positionForEdit } = props;
     addingItemNormalPropsInState(positionForEdit);
     addingItemDropdownPropsInState(positionForEdit);
     loadingPropertiesToChange({
@@ -138,20 +162,25 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     setImgName(positionForEdit.imgName);
   };
 
-  const {
-    addAllProperties,
-    getCurrentItem,
-    completeRemovalFromComponent,
-    match: { params },
-    positionForEdit,
-    propertyDefaultNormal,
-    propertyDefaultDropdown,
-  } = props;
+  const { match: { params } } = props;
+
+  const getCurrentItem = async (id: string) => {
+    addNewAlert({ alert: { id: _.uniqueId(), type: 'RequestEditItem', component: 'addItem' } });
+    try {
+      const responce = await axios.get(`http://localhost:3000/goods/?id=${id}`);
+      const item = { ...responce.data[0] };
+      setPositionForEdit(item);
+      spliceStateAndItem();
+      addNewAlert({ alert: { id: _.uniqueId(), type: 'SuccesForEditItem', component: 'addItem' } });
+    } catch (e) {
+      addNewAlert({ alert: { id: _.uniqueId(), type: 'FailedForEditItem', component: 'addItem' } });
+    }
+  };
 
   useEffect(() => {
     if (params.id) {
       const idInURL = params.id.slice(1);
-      getCurrentItem(idInURL, spliceStateAndItem);
+      getCurrentItem(idInURL);
     } else {
       addAllProperties();
     }
@@ -187,7 +216,6 @@ const AddNewItem = (props: IPropsAddNewItem) => {
 
   const validationCheck = () => {
     let check = 'add';
-    const { addNewAlert } = props;
     const allNotValidProps = dataPropertiesNormalID.map(
       (id) => dataPropertiesNormal[id],
     ).filter((prop) => prop.isValid === false);
@@ -242,7 +270,6 @@ const AddNewItem = (props: IPropsAddNewItem) => {
       allPropertiesDataNormal,
     };
 
-    const { setCurrentItemForEdit, addNewItem } = props;
     if (params.id) {
       setCurrentItemForEdit(params.id, item);
     } else {
@@ -261,7 +288,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     setImgName('');
   };
 
-  const createValuesSelect = (id: string, index: number, value: string) => {
+  const createValuesSelect = (id: number, index: number, value: string) => {
     const valueOneInput = { id: _.uniqueId(), value };
     let currentStorageSelect;
 
@@ -323,8 +350,7 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     setDataPropertiesNormal({ ...dataPropertiesNormal, [id]: dataProp });
   };
 
-  const removeProp = (type: string, id: string) => () => {
-    const { deleteProperty } = props;
+  const removeProp = (type: string, id: number) => () => {
     if (type === 'Dropdown') {
       const dataPropFiltered = dataPropertiesDropdownID.filter((i) => i !== id);
       setDataPropertiesDropdownID(dataPropFiltered);
@@ -335,14 +361,13 @@ const AddNewItem = (props: IPropsAddNewItem) => {
     deleteProperty({ id, type });
   };
 
-  const { allAlerts } = props;
-
   let returnPath;
   if (params.id) {
     returnPath = `/addProperty/${params.id}`;
   } else {
     returnPath = '/addProperty/:addItem';
   }
+
   return (
     <div className={addItem.conteiner}>
       <nav>
@@ -388,10 +413,8 @@ const AddNewItem = (props: IPropsAddNewItem) => {
             ))}
           </div>
         </form>
-        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+        {allAlertsFiltered.length !== 0 && <ListAlerts allAlerts={allAlertsFiltered} />}
       </main>
     </div>
   );
 };
-
-export const AddItem = connect(mapStateToProps, actionCreators)(AddNewItem);

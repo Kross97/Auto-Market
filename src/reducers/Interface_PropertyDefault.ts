@@ -6,13 +6,13 @@ interface IDataInputSelect {
 export interface IPropDefaultNormal {
   title: string;
   type: string;
-  id: string;
+  id: number;
 }
 
 export interface IPropDefaultDropdown {
   title: string;
   type: string;
-  id: string;
+  id: number;
   values: IDataInputSelect[];
 }
 
@@ -29,7 +29,10 @@ export interface IActionPropertiesSucces {
 
 export interface IActionDeletePropOrQuantityInputs {
   type: string;
-  id: string;
+  id: number;
+}
+export interface IActionAddOrDeleteQuantityInputs {
+  id: number;
 }
 
 export interface IActionAddPropNormal {

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, shallowEqual, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import axios from 'axios';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
@@ -10,16 +11,6 @@ import { alerts } from '../../reducers';
 import * as actions from '../../actions';
 import { IPropsItemCard, IAuto } from './InterfaceCard';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
-
-const mapStateToProps = (
-  { listAllItems: { allItems }, alerts: { allAlerts } }: IAllStateApplication,
-) => {
-  const props = {
-    allItems,
-    allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'itemCard'),
-  };
-  return props;
-};
 
 const actionCreators = {
   addAllItems: actions.addAllItems,
@@ -35,13 +26,19 @@ const CardUndefined = () => (
   </div>
 );
 
-const Card = (props: IPropsItemCard) => {
-  const {
-    match,
-    allItems,
-    allAlerts,
-    addAllItems,
-  } = props;
+export const ItemCard = (props: IPropsItemCard) => {
+  const dispatch = useDispatch();
+  const { addAllItems, addNewAlert } = bindActionCreators(actionCreators, dispatch);
+
+  const { allItems } = useSelector(
+    ({ listAllItems }: IAllStateApplication) => listAllItems, shallowEqual,
+  );
+
+  const { allAlertsFiltered } = useSelector(
+    ({ alerts: { allAlerts } }: IAllStateApplication) => ({ allAlertsFiltered: allAlerts.filter((alert: IAlert) => alert.component === 'itemCard') }), shallowEqual,
+  );
+
+  const { match } = props;
   const id: string = match.params.id.slice(1);
 
   useEffect(() => {
@@ -49,7 +46,6 @@ const Card = (props: IPropsItemCard) => {
   }, [id]);
 
   const addBasket = ({ title, price }: IAuto) => () => {
-    const { addNewAlert } = props;
     const auto: IAuto = { title, price };
     axios.post('http://localhost:3000/basket', auto).then(() => {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'addBasket', component: 'itemCard' } });
@@ -76,11 +72,8 @@ const Card = (props: IPropsItemCard) => {
         <CardAdditionalProps card={card} />
         <p>{`Цена : ${card.price}`}</p>
         <button onClick={addBasket(card)} className={itemCard.addBasket} type="button">Беру!!!</button>
-        {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+        {allAlertsFiltered.length !== 0 && <ListAlerts allAlerts={allAlertsFiltered} />}
       </main>
     </div>
   );
 };
-
-
-export const ItemCard = connect(mapStateToProps, actionCreators)(Card);

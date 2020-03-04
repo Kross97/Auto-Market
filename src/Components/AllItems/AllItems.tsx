@@ -1,48 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { ItemsFooter } from './ItemsFooter';
 import { ItemsMain } from './ItemsMain';
 import { ItemsSortNavigation } from './ItemsSortNavigation';
 import items from '../../styles/AllItems.css';
 import * as actions from '../../actions';
 import { listAllItems } from '../../reducers';
-import { IPropsAllItems } from './InterfaceAllItems';
 import { IAllStateApplication } from '../../Interface_Application';
-
-const mapStateToProps = ({ listAllItems: { countItems } }: IAllStateApplication) => (
-  { countItems }
-);
 
 const actionCreators = {
   addAllItems: actions.addAllItems,
-  addAllProperties: actions.addAllProperties,
   addFilterPage: listAllItems.actions.addFilterPage,
   addFilterTitle: listAllItems.actions.addFilterTitle,
   addFilterQuantity: listAllItems.actions.addFilterQuantity,
 };
 
-const Items = (props: IPropsAllItems) => {
+export const AllItems = () => {
   const [currentQuantity, setCurrentQuantity] = useState('10');
   const [currentPage, setCurrentPage] = useState('1');
   const [typeSort, setTypeSort] = useState('');
-  const [titleSearch, setTitleSearch] = useState('');
   const [titleData, setTitleData] = useState('');
 
+  const dispatch = useDispatch();
   const {
     addAllItems,
     addFilterPage,
     addFilterTitle,
     addFilterQuantity,
-    countItems,
-  } = props;
+  } = bindActionCreators(actionCreators, dispatch);
 
+  const countAllItems = useSelector(
+    ({ listAllItems: { countItems } }: IAllStateApplication) => countItems,
+    shallowEqual,
+  );
   useEffect(() => {
     addAllItems();
     addFilterTitle({ title: '' });
     addFilterPage({ page: currentPage });
     addFilterQuantity({ quantity: currentQuantity });
-  }, [countItems]);
+  }, [countAllItems]);
 
 
   const changeCurrentQuantity = ({ currentTarget }: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,7 +62,6 @@ const Items = (props: IPropsAllItems) => {
   };
 
   const addSearchTitle = () => {
-    setTitleSearch(titleData);
     addFilterTitle({ title: titleData });
   };
 
@@ -72,7 +69,7 @@ const Items = (props: IPropsAllItems) => {
     setTitleData(target.value);
   };
 
-  const quantityPages: number = Math.ceil(countItems / Number(currentQuantity));
+  const quantityPages: number = Math.ceil(countAllItems / Number(currentQuantity));
   const userIsLogin: string | null = localStorage.getItem('isLogin');
   return (
     <div className={items.content}>
@@ -88,10 +85,8 @@ const Items = (props: IPropsAllItems) => {
         typeSort={typeSort}
       />
       <ItemsMain
-        titleSearch={titleSearch}
         typeSort={typeSort}
         currentQuantity={currentQuantity}
-        currentPage={currentPage}
       />
       <ItemsFooter
         currentPage={currentPage}
@@ -103,5 +98,3 @@ const Items = (props: IPropsAllItems) => {
     </div>
   );
 };
-
-export const AllItems = connect(mapStateToProps, actionCreators)(Items);

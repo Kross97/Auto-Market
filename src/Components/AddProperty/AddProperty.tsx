@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import _ from 'lodash';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { PropertyMain } from './PropertyMain';
@@ -16,14 +17,6 @@ import {
 } from '../../Interface_Application';
 import * as actions from '../../actions';
 
-const mapStateToProps = (state: IAllStateApplication) => {
-  const props = {
-    propertyDefaultTitles: defaultPropsTitles(state),
-    allAlerts: state.alerts.allAlerts.filter((alert: IAlert) => alert.component === 'addProp'),
-  };
-  return props;
-};
-
 const actionCreators = {
   addPropertyInEditNormal: actions.addPropertyInEditNormal,
   addPropertyInEditDropdown: actions.addPropertyInEditDropdown,
@@ -33,22 +26,38 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-const AddNewProperty = (props: IPropsAddNewProperty) => {
+export const AddProperty = (props: IPropsAddNewProperty) => {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
 
-  const { completeRemovalFromComponent } = props;
+  const dispatch = useDispatch();
+  const {
+    addPropertyInEditNormal,
+    addPropertyInEditDropdown,
+    addNewPropertyNormal,
+    addNewPropertyDropdown,
+    addNewAlert,
+    completeRemovalFromComponent,
+  } = bindActionCreators(actionCreators, dispatch);
 
-  useEffect(() => () => completeRemovalFromComponent({ component: 'addProp' }), []);
+  const propertyDefaultTitles = useSelector(defaultPropsTitles);
+
+  const allAlertsFitered = useSelector(
+    ({ alerts: { allAlerts } }: IAllStateApplication) => allAlerts.filter((alert: IAlert) => alert.component === 'addProp'), shallowEqual,
+  );
+
+  useEffect(() => () => {
+    completeRemovalFromComponent({ component: 'addProp' });
+  }, []);
 
   const constructorPropNormal = () => {
-    const property = { id: `@idP${_.uniqueId()}`, title, type };
+    const property = { id: Number(_.uniqueId()), title, type };
     return property;
   };
 
   const constructorPropDropdown = () => {
     const property = {
-      id: `@idP${_.uniqueId()}`,
+      id: Number(_.uniqueId()),
       title,
       type,
       values: [{ id: _.uniqueId(), value: '' }],
@@ -57,7 +66,6 @@ const AddNewProperty = (props: IPropsAddNewProperty) => {
   };
 
   const addNewProperty = () => {
-    const { propertyDefaultTitles, addNewAlert } = props;
     const allPropTitles = new Set(propertyDefaultTitles);
     if (allPropTitles.has(title) || title === '') {
       addNewAlert({ alert: { id: _.uniqueId(), type: 'erorTitle', component: 'addProp' } });
@@ -68,13 +76,7 @@ const AddNewProperty = (props: IPropsAddNewProperty) => {
       return;
     }
 
-    const {
-      match: { params: { from } },
-      addPropertyInEditNormal,
-      addPropertyInEditDropdown,
-      addNewPropertyNormal,
-      addNewPropertyDropdown,
-    } = props;
+    const { match: { params: { from } } } = props;
 
     if (from !== ':addItem' && from != undefined) {
       switch (type) {
@@ -110,7 +112,6 @@ const AddNewProperty = (props: IPropsAddNewProperty) => {
     setType(target.value);
   };
 
-  const { allAlerts } = props;
   const { match: { params: { from } } } = props;
   let returnPath;
   switch (from) {
@@ -137,9 +138,7 @@ const AddNewProperty = (props: IPropsAddNewProperty) => {
         type={type}
         title={title}
       />
-      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+      {allAlertsFitered.length !== 0 && <ListAlerts allAlerts={allAlertsFitered} />}
     </div>
   );
 };
-
-export const AddProperty = connect(mapStateToProps, actionCreators)(AddNewProperty);

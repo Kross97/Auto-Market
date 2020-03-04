@@ -1,11 +1,6 @@
-import {
-  IItem,
-  IAlert,
-  IPropDefaultNormal,
-  IPropDefaultDropdown,
-} from '../../Interface_Application';
+import { IPropDefaultNormal, IPropDefaultDropdown } from '../../Interface_Application';
 
-interface IDataInputSelect {
+export interface IDataInputSelect {
   id: string;
   value: string;
 }
@@ -13,7 +8,7 @@ interface IDataInputSelect {
 export interface IPropNormalForItem {
   title: string;
   type: string;
-  id: string;
+  id: number;
   isValid: boolean;
   value: string;
 }
@@ -21,59 +16,44 @@ export interface IPropNormalForItem {
 export interface IPropDropdownForItem {
   title: string;
   type: string;
-  id: string;
+  id: number;
   values: IDataInputSelect[];
 }
 
 export interface IPropsAddNewItem {
-  propertyDefaultDropdown: IPropDefaultDropdown[];
-  propertyDefaultNormal: IPropDefaultNormal[];
-  allItems: IItem[];
-  allAlerts: IAlert[];
   match: {
     params: {
       id: string;
     };
   };
-  positionForEdit: IItem;
-  deleteProperty(id: { id: string, type: string }): void;
-  getCurrentItem(id: string, startEdit: () => void): void;
-  setCurrentItemForEdit(id: string, item: IItem): void;
-  addNewItem(item: IItem): void;
-  addNewAlert(alert: { alert: IAlert }): void;
-  completeRemovalFromComponent(remove: { component: string }): void;
-  addAllProperties(): void;
-  loadingPropertiesToChange(
-    prop: { propertiesNormal: IPropDefaultNormal[], propertiesDropdown: IPropDefaultDropdown[]}
-  ): void;
 }
 
 export interface IdataPropertiesNormal {
-  [id: string]: IPropNormalForItem;
+  [id: number]: IPropNormalForItem;
 }
 
 export interface IdataPropertiesDropdown {
-  [id: string]: IPropDropdownForItem;
+  [id: number]: IPropDropdownForItem;
 }
 
 export interface IdataAllPropsSelect {
-  [id: string]: {
+  [id: number]: {
     [index: number]: IDataInputSelect;
   };
 }
 
 export interface IStateAddNewItem {
   dataAllPropsSelect: {
-    [id: string]: {
+    [id: number]: {
       [index: number]: IDataInputSelect;
     };
   };
   dataAllPropsSelectID: number[];
   dataPropertiesNormal: {
-    [id: string]: IPropNormalForItem;
+    [id: number]: IPropNormalForItem;
   };
   dataPropertiesDropdown: {
-    [id: string]: IPropDropdownForItem;
+    [id: number]: IPropDropdownForItem;
   };
   dataPropertiesNormalID: string[],
   dataPropertiesDropdownID: string[],
@@ -98,7 +78,7 @@ export interface IPropsMainData {
 
 export interface IPropsItemProp {
   dataProperties: {
-    [id: string]: IPropNormalForItem;
+    [id: number]: IPropNormalForItem;
   };
   prop: IPropDefaultNormal;
   index: number;
@@ -107,13 +87,11 @@ export interface IPropsItemProp {
 }
 
 export interface IPropsItemSelect {
-  dataPropertiesID: string[];
+  dataPropertiesID: number[];
   prop: IPropDefaultDropdown;
   index: number;
   removeProp(event: React.MouseEvent<HTMLButtonElement>): void;
   addDataInputSelect(prop: IPropDefaultDropdown, inder: number): any;
-  reduceQuantityInputsDropdown(id: { id: string }): any;
-  increaseQuantityInputsDropdown(id: { id: string }): any;
 }
 
 export interface IAllTypeValidators {

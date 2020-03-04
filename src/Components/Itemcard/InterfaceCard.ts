@@ -8,8 +8,6 @@ export interface IPropsItemCard {
   };
   allAlerts: IAlert[];
   allItems: IItem[];
-  addAllItems(): void;
-  addNewAlert(alert: { alert: IAlert }): void;
 }
 
 export interface IAuto {
@@ -23,7 +21,7 @@ interface IDataInputSelect {
 }
 export interface IPropSelect {
   data: {
-    id: string;
+    id: number;
     title: string;
     type: string;
     values: IDataInputSelect[];
@@ -32,7 +30,7 @@ export interface IPropSelect {
 
 export interface IPropNormal {
   data: {
-    id: string;
+    id: number;
     title: string;
     type: string;
     isValid: boolean;

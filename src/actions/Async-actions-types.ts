@@ -17,12 +17,12 @@ interface IDataInputSelect {
 export interface IPropDefaultNormal {
   title: string;
   type: string;
-  id: string;
+  id: number;
 }
 
 export interface IPropDefaultDropdown {
   title: string;
   type: string;
-  id: string;
+  id: number;
   values: IDataInputSelect[];
 }

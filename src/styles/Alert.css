@@ -1,3 +1,22 @@
+@keyframes animation {
+  from {
+    opacity: 1.0;
+  }
+
+  25% {
+    opacity: 0.8
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  to {
+    opacity: 0.4;
+    transform: scale(0,0);
+  }
+}
+
 .alert {
   height: 100px;
   width: 300px;
@@ -7,11 +26,14 @@
   margin-bottom: 15px;
   font-size: 20px;
   color: #fff;
-  opacity: 0.5;
+  animation-name: animation;
+  animation-duration: 3.5s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
   position: relative;
 }
 
-.erorTitle , .addPropsFailed, .addItemsFailed, .FailedAddItem, .FailedEditItem {
+.erorTitle , .addPropsFailed, .addItemsFailed, .FailedAddItem, .FailedEditItem, .FailedForEditItem {
   background-color: #f00;
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useDispatch } from 'react-redux';
 import addItem from '../../styles/AddItem.css';
 import { allPropertyDefault } from '../../reducers';
 import { IPropsItemSelect } from './InterfaceAddItem';
@@ -10,14 +11,18 @@ const actionCreators = {
   increaseQuantityInputsDropdown: allPropertyDefault.actions.increaseQuantityInputsDropdown,
 };
 
-const ItemSelect = (props: IPropsItemSelect) => {
-  const increaseInput = (id: string) => () => {
-    const { increaseQuantityInputsDropdown } = props;
+export const ItemPropSelect = (props: IPropsItemSelect) => {
+  const dispatch = useDispatch();
+  const {
+    reduceQuantityInputsDropdown,
+    increaseQuantityInputsDropdown,
+  } = bindActionCreators(actionCreators, dispatch);
+
+  const increaseInput = (id: number) => () => {
     increaseQuantityInputsDropdown({ id });
   };
 
-  const reduceInput = (id: string) => () => {
-    const { reduceQuantityInputsDropdown } = props;
+  const reduceInput = (id: number) => () => {
     reduceQuantityInputsDropdown({ id });
   };
 
@@ -55,5 +60,3 @@ const ItemSelect = (props: IPropsItemSelect) => {
     </div>
   );
 };
-
-export const ItemPropSelect = connect(null, actionCreators)(ItemSelect);

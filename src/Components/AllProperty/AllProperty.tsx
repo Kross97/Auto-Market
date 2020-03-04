@@ -1,25 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import properties from '../../styles/AllProperty.css';
 import { ListAlerts } from '../ListAlerts/ListAlerts';
 import { PropertiesList } from './PropertiesList';
 import { alerts } from '../../reducers';
 import * as actions from '../../actions';
-import { IPropAllProperty } from './InterfaceAllProperty';
 import { IAllStateApplication, IAlert } from '../../Interface_Application';
-
-const mapStateToProps = ({
-  allPropertyDefault: { propertyDefaultNormal, propertyDefaultDropdown },
-  alerts: { allAlerts },
-}: IAllStateApplication) => {
-  const props = {
-    propertyDefault: [...propertyDefaultNormal, ...propertyDefaultDropdown],
-    allAlerts: allAlerts.filter((alert: IAlert) => alert.component === 'allProperty'),
-  };
-  return props;
-};
 
 const actionCreators = {
   addNewAlert: alerts.actions.addNewAlert,
@@ -28,26 +17,42 @@ const actionCreators = {
   completeRemovalFromComponent: alerts.actions.completeRemovalFromComponent,
 };
 
-const Properties = (props: IPropAllProperty) => {
-  const { completeRemovalFromComponent, addAllProperties, propertyDefault } = props;
+export const AllProperty = () => {
+  const dispatch = useDispatch();
+  const {
+    completeRemovalFromComponent,
+    addAllProperties,
+    deleteProperty,
+    addNewAlert,
+  } = bindActionCreators(actionCreators, dispatch);
+
+  const { propertyDefault } = useSelector(({
+    allPropertyDefault: { propertyDefaultNormal, propertyDefaultDropdown },
+  }: IAllStateApplication) => (
+    { propertyDefault: [...propertyDefaultNormal, ...propertyDefaultDropdown] }
+  ), shallowEqual);
+
+  const { allAlertsFiltered } = useSelector(({
+    alerts: { allAlerts },
+  }: IAllStateApplication) => (
+    { allAlertsFiltered: allAlerts.filter((alert: IAlert) => alert.component === 'allProperty') }
+  ), shallowEqual);
 
   useEffect(() => {
     addAllProperties();
     return () => {
       completeRemovalFromComponent({ component: 'allProperty' });
     };
-  }, [propertyDefault.length]);
+  }, []);
 
   const removeProperty = (
-    type: string, id: string,
+    type: string, id: number,
   ) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const { deleteProperty, addNewAlert } = props;
     addNewAlert({ alert: { id: _.uniqueId(), type: 'deleteProp', component: 'allProperty' } });
     deleteProperty(type, id);
   };
 
-  const { allAlerts } = props;
   return (
     <main className={properties.content}>
       <div className={properties.btns}>
@@ -64,9 +69,7 @@ const Properties = (props: IPropAllProperty) => {
         propertyDefault={propertyDefault}
         removeProperty={removeProperty}
       />
-      {allAlerts.length !== 0 && <ListAlerts allAlerts={allAlerts} />}
+      {allAlertsFiltered.length !== 0 && <ListAlerts allAlerts={allAlertsFiltered} />}
     </main>
   );
 };
-
-export const AllProperty = connect(mapStateToProps, actionCreators)(Properties);

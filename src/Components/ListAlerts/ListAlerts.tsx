@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Alert } from './Alert';
 import { alerts } from '../../reducers';
 import { IPropsListAlerts } from './InterfaceListAlerts';
@@ -8,9 +9,10 @@ const actionCreators = {
   removeAlert: alerts.actions.removeAlert,
 };
 
-const Alerts = (props: IPropsListAlerts) => {
+export const ListAlerts = (props: IPropsListAlerts) => {
+  const dispatch = useDispatch();
+  const { removeAlert } = bindActionCreators(actionCreators, dispatch);
   const removeCurrentAlert = (id: string) => () => {
-    const { removeAlert } = props;
     removeAlert({ id });
   };
 
@@ -40,6 +42,9 @@ const Alerts = (props: IPropsListAlerts) => {
             break;
           case 'SuccesForEditItem':
             text = 'Товар загружен для редактирования!';
+            break;
+          case 'FailedForEditItem':
+            text = 'Товар не загружен для редактирования!';
             break;
           case 'succesEditItem':
             text = 'Товар успешно отредактирован!';
@@ -98,6 +103,3 @@ const Alerts = (props: IPropsListAlerts) => {
     </ul>
   );
 };
-
-
-export const ListAlerts = connect(null, actionCreators)(Alerts);

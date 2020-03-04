@@ -11,10 +11,7 @@ export const ItemProp = (props: IPropsItemProp) => {
     addDataInput,
     removeProp,
   } = props;
-  const propIsHaveData = Object.keys(dataProperties).includes(prop.id);
-  console.log(dataProperties);
-  console.log(propIsHaveData);
-  console.log('id', prop.id);
+  const propIsHaveData = Object.keys(dataProperties).includes(String(prop.id));
   let valueProp = '';
   if (propIsHaveData) {
     valueProp = dataProperties[prop.id].value;

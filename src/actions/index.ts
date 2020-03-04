@@ -1,8 +1,8 @@
 import axios from 'axios';
+import _ from 'lodash';
 import {
   listAllItems,
   allPropertyDefault,
-  itemForEdit,
 } from '../reducers';
 import { IItem } from '../Interface_Application';
 import {
@@ -35,21 +35,6 @@ export const addAllProperties = (): AppThunk => async (dispatch: AppDispatch) =>
     );
   } catch (e) {
     dispatch(allPropertyDefault.actions.loadingPropertiesFailed());
-  }
-};
-
-/* GET ITEM FOR EDIT */
-export const getCurrentItem = (
-  id: string, startEdit: () => void,
-): AppThunk => async (dispatch: AppDispatch) => {
-  dispatch(itemForEdit.actions.loadingItemRequest());
-  try {
-    const responce = await axios.get(`http://localhost:3000/goods/?id=${id}`);
-    const item = { ...responce.data[0] };
-    dispatch(itemForEdit.actions.loadingItemSucces({ item }));
-    startEdit();
-  } catch (e) {
-    dispatch(itemForEdit.actions.loadingItemfailed());
   }
 };
 
@@ -130,7 +115,8 @@ export const addNewPropertyNormal = (
   dispatch(allPropertyDefault.actions.addPropRequest());
   try {
     dispatch(allPropertyDefault.actions.addPropertyNormal({ property }));
-    await axios.post('http://localhost:3000/props', property);
+    const propertyForServer = _.omit(property, 'id');
+    await axios.post('http://localhost:3000/props', propertyForServer);
   } catch (e) {
     dispatch(allPropertyDefault.actions.addPropFailed());
   }
@@ -142,7 +128,8 @@ export const addNewPropertyDropdown = (
   dispatch(allPropertyDefault.actions.addPropRequest());
   try {
     dispatch(allPropertyDefault.actions.addPropertyDropdown({ property }));
-    await axios.post('http://localhost:3000/props', property);
+    const propertyForServer = _.omit(property, 'id');
+    await axios.post('http://localhost:3000/props', propertyForServer);
   } catch (e) {
     dispatch(allPropertyDefault.actions.addPropFailed());
   }
@@ -150,7 +137,7 @@ export const addNewPropertyDropdown = (
 
 /* DELETE PROPERTY */
 
-export const deleteProperty = (type: string, id: string): AppThunk => async (
+export const deleteProperty = (type: string, id: number): AppThunk => async (
   dispatch: AppDispatch,
 ) => {
   dispatch(allPropertyDefault.actions.deletePropertyRequest());
