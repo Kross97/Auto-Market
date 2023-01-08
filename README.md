@@ -1,6 +1,4 @@
-# Dex-test-quest-TypeScript
-
-[![Build Status](https://travis-ci.org/Kross97/Dex-test-quest-TypeScript.svg?branch=master)](https://travis-ci.org/Kross97/Dex-test-quest-TypeScript)
+# Dex-Auto-Market-Admin (Второе тестовое Dex авто-админка)
 
 Шаг 1: запустить сервер  npm run start
 
